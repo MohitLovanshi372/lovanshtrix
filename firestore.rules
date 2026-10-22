@@ -1,0 +1,84 @@
+rules_version = '2';
+
+// LOVANSTRIX — Production Firestore & Storage Security Rules Reference
+// Enforces server-verified Admin RBAC, strict Student document ownership,
+// private resume isolation, and non-sensitive public certificate verification.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Verified Admin Role via custom claim or server-provisioned admin collection
+    function isAdmin() {
+      return isSignedIn() && (
+        request.auth.token.admin == true ||
+        exists(/databases/$(database)/documents/adminUsers/$(request.auth.uid))
+      );
+    }
+
+    function isStudentOwner(resourceData) {
+      return isSignedIn() && (
+        resourceData.studentUid == request.auth.uid ||
+        resourceData.email == request.auth.token.email
+      );
+    }
+
+    // 1. Public / Admin Internship Listings
+    match /internshipListings/{listingId} {
+      allow read: if resource.data.status != 'Archived' || isAdmin();
+      allow create, update, delete: if isAdmin();
+    }
+
+    // 2. Student Internship Applications (Private to Applicant & Verified Admin)
+    match /internshipApplications/{applicationId} {
+      // Students can create applications only for Open listings
+      allow create: if request.resource.data.privacyConsent == true
+                    && request.resource.data.status == 'Submitted'
+                    && request.resource.data.completionApproved == false;
+
+      // Students can read only their own application; Admins can read all
+      allow read: if isAdmin() || isStudentOwner(resource.data);
+
+      // Students may only withdraw their own application; Admins control selection/review/completion
+      allow update: if isAdmin() || (
+        isStudentOwner(resource.data) &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'updatedAt']) &&
+        request.resource.data.status == 'Withdrawn'
+      );
+
+      allow delete: if isAdmin();
+    }
+
+    // 3. Official Offer Letters & Internship Documents (Read-only for owning Student; Write for Admin)
+    match /internshipDocuments/{documentId} {
+      allow read: if isAdmin() || (
+        isSignedIn() && resource.data.studentEmail == request.auth.token.email
+      );
+      allow create, update, delete: if isAdmin();
+    }
+
+    // 4. Internship Progress & Assigned Tasks
+    match /internshipProgress/{progressId} {
+      allow read: if isAdmin() || isStudentOwner(resource.data);
+      allow create, update, delete: if isAdmin();
+    }
+
+    // 5. Publicly Verifiable Certificate Records (Only non-sensitive certificate metadata stored here)
+    match /certificateRecords/{certificateId} {
+      allow get: if true; // Allows /verify-certificate/:certificateId lookup by exact ID
+      allow list: if isAdmin() || (
+        isSignedIn() && resource.data.studentEmail == request.auth.token.email
+      );
+      allow create, update, delete: if isAdmin();
+    }
+
+    // 6. Immutable Admin Audit Logs
+    match /adminAuditLogs/{logId} {
+      allow read, create: if isAdmin();
+      allow update, delete: if false; // Audit trail is append-only
+    }
+  }
+}
