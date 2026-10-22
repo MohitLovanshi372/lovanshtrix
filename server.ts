@@ -76,9 +76,11 @@ function loadStore(): LovanstrixStore {
       ...INITIAL_STORE.company,
       ...(parsed.company || {}),
       heroHeading:
-        parsed.company?.heroHeading === 'We Build Digital Experiences That Move Ideas Forward.'
+        !parsed.company?.heroHeading ||
+        parsed.company?.heroHeading === 'We Build Digital Experiences That Move Ideas Forward.' ||
+        parsed.company?.heroHeading === 'Technology Solutions Built Around Your Ideas.'
           ? INITIAL_STORE.company.heroHeading
-          : parsed.company?.heroHeading || INITIAL_STORE.company.heroHeading,
+          : parsed.company.heroHeading,
       heroSubtitle:
         parsed.company?.heroSubtitle?.startsWith(
           'Lovanstrix is an emerging technology venture focused on web development'
