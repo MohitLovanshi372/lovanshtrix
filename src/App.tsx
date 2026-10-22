@@ -242,11 +242,11 @@ export default function App() {
   const [studentSessionPrefill, setStudentSessionPrefill] = useState<
     { email: string; accessKey: string } | undefined
   >(undefined);
-  const [heroVisualMode, setHeroVisualMode] = useState<'3d' | '2d'>('3d');
+  const [heroVisualMode, setHeroVisualMode] = useState<'3d' | '2d' | 'image'>('image');
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
   const [servicesDropdownOpen, setServicesDropdownOpen] = useState<boolean>(false);
   const [openFaqIdx, setOpenFaqIdx] = useState<number | null>(0);
-  const [isDark, setIsDark] = useState<boolean>(true);
+  const [isDark, setIsDark] = useState<boolean>(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
   // Dynamic Store State loaded from Express Backend
@@ -965,13 +965,39 @@ export default function App() {
                           : 'text-slate-600 hover:text-slate-900'
                       }`}
                     >
-                      2D SVG Blueprint
+                      2D Blueprint
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setHeroVisualMode('image')}
+                      className={`px-2.5 py-1 rounded-md font-semibold transition-colors ${
+                        heroVisualMode === 'image'
+                          ? 'bg-blue-600 text-white'
+                          : isDark
+                          ? 'text-slate-400 hover:text-white'
+                          : 'text-slate-600 hover:text-slate-900'
+                      }`}
+                    >
+                      3D Image
                     </button>
                   </div>
                 </div>
 
                 {heroVisualMode === '3d' ? (
                   <Interactive3DCore isDark={isDark} />
+                ) : heroVisualMode === 'image' ? (
+                  <figure className="relative overflow-hidden rounded-2xl border border-blue-100 bg-white shadow-[0_24px_80px_-32px_rgba(37,99,235,0.35)]">
+                    <img
+                      src="/images/lovanstrix-hero-orbit.svg"
+                      alt="Lovanstrix abstract 3D innovation artwork with blue and violet geometric forms"
+                      className="block w-full h-auto"
+                      width="1200"
+                      height="980"
+                    />
+                    <figcaption className="absolute bottom-4 left-4 rounded-full border border-white/80 bg-white/85 px-3 py-1.5 text-[11px] font-medium text-slate-600 shadow-sm backdrop-blur">
+                      Design · Develop · Innovate
+                    </figcaption>
+                  </figure>
                 ) : (
                   <HeroGeometricIllustration isDark={isDark} />
                 )}
