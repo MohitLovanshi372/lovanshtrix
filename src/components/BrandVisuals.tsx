@@ -6,56 +6,18 @@ interface LovanstrixMarkProps {
 
 export const LovanstrixMark: React.FC<LovanstrixMarkProps> = ({ isDark }) => {
   return (
-    <span className="inline-flex items-center gap-3 whitespace-nowrap shrink-0 select-none">
-      <svg
-        width="30"
-        height="30"
-        viewBox="0 0 36 36"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        aria-hidden="true"
-        className="shrink-0"
-      >
-        <defs>
-          <linearGradient id="lovanstrix-prism-a" x1="4" y1="4" x2="32" y2="32" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stopColor="#3B82F6" />
-            <stop offset="55%" stopColor="#6366F1" />
-            <stop offset="100%" stopColor="#8B5CF6" />
-          </linearGradient>
-          <linearGradient id="lovanstrix-prism-b" x1="30" y1="6" x2="8" y2="30" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stopColor="#60A5FA" />
-            <stop offset="100%" stopColor="#4F46E5" stopOpacity="0.35" />
-          </linearGradient>
-        </defs>
-        {/* Outer isometric hexagon frame */}
-        <path
-          d="M18 2.5L31.5 10.25V25.75L18 33.5L4.5 25.75V10.25L18 2.5Z"
-          stroke="url(#lovanstrix-prism-a)"
-          strokeWidth="2"
-          fill="url(#lovanstrix-prism-b)"
-          fillOpacity="0.16"
-        />
-        {/* Inner geometric L-vector ascending into an innovation prism */}
-        <path
-          d="M12 10.5V22.5L23.5 22.5"
-          stroke="url(#lovanstrix-prism-a)"
-          strokeWidth="2.6"
-          strokeLinecap="square"
-        />
-        <path
-          d="M18 7.5L26.5 12.5V22.5L18 17.5V7.5Z"
-          fill="url(#lovanstrix-prism-a)"
-          fillOpacity="0.88"
-        />
-        <circle cx="18" cy="17.5" r="2" fill="#F8FAFC" />
-      </svg>
-      <span
-        className={`font-display text-lg font-bold tracking-tight ${
-          isDark ? 'text-white' : 'text-slate-950'
-        }`}
-      >
-        LOVANSTRIX
-      </span>
+    <span
+      className={`inline-flex items-center justify-center rounded-xl border border-blue-100/80 bg-white px-2 py-1.5 transition-shadow ${
+        isDark ? 'shadow-lg shadow-blue-950/20' : 'shadow-sm shadow-blue-100/60'
+      }`}
+    >
+      <img
+        src="/images/lovanstrix-logo.svg"
+        alt="LOVANSTRIX — Ideas Into Innovation"
+        width="960"
+        height="250"
+        className="block h-9 w-auto max-w-[42vw] object-contain sm:h-10"
+      />
     </span>
   );
 };
