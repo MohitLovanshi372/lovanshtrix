@@ -1327,6 +1327,86 @@ export default function App() {
               </div>
             </section>
 
+            {/* SECTION 5B: LIGHTWEIGHT INSIGHTS / STARTER GUIDES */}
+            <section className="space-y-7">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                  <p className="mb-2 text-xs font-semibold uppercase tracking-[0.16em] text-blue-700">
+                    Ideas, made practical
+                  </p>
+                  <h2 className={`font-display text-3xl sm:text-4xl font-medium tracking-tight ${
+                    isDark ? 'text-white' : 'text-slate-950'
+                  }`}>
+                    A clearer path from idea to launch.
+                  </h2>
+                  <p className={`mt-3 max-w-2xl text-sm leading-relaxed ${
+                    isDark ? 'text-slate-300' : 'text-slate-600'
+                  }`}>
+                    Explore practical starting points for planning a digital product without overcomplicating the first step.
+                  </p>
+                </div>
+                <span className={`text-[11px] font-medium ${
+                  isDark ? 'text-slate-400' : 'text-slate-500'
+                }`}>Starter topics · No account required</span>
+              </div>
+
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                <article className={`group rounded-2xl border p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${
+                  isDark ? 'bg-[#0B1224] border-slate-800 hover:border-blue-500/50' : 'bg-white border-slate-200 hover:border-blue-300 hover:shadow-blue-100/60'
+                }`}>
+                  <span className="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-blue-50 text-blue-700">
+                    <Code2 className="h-5 w-5" />
+                  </span>
+                  <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.15em] text-blue-700">01 / Websites</p>
+                  <h3 className={`font-display text-xl font-semibold tracking-tight ${
+                    isDark ? 'text-white' : 'text-slate-900'
+                  }`}>Plan your first business website</h3>
+                  <p className={`mt-3 text-sm leading-relaxed ${
+                    isDark ? 'text-slate-300' : 'text-slate-600'
+                  }`}>Start with your audience, key pages, contact flow, and a realistic launch scope.</p>
+                  <button type="button" onClick={() => navigateTo('services')} className="mt-5 inline-flex items-center gap-2 text-xs font-semibold text-blue-700 hover:text-violet-700">
+                    Explore website services <ArrowRight className="h-3.5 w-3.5" />
+                  </button>
+                </article>
+
+                <article className={`group rounded-2xl border p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${
+                  isDark ? 'bg-[#0B1224] border-slate-800 hover:border-blue-500/50' : 'bg-white border-slate-200 hover:border-blue-300 hover:shadow-blue-100/60'
+                }`}>
+                  <span className="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-violet-50 text-violet-700">
+                    <Layers className="h-5 w-5" />
+                  </span>
+                  <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.15em] text-violet-700">02 / Applications</p>
+                  <h3 className={`font-display text-xl font-semibold tracking-tight ${
+                    isDark ? 'text-white' : 'text-slate-900'
+                  }`}>When an idea needs a web app</h3>
+                  <p className={`mt-3 text-sm leading-relaxed ${
+                    isDark ? 'text-slate-300' : 'text-slate-600'
+                  }`}>Understand users, forms, dashboards, data storage, and the smallest useful first version.</p>
+                  <button type="button" onClick={() => navigateTo('solutions')} className="mt-5 inline-flex items-center gap-2 text-xs font-semibold text-blue-700 hover:text-violet-700">
+                    Explore digital solutions <ArrowRight className="h-3.5 w-3.5" />
+                  </button>
+                </article>
+
+                <article className={`group rounded-2xl border p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${
+                  isDark ? 'bg-[#0B1224] border-slate-800 hover:border-blue-500/50' : 'bg-white border-slate-200 hover:border-blue-300 hover:shadow-blue-100/60'
+                }`}>
+                  <span className="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-cyan-50 text-cyan-700">
+                    <Sparkles className="h-5 w-5" />
+                  </span>
+                  <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.15em] text-cyan-700">03 / AI</p>
+                  <h3 className={`font-display text-xl font-semibold tracking-tight ${
+                    isDark ? 'text-white' : 'text-slate-900'
+                  }`}>Use AI where it adds value</h3>
+                  <p className={`mt-3 text-sm leading-relaxed ${
+                    isDark ? 'text-slate-300' : 'text-slate-600'
+                  }`}>Find a specific workflow to improve before adding complexity or ongoing API costs.</p>
+                  <button type="button" onClick={() => navigateTo('solutions')} className="mt-5 inline-flex items-center gap-2 text-xs font-semibold text-blue-700 hover:text-violet-700">
+                    Explore AI solutions <ArrowRight className="h-3.5 w-3.5" />
+                  </button>
+                </article>
+              </div>
+            </section>
+
             {/* SECTION 6: OUR DEVELOPMENT PROCESS */}
             <section className="space-y-8">
               <div className="max-w-2xl">
