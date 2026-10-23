@@ -243,6 +243,7 @@ export default function App() {
   const [openFaqIdx, setOpenFaqIdx] = useState<number | null>(0);
   const [isDark, setIsDark] = useState<boolean>(false);
   const [showIntro, setShowIntro] = useState<boolean>(() => {
+    if (initialRoute.section !== 'home') return false;
     try {
       return window.sessionStorage.getItem('lovanstrix-intro-seen') !== '1';
     } catch {
@@ -260,6 +261,10 @@ export default function App() {
   }, []);
   useEffect(() => {
     if (!showIntro) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      finishIntro();
+      return;
+    }
     const oldOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
     const timer = window.setTimeout(finishIntro, 4200);
