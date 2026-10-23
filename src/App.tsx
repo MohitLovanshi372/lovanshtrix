@@ -7,7 +7,6 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   ArrowRight,
   Award,
-  Box,
   Check,
   ChevronDown,
   Code2,
@@ -38,12 +37,7 @@ import {
   ServiceItem,
   SystemConfigStatus,
 } from './types/lovanstrix';
-import {
-  HeroGeometricIllustration,
-  LovanstrixMark,
-  ProjectVisualCanvas,
-} from './components/BrandVisuals';
-import { Interactive3DCore } from './components/Interactive3DCore';
+import { LovanstrixMark, ProjectVisualCanvas } from './components/BrandVisuals';
 import { ServiceDetailView } from './components/ServiceDetailView';
 import { SolutionsSection } from './components/SolutionsSection';
 import { CareersSection } from './components/CareersSection';
@@ -242,7 +236,6 @@ export default function App() {
   const [studentSessionPrefill, setStudentSessionPrefill] = useState<
     { email: string; accessKey: string } | undefined
   >(undefined);
-  const [heroVisualMode, setHeroVisualMode] = useState<'3d' | '2d' | 'image'>('image');
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
   const [servicesDropdownOpen, setServicesDropdownOpen] = useState<boolean>(false);
   const [openFaqIdx, setOpenFaqIdx] = useState<number | null>(0);
