@@ -7,6 +7,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   ArrowRight,
   Award,
+  Box,
   Check,
   ChevronDown,
   Code2,
@@ -38,6 +39,7 @@ import {
   SystemConfigStatus,
 } from './types/lovanstrix';
 import { LovanstrixMark, ProjectVisualCanvas } from './components/BrandVisuals';
+import { Interactive3DCore } from './components/Interactive3DCore';
 import { ServiceDetailView } from './components/ServiceDetailView';
 import { SolutionsSection } from './components/SolutionsSection';
 import { CareersSection } from './components/CareersSection';
@@ -240,6 +242,37 @@ export default function App() {
   const [servicesDropdownOpen, setServicesDropdownOpen] = useState<boolean>(false);
   const [openFaqIdx, setOpenFaqIdx] = useState<number | null>(0);
   const [isDark, setIsDark] = useState<boolean>(false);
+  const [showIntro, setShowIntro] = useState<boolean>(() => {
+    if (initialRoute.section !== 'home') return false;
+    try {
+      return window.sessionStorage.getItem('lovanstrix-intro-seen') !== '1';
+    } catch {
+      return true;
+    }
+  });
+  const [heroVisualMode, setHeroVisualMode] = useState<'image' | '3d'>('image');
+  const finishIntro = useCallback(() => {
+    try {
+      window.sessionStorage.setItem('lovanstrix-intro-seen', '1');
+    } catch {
+      // The intro still works if browser storage is unavailable.
+    }
+    setShowIntro(false);
+  }, []);
+  useEffect(() => {
+    if (!showIntro) return;
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
+      finishIntro();
+      return;
+    }
+    const oldOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const timer = window.setTimeout(finishIntro, 4600);
+    return () => {
+      window.clearTimeout(timer);
+      document.body.style.overflow = oldOverflow;
+    };
+  }, [showIntro, finishIntro]);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
   // Dynamic Store State loaded from Express Backend
@@ -397,13 +430,57 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#9CADB5] p-0 sm:p-4 lg:p-8">
       <div
+        className={`lovanstrix-intro ${showIntro ? 'is-open' : 'is-closed'}`}
+        aria-hidden={!showIntro}
+      >
+        <div className="lovanstrix-intro__ambient" />
+        <div className="lovanstrix-intro__topline">
+          <span>LOVANSTRIX <span className="text-blue-300">/</span> DIGITAL FUTURES</span>
+          <span className="hidden sm:inline">INDEPENDENT TECHNOLOGY STUDIO</span>
+        </div>
+        <div className="lovanstrix-intro__center">
+          <div className="lovanstrix-intro__brand">
+            <img src="/images/lovanstrix-logo.svg" alt="" width="960" height="250" className="h-auto w-[230px] sm:w-[290px]" />
+          </div>
+          <div className="lovanstrix-intro__stage" aria-hidden="true">
+            <div className="lovanstrix-intro__orbit lovanstrix-intro__orbit--one" />
+            <div className="lovanstrix-intro__orbit lovanstrix-intro__orbit--two" />
+            <div className="lovanstrix-intro__orbit lovanstrix-intro__orbit--three" />
+            <div className="lovanstrix-intro__cube-wrap">
+              <div className="lovanstrix-intro__cube">
+                {['front', 'back', 'right', 'left', 'top', 'bottom'].map((face) => (
+                  <span key={face} className={`lovanstrix-intro__cube-face lovanstrix-intro__cube-face--${face}`} />
+                ))}
+              </div>
+            </div>
+            <span className="lovanstrix-intro__spark lovanstrix-intro__spark--one" />
+            <span className="lovanstrix-intro__spark lovanstrix-intro__spark--two" />
+          </div>
+          <p className="lovanstrix-intro__eyebrow">DESIGN · DEVELOPMENT · INTELLIGENCE</p>
+          <h2 className="lovanstrix-intro__title">
+            <span>WE BUILD</span>
+            <span className="lovanstrix-intro__title-accent">WHAT’S NEXT.</span>
+          </h2>
+          <p className="lovanstrix-intro__subtitle">Thoughtful digital experiences, engineered for what’s ahead.</p>
+          <button type="button" className="lovanstrix-intro__enter" onClick={finishIntro}>
+            ENTER EXPERIENCE <ArrowRight className="h-4 w-4" />
+          </button>
+        </div>
+        <div className="lovanstrix-intro__footer">
+          <span>WEB <i>·</i> APPS <i>·</i> AI</span>
+          <div className="lovanstrix-intro__progress" aria-hidden="true"><span /></div>
+          <button type="button" onClick={finishIntro} className="lovanstrix-intro__skip">SKIP INTRO ↗</button>
+        </div>
+      </div>
+      <div
         className={`mx-auto max-w-[1600px] min-h-screen overflow-hidden shadow-[0_30px_90px_rgba(15,23,42,0.16)] transition-colors duration-200 ${
           isDark ? 'bg-[#050814] text-slate-100' : 'bg-[#E4E7EF] text-[#111318]'
         }`}
       >
       {/* STICKY HEADER & NAVIGATION BAR */}
       <header
-        className={`sticky top-0 z-40 backdrop-blur-md border-b transition-colors ${
+        data-intro-state={showIntro ? 'waiting' : 'ready'}
+        className={`lovanstrix-site-header sticky top-0 z-40 backdrop-blur-md border-b transition-colors ${
           isDark ? 'bg-[#050814]/90 border-slate-800/80' : 'bg-[#E4E7EF]/95 border-slate-300/70'
         }`}
       >
@@ -835,7 +912,17 @@ export default function App() {
                 </div>
 
                 <h1 className="font-display text-[47px] leading-[1.03] tracking-[-0.055em] sm:text-[58px] xl:text-[70px] font-medium text-[#101216] text-balance max-w-[690px]">
-                  {company.heroHeading}
+                  {company.heroHeading.split(' ').map((word, index, words) => (
+                    <React.Fragment key={`${word}-${index}`}>
+                      <span
+                        className={`lovanstrix-heading-word ${showIntro ? 'is-paused' : ''}`}
+                        style={{ animationDelay: `${0.08 + index * 0.085}s` }}
+                      >
+                        {word}
+                      </span>
+                      {index < words.length - 1 ? ' ' : null}
+                    </React.Fragment>
+                  ))}
                 </h1>
 
                 <p className="mt-6 max-w-[500px] text-[15px] sm:text-[17px] leading-[1.8] text-slate-600">
@@ -886,19 +973,37 @@ export default function App() {
 
               <div className="lg:col-span-6 relative mx-auto w-full max-w-[660px] lg:max-w-none">
                 <div className="pointer-events-none absolute -inset-5 rounded-full bg-gradient-to-br from-blue-200/30 via-transparent to-violet-200/35 blur-3xl" />
-                <figure className="relative mx-auto w-full max-w-[650px] overflow-hidden rounded-[26px] sm:rounded-[32px]">
-                  <img
-                    src="/images/lovanstrix-hero-orbit.svg"
-                    alt="Lovanstrix abstract glass cube with blue and violet fluid details surrounded by orbital lines"
-                    className="lovanstrix-hero-art block h-auto w-full"
-                    width="1200"
-                    height="1000"
-                    fetchPriority="high"
-                  />
-                </figure>
-                <div className="absolute bottom-5 left-3 sm:bottom-8 sm:left-6 inline-flex items-center gap-2 rounded-full border border-white/90 bg-white/85 px-3.5 py-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-600 shadow-md backdrop-blur-md">
+                <div className="relative z-10 flex justify-end pb-3">
+                  <button
+                    type="button"
+                    onClick={() => setHeroVisualMode((mode) => mode === 'image' ? '3d' : 'image')}
+                    aria-pressed={heroVisualMode === '3d'}
+                    className="inline-flex items-center gap-2 rounded-full border border-white/90 bg-white/85 px-4 py-2 text-[11px] font-semibold text-slate-700 shadow-sm backdrop-blur transition-all hover:-translate-y-0.5 hover:border-blue-300 hover:text-blue-700"
+                  >
+                    <Box className="h-3.5 w-3.5 text-blue-600" />
+                    {heroVisualMode === 'image' ? 'Explore interactive 3D' : 'Back to artwork'}
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+                {heroVisualMode === '3d' ? (
+                  <div className="lovanstrix-3d-panel relative overflow-hidden rounded-[26px] sm:rounded-[32px]">
+                    <Interactive3DCore isDark={isDark} compact />
+                  </div>
+                ) : (
+                  <figure className="lovanstrix-hero-figure relative mx-auto w-full max-w-[650px] overflow-hidden rounded-[26px] sm:rounded-[32px]">
+                    <img
+                      src="/images/lovanstrix-hero-orbit.svg"
+                      alt="Lovanstrix abstract glass cube with blue and violet fluid details surrounded by orbital lines"
+                      className="lovanstrix-hero-art block h-auto w-full"
+                      width="1200"
+                      height="1000"
+                      fetchPriority="high"
+                    />
+                  </figure>
+                )}
+                <div className="absolute bottom-5 left-3 sm:bottom-8 sm:left-6 z-20 inline-flex items-center gap-2 rounded-full border border-white/90 bg-white/85 px-3.5 py-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-600 shadow-md backdrop-blur-md">
                   <span className="h-1.5 w-1.5 rounded-full bg-blue-600" />
-                  Web · Apps · AI
+                  {heroVisualMode === 'image' ? 'Web · Apps · AI' : 'Interactive technology core'}
                 </div>
               </div>
             </section>
@@ -1011,7 +1116,7 @@ export default function App() {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {services.map((srv, idx) => (
+                {services.slice(0, 6).map((srv, idx) => (
                   <article
                     key={srv.id}
                     className={`rounded-2xl border p-7 flex flex-col justify-between transition-colors ${
@@ -1204,6 +1309,62 @@ export default function App() {
                         Inspect Work →
                       </button>
                     </div>
+                  </article>
+                ))}
+              </div>
+            </section>
+
+            {/* SECTION 5B: PRACTICAL INSIGHTS — LIGHTWEIGHT CONTENT HUB */}
+            <section className="space-y-7">
+              <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+                <div>
+                  <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-blue-700">Ideas & insights</p>
+                  <h2 className="font-display text-3xl sm:text-4xl font-medium tracking-tight text-slate-950">Make the next step clearer.</h2>
+                  <p className="mt-3 max-w-2xl text-sm leading-relaxed text-slate-600">
+                    Practical notes for choosing the right technology, starting small, and building digital products responsibly.
+                  </p>
+                </div>
+              </div>
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                {[
+                  {
+                    number: '01',
+                    category: 'STARTUP BUILD GUIDE',
+                    title: 'Turn an idea into a useful first version.',
+                    description: 'Start with one clear problem, a small feature set, and a prototype you can test with real users.',
+                    action: 'Explore solutions',
+                    target: 'solutions' as NavSection,
+                  },
+                  {
+                    number: '02',
+                    category: 'PRACTICAL AI',
+                    title: 'Use AI where it solves a real problem.',
+                    description: 'Choose focused assistants, document search, and workflow helpers before adding complicated automation.',
+                    action: 'Explore services',
+                    target: 'services' as NavSection,
+                  },
+                  {
+                    number: '03',
+                    category: 'PRODUCT THINKING',
+                    title: 'Build for people, not just features.',
+                    description: 'Accessible layouts, clear forms, and a dependable mobile experience make software easier to use.',
+                    action: 'View our work',
+                    target: 'projects' as NavSection,
+                  },
+                ].map((item) => (
+                  <article key={item.number} className="group rounded-2xl border border-slate-200/90 bg-white/80 p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-lg hover:shadow-blue-950/5">
+                    <div className="mb-6 flex items-center justify-between">
+                      <span className="font-mono text-xs tracking-widest text-blue-700">{item.number}</span>
+                      <span className="h-9 w-9 rounded-full border border-slate-200 bg-slate-50 p-2 text-slate-500 transition-all group-hover:border-blue-200 group-hover:text-blue-700">
+                        <ArrowRight className="h-full w-full" />
+                      </span>
+                    </div>
+                    <p className="text-[10px] font-semibold tracking-[0.15em] text-slate-500">{item.category}</p>
+                    <h3 className="mt-3 font-display text-xl font-semibold leading-snug tracking-tight text-slate-950">{item.title}</h3>
+                    <p className="mt-3 text-sm leading-relaxed text-slate-600">{item.description}</p>
+                    <button type="button" onClick={() => navigateTo(item.target)} className="mt-5 inline-flex items-center gap-2 text-xs font-semibold text-blue-700 transition-colors hover:text-violet-700">
+                      {item.action} <ArrowRight className="h-3.5 w-3.5" />
+                    </button>
                   </article>
                 ))}
               </div>
