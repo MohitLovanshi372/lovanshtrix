@@ -398,9 +398,9 @@ export const INITIAL_STORE: LovanstrixStore = {
   company: {
     name: 'LOVANSTRIX',
     tagline: 'Ideas Into Innovation.',
-    heroHeading: 'We Build Digital Ideas Into Reality.',
+    heroHeading: 'Turn ideas into immersive digital experiences.',
     heroSubtitle:
-      'Modern websites, custom web applications, and practical AI integrations built around your goals—with transparent scope, clear milestones, and room to grow.',
+      'We shape business websites, custom applications, and practical AI tools into digital experiences built around your next big idea.',
     shortIntroduction:
       'Founded as an emerging technology venture, Lovanstrix works directly with individuals, founders, educators, and growing businesses to turn practical ideas into clean, maintainable digital products and software systems.',
     mission: 'Build useful, accessible, and innovative digital solutions.',
