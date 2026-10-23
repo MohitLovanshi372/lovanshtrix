@@ -36,10 +36,6 @@ const TIMELINE_OPTIONS = [
 
 interface EnquirySubmissionFeedback {
   savedToDatabase: boolean;
-  emailConfigured: boolean;
-  emailDelivered: boolean;
-  demoMode: boolean;
-  notice: string;
 }
 
 export const ContactQuoteSection: React.FC<ContactQuoteSectionProps> = ({
@@ -138,12 +134,6 @@ export const ContactQuoteSection: React.FC<ContactQuoteSectionProps> = ({
       } else {
         setSubmissionResult({
           savedToDatabase: Boolean(data.savedToDatabase),
-          emailConfigured: Boolean(data.emailConfigured),
-          emailDelivered: Boolean(data.emailDelivered),
-          demoMode: Boolean(data.demoMode),
-          notice:
-            data.notice ||
-            'Saved to server database. SMTP_WEBHOOK_URL is optional and not configured—no email was sent.',
         });
         setName('');
         setEmail('');
@@ -155,11 +145,6 @@ export const ContactQuoteSection: React.FC<ContactQuoteSectionProps> = ({
     } catch {
       setSubmissionResult({
         savedToDatabase: false,
-        emailConfigured: false,
-        emailDelivered: false,
-        demoMode: true,
-        notice:
-          'Demo Mode Notice: Neither a live backend database nor SMTP_WEBHOOK_URL is connected right now. Your form inputs were validated in demo mode only—no email was sent.',
       });
       setName('');
       setEmail('');
@@ -196,7 +181,7 @@ export const ContactQuoteSection: React.FC<ContactQuoteSectionProps> = ({
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
-        {/* Left Column: Direct Channels & Optional Email/Database Transparency */}
+        {/* Left Column: Direct Contact Channels */}
         <div className="lg:col-span-5 space-y-6">
           <div
             className={`rounded-2xl border p-6 space-y-6 ${
@@ -260,8 +245,7 @@ export const ContactQuoteSection: React.FC<ContactQuoteSectionProps> = ({
                         isDark ? 'text-slate-300' : 'text-slate-600'
                       }`}
                     >
-                      WhatsApp chat button is currently inactive because no official company phone
-                      number has been configured yet.
+                      WhatsApp is not available at the moment. Please use the email address or enquiry form instead.
                     </p>
 
                   </div>
@@ -308,7 +292,7 @@ export const ContactQuoteSection: React.FC<ContactQuoteSectionProps> = ({
                   Project Enquiry &amp; Quote Specification
                 </h3>
                 <p className={`text-xs mt-1 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                  Fields marked with * are required. Confirmed only after backend verification.
+                  Fields marked with * are required. Share a few details so we can understand your project.
                 </p>
               </div>
 
