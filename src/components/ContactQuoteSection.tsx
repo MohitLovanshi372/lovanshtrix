@@ -11,17 +11,15 @@ import {
   Settings,
   ShieldCheck,
 } from 'lucide-react';
-import { CompanyDetails, ServiceItem, SystemConfigStatus } from '../types/lovanstrix';
+import { CompanyDetails, ServiceItem } from '../types/lovanstrix';
 
 interface ContactQuoteSectionProps {
   company: CompanyDetails;
   services: ServiceItem[];
-  configStatus: SystemConfigStatus;
   initialService?: string;
   initialDescription?: string;
   isDark: boolean;
   onEnquirySubmitted?: () => void;
-  onOpenAdmin?: () => void;
 }
 
 const BUDGET_RANGES = [
@@ -50,12 +48,10 @@ interface EnquirySubmissionFeedback {
 export const ContactQuoteSection: React.FC<ContactQuoteSectionProps> = ({
   company,
   services,
-  configStatus,
   initialService,
   initialDescription,
   isDark,
   onEnquirySubmitted,
-  onOpenAdmin,
 }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -286,72 +282,19 @@ export const ContactQuoteSection: React.FC<ContactQuoteSectionProps> = ({
             </div>
           </div>
 
-          {/* Transparent Server-Side Email & Database Architecture Card */}
-          <div
-            className={`rounded-2xl border p-6 space-y-3.5 ${
-              isDark
-                ? 'bg-[#090F21] border-slate-800/90'
-                : 'bg-slate-50 border-slate-200'
-            }`}
-          >
-            <div className="flex items-center justify-between gap-2 text-xs font-semibold text-blue-400">
-              <span className="inline-flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4" />
-                <span>Server-Side Enquiry &amp; Email Status</span>
-              </span>
-              <span className="font-mono text-[11px] text-slate-400">POST /api/enquiries</span>
-            </div>
-
-            <div
-              className={`text-xs leading-relaxed space-y-2 ${
-                isDark ? 'text-slate-300' : 'text-slate-600'
-              }`}
-            >
-              <p className="flex items-start gap-2">
-                <Database className="w-3.5 h-3.5 text-blue-400 shrink-0 mt-0.5" />
-                <span>
-                  <strong>Database Storage:</strong>{' '}
-                  {configStatus.databaseAvailable ? (
-                    <>
-                      Active ({configStatus.persistenceMode}). Enquiries are saved directly to the
-                      configured database and can be reviewed in the{' '}
-                      <button
-                        type="button"
-                        onClick={onOpenAdmin}
-                        className="underline text-blue-400 hover:text-blue-300"
-                      >
-                        Admin Console
-                      </button>
-                      .
-                    </>
-                  ) : (
-                    <>
-                      No persistent database connected; submissions run in demo preview mode.
-                    </>
-                  )}
-                </span>
-              </p>
-
-              <p className="flex items-start gap-2">
-                <Mail className="w-3.5 h-3.5 text-blue-400 shrink-0 mt-0.5" />
-                <span>
-                  <strong>
-                    Optional Email Delivery (<code className="font-mono">SMTP_WEBHOOK_URL</code>):
-                  </strong>{' '}
-                  {configStatus.emailWebhookConfigured ? (
-                    <>
-                      Configured on the server. Enquiries are forwarded via the secure server-side
-                      endpoint.
-                    </>
-                  ) : (
-                    <>
-                      Currently unconfigured (optional). <strong>No emails are sent</strong> upon
-                      submission. Email integration remains ready to enable later on the server by
-                      setting <code className="font-mono">SMTP_WEBHOOK_URL</code>.
-                    </>
-                  )}
-                </span>
-              </p>
+          <div className={`rounded-2xl border p-5 ${
+            isDark ? 'bg-[#090F21] border-slate-800/90' : 'bg-slate-50 border-slate-200'
+          }`}>
+            <div className="flex items-start gap-3">
+              <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-blue-500" />
+              <div>
+                <p className={`text-xs font-semibold ${isDark ? 'text-slate-200' : 'text-slate-900'}`}>
+                  Project enquiries
+                </p>
+                <p className={`mt-1.5 text-xs leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                  Share only the project information needed for an initial discussion. Never include passwords, API keys, or other sensitive credentials.
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -380,13 +323,7 @@ export const ContactQuoteSection: React.FC<ContactQuoteSectionProps> = ({
                   Fields marked with * are required. Confirmed only after backend verification.
                 </p>
               </div>
-              <span className="text-xs text-slate-400">
-                {configStatus.emailWebhookConfigured
-                  ? 'Database + Email Active'
-                  : configStatus.databaseAvailable
-                  ? 'Database Storage Active · Email Optional (Off)'
-                  : 'Demo Mode · No Email Sent'}
-              </span>
+
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
