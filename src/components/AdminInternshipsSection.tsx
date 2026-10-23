@@ -55,7 +55,9 @@ export const AdminInternshipsSection: React.FC<AdminInternshipsSectionProps> = (
   const [token, setToken] = useState<string>(() => sessionStorage.getItem('lx_admin_token') || '');
   const [passcodeInput, setPasscodeInput] = useState('');
   const [authenticated, setAuthenticated] = useState<boolean>(false);
-  const [previewMode, setPreviewMode] = useState<boolean>(true);
+  const [previewMode, setPreviewMode] = useState<boolean>(false);
+  const [adminAccessUnavailable, setAdminAccessUnavailable] = useState<boolean>(false);
+  const [adminAccessMessage, setAdminAccessMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [bannerMsg, setBannerMsg] = useState<{ text: string; isError?: boolean } | null>(null);
 
@@ -141,14 +143,24 @@ export const AdminInternshipsSection: React.FC<AdminInternshipsSectionProps> = (
       const resp = await fetch('/api/admin/store', {
         headers: authHeaders(activeToken),
       });
+      const data = await resp.json().catch(() => ({}));
+      if (resp.status === 503) {
+        setAuthenticated(false);
+        setPreviewMode(false);
+        setAdminAccessUnavailable(true);
+        setAdminAccessMessage(data.error || 'Admin access is disabled until a strong server passcode is configured.');
+        return;
+      }
       if (resp.status === 401) {
         setAuthenticated(false);
         setPreviewMode(false);
+        setAdminAccessUnavailable(false);
         setLoading(false);
         return;
       }
-      const data = await resp.json();
       if (resp.ok && data.store) {
+        setAdminAccessUnavailable(false);
+        setAdminAccessMessage(null);
         const st = data.store;
         setCompany(st.company);
         setSignatoryName(st.company.authorizedSignatoryName || '');
@@ -220,11 +232,17 @@ export const AdminInternshipsSection: React.FC<AdminInternshipsSectionProps> = (
       });
       const data = await resp.json();
       if (!resp.ok) {
-        showToast(data.error || 'Invalid administrator passcode.', true);
+        const message = data.error || 'Invalid administrator passcode.';
+        if (resp.status === 503) setAdminAccessUnavailable(true);
+        setAdminAccessMessage(message);
+        showToast(message, true);
         return;
       }
+      setAdminAccessUnavailable(false);
+      setAdminAccessMessage(null);
       sessionStorage.setItem('lx_admin_token', data.token);
       setToken(data.token);
+      setPreviewMode(false);
       setAuthenticated(true);
       await loadAdminInternshipData(data.token);
     } catch {
@@ -662,6 +680,7 @@ export const AdminInternshipsSection: React.FC<AdminInternshipsSectionProps> = (
             <input
               type="password"
               required
+              disabled={adminAccessUnavailable}
               value={passcodeInput}
               onChange={(e) => setPasscodeInput(e.target.value)}
               placeholder="Enter ADMIN_PASSCODE"
@@ -671,9 +690,20 @@ export const AdminInternshipsSection: React.FC<AdminInternshipsSectionProps> = (
                   : 'bg-white border-slate-300 text-slate-900'
               }`}
             />
+            {adminAccessUnavailable && (
+              <p className={`rounded-lg border p-3 text-xs leading-relaxed ${
+                isDark ? 'border-amber-500/30 bg-amber-500/10 text-amber-200' : 'border-amber-200 bg-amber-50 text-amber-900'
+              }`}>
+                {adminAccessMessage || 'Admin sign-in is disabled until the site owner configures a strong ADMIN_PASSCODE in the server environment.'}
+              </p>
+            )}
+            {adminAccessMessage && !adminAccessUnavailable && (
+              <p className="text-xs text-rose-500">{adminAccessMessage}</p>
+            )}
             <button
               type="submit"
-              className="w-full py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold"
+              disabled={adminAccessUnavailable}
+              className="w-full py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-50 text-white text-xs font-semibold"
             >
               Verify &amp; Enter Admin Portal
             </button>
