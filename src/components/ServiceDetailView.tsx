@@ -13,7 +13,6 @@ import {
 import {
   CompanyDetails,
   ServiceItem,
-  SystemConfigStatus,
 } from '../types/lovanstrix';
 import { ContactQuoteSection } from './ContactQuoteSection';
 
@@ -21,24 +20,20 @@ interface ServiceDetailViewProps {
   service: ServiceItem;
   allServices: ServiceItem[];
   company: CompanyDetails;
-  configStatus: SystemConfigStatus;
   isDark: boolean;
   onSelectService: (slug: string) => void;
   onBackToAllServices: () => void;
   onEnquirySubmitted: () => void;
-  onOpenAdmin: () => void;
 }
 
 export const ServiceDetailView: React.FC<ServiceDetailViewProps> = ({
   service,
   allServices,
   company,
-  configStatus,
   isDark,
   onSelectService,
   onBackToAllServices,
   onEnquirySubmitted,
-  onOpenAdmin,
 }) => {
   const isImmediate = service.availability === 'Available for New Projects';
 
@@ -420,12 +415,10 @@ export const ServiceDetailView: React.FC<ServiceDetailViewProps> = ({
         <ContactQuoteSection
           company={company}
           services={allServices}
-          configStatus={configStatus}
           initialService={service.title}
           initialDescription={`Hello Lovanstrix, I would like to discuss a "${service.title}" project. Here are our main requirements:`}
           isDark={isDark}
           onEnquirySubmitted={onEnquirySubmitted}
-          onOpenAdmin={onOpenAdmin}
         />
       </section>
     </div>
