@@ -15,16 +15,13 @@ import {
 import {
   InternshipDepartment,
   InternshipListing,
-  SystemConfigStatus,
 } from '../types/lovanstrix';
 
 interface InternshipPortalSectionProps {
   listings: InternshipListing[];
-  configStatus: SystemConfigStatus;
   isDark: boolean;
   onApplicationSubmitted: (email: string, referenceNumber: string, accessKey: string) => void;
   onNavigateStudentDashboard: () => void;
-  onNavigateAdminInternships: () => void;
 }
 
 const DEPARTMENTS: ('All' | InternshipDepartment)[] = [
@@ -39,11 +36,9 @@ const DEPARTMENTS: ('All' | InternshipDepartment)[] = [
 
 export const InternshipPortalSection: React.FC<InternshipPortalSectionProps> = ({
   listings,
-  configStatus,
   isDark,
   onApplicationSubmitted,
   onNavigateStudentDashboard,
-  onNavigateAdminInternships,
 }) => {
   const [selectedDept, setSelectedDept] = useState<'All' | InternshipDepartment>('All');
   const [statusFilter, setStatusFilter] = useState<'All' | 'Open' | 'Upcoming' | 'Closed'>('All');
@@ -312,10 +307,7 @@ export const InternshipPortalSection: React.FC<InternshipPortalSectionProps> = (
               isDark ? 'text-slate-300' : 'text-slate-600'
             }`}
           >
-            Explore Lovanstrix’s structured learning and project internship tracks. Tracks marked as{' '}
-            <strong>Upcoming</strong> are example curriculum categories preparing for future
-            cohorts; applications are accepted only when an administrator publishes a track as{' '}
-            <strong>Open</strong>.
+            Explore current internship tracks. Applications are accepted only for opportunities marked Open.
           </p>
         </div>
 
@@ -325,19 +317,8 @@ export const InternshipPortalSection: React.FC<InternshipPortalSectionProps> = (
             onClick={onNavigateStudentDashboard}
             className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold transition-colors whitespace-nowrap shrink-0"
           >
-            <span>Student Dashboard (/student-dashboard)</span>
+            <span>Track an Application</span>
             <ArrowRight className="w-3.5 h-3.5" />
-          </button>
-          <button
-            type="button"
-            onClick={onNavigateAdminInternships}
-            className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border text-xs font-semibold transition-colors whitespace-nowrap shrink-0 ${
-              isDark
-                ? 'border-slate-700 bg-slate-900 text-slate-200 hover:bg-slate-800'
-                : 'border-slate-300 bg-white text-slate-800 hover:bg-slate-100'
-            }`}
-          >
-            <span>Admin Portal (/admin/internships)</span>
           </button>
         </div>
       </div>
@@ -644,19 +625,11 @@ export const InternshipPortalSection: React.FC<InternshipPortalSectionProps> = (
                 }`}
               >
                 <p className="font-semibold">
-                  No Internship Tracks Are Marked &ldquo;Open&rdquo; Yet
+                  No internship openings are available right now
                 </p>
                 <p className="leading-relaxed">
-                  In accordance with Lovanstrix’s transparency policy, all initial tracks are set to{' '}
-                  <strong>Upcoming</strong> until an administrator publishes a genuine opening.
+                  New opportunities will appear here when applications open.
                 </p>
-                <button
-                  type="button"
-                  onClick={onNavigateAdminInternships}
-                  className="inline-flex items-center gap-1.5 text-blue-400 hover:text-blue-300 font-semibold underline"
-                >
-                  <span>Open Admin Portal (/admin/internships) to publish a track →</span>
-                </button>
               </div>
             )}
 
@@ -669,18 +642,10 @@ export const InternshipPortalSection: React.FC<InternshipPortalSectionProps> = (
             >
               <div className="flex items-center gap-2 font-semibold text-blue-400">
                 <Lock className="w-3.5 h-3.5" />
-                <span>Security &amp; Storage Status</span>
+                <span>Applicant privacy</span>
               </div>
-              <p>
-                Persistence: <strong>{configStatus.persistenceMode}</strong>
-              </p>
-              <p>
-                Optional Email Notifications:{' '}
-                <strong>
-                  {configStatus.emailWebhookConfigured
-                    ? 'Active (Server-Side)'
-                    : 'Not Configured (No Emails Sent)'}
-                </strong>
+              <p className="leading-relaxed">
+                Submit accurate details and only the documents requested for the internship. Never share account passwords, API keys, or other private credentials.
               </p>
             </div>
           </div>
@@ -709,7 +674,7 @@ export const InternshipPortalSection: React.FC<InternshipPortalSectionProps> = (
                 >
                   {openListings.length === 0 ? (
                     <option value="">
-                      No Open tracks published yet — publish a track in /admin/internships first
+                      No internship openings are currently available
                     </option>
                   ) : (
                     openListings.map((l) => (

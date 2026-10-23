@@ -6,7 +6,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   ArrowRight,
-  Award,
   Box,
   Check,
   ChevronDown,
@@ -16,13 +15,10 @@ import {
   GraduationCap,
   HelpCircle,
   Layers,
+  Lock,
   Menu,
-  Moon,
-  Settings,
   ShieldCheck,
   Sparkles,
-  Sun,
-  UserCheck,
   X,
 } from 'lucide-react';
 import {
@@ -219,6 +215,7 @@ function parseInitialRoute(): {
   if (pathname === '/student-dashboard') {
     return { section: 'student-dashboard', certId: '', serviceSlug: '' };
   }
+  if (pathname === '/admin') return { section: 'admin', certId: '', serviceSlug: '' };
   if (pathname === '/admin/internships') {
     return { section: 'admin-internships', certId: '', serviceSlug: '' };
   }
@@ -241,7 +238,7 @@ export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
   const [servicesDropdownOpen, setServicesDropdownOpen] = useState<boolean>(false);
   const [openFaqIdx, setOpenFaqIdx] = useState<number | null>(0);
-  const [isDark, setIsDark] = useState<boolean>(false);
+  const isDark = false;
   const [showIntro, setShowIntro] = useState<boolean>(() => {
     if (initialRoute.section !== 'home') return false;
     try {
@@ -380,6 +377,7 @@ export default function App() {
         about: '/about',
         careers: '/careers',
         contact: '/contact',
+        admin: '/admin',
         internships: '/internships',
         'student-dashboard': '/student-dashboard',
         'admin-internships': '/admin/internships',
@@ -674,7 +672,7 @@ export default function App() {
           </div>
         </div>
 
-        {/* Responsive Mobile Navigation Drawer */}
+        {/* Simplified mobile menu: only customer-facing pages */}
         {mobileMenuOpen && (
           <div
             className={`lg:hidden border-t px-6 py-5 space-y-4 ${
@@ -687,7 +685,7 @@ export default function App() {
                   key={item.id}
                   type="button"
                   onClick={() => navigateTo(item.id)}
-                  className={`text-left px-3 py-2 rounded-lg text-xs font-medium ${
+                  className={`text-left px-3 py-2.5 rounded-lg text-xs font-medium transition-colors ${
                     activeNav === item.id
                       ? 'bg-blue-600 text-white'
                       : isDark
@@ -698,211 +696,40 @@ export default function App() {
                   {item.label}
                 </button>
               ))}
-              <button
-                type="button"
-                onClick={() => navigateTo('internships')}
-                className={`text-left px-3 py-2 rounded-lg text-xs font-medium ${
-                  activeNav === 'internships'
-                    ? 'bg-blue-600 text-white'
-                    : isDark
-                    ? 'text-blue-400 hover:bg-slate-800/70'
-                    : 'text-blue-600 hover:bg-slate-100'
-                }`}
-              >
-                Internships Portal
-              </button>
-              <button
-                type="button"
-                onClick={() => navigateTo('student-dashboard')}
-                className={`text-left px-3 py-2 rounded-lg text-xs font-medium ${
-                  activeNav === 'student-dashboard'
-                    ? 'bg-blue-600 text-white'
-                    : isDark
-                    ? 'text-slate-300 hover:bg-slate-800/70'
-                    : 'text-slate-700 hover:bg-slate-100'
-                }`}
-              >
-                Student Dashboard
-              </button>
-              <button
-                type="button"
-                onClick={() => navigateTo('verify-certificate')}
-                className={`text-left px-3 py-2 rounded-lg text-xs font-medium ${
-                  activeNav === 'verify-certificate'
-                    ? 'bg-blue-600 text-white'
-                    : isDark
-                    ? 'text-slate-300 hover:bg-slate-800/70'
-                    : 'text-slate-700 hover:bg-slate-100'
-                }`}
-              >
-                Verify Certificate
-              </button>
-              <button
-                type="button"
-                onClick={() => navigateTo('admin')}
-                className={`text-left px-3 py-2 rounded-lg text-xs font-medium ${
-                  activeNav === 'admin'
-                    ? 'bg-blue-600 text-white'
-                    : isDark
-                    ? 'text-blue-400 hover:bg-slate-800/70'
-                    : 'text-blue-600 hover:bg-slate-100'
-                }`}
-              >
-                Site Admin Console
-              </button>
             </div>
-
-            <div className="pt-3 border-t border-slate-800/60">
-              <p className="text-[11px] font-semibold text-blue-400 mb-2">
-                Direct Service Pages
-              </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 max-h-48 overflow-y-auto">
-                {services.map((srv) => (
-                  <button
-                    key={srv.id}
-                    type="button"
-                    onClick={() => openServiceDetail(srv)}
-                    className={`text-left px-2.5 py-1.5 rounded text-xs truncate ${
-                      isDark
-                        ? 'text-slate-300 hover:bg-slate-800'
-                        : 'text-slate-700 hover:bg-slate-100'
-                    }`}
-                  >
-                    {srv.index}. {srv.title}
-                  </button>
-                ))}
-              </div>
-            </div>
+            <button
+              type="button"
+              onClick={() => navigateTo('contact')}
+              className="w-full rounded-lg bg-slate-950 px-4 py-3 text-xs font-semibold text-white transition-colors hover:bg-blue-700"
+            >
+              Request a Quote
+            </button>
           </div>
         )}
       </header>
 
-      {(['admin', 'admin-internships', 'student-dashboard', 'verify-certificate'].includes(activeNav)) && (
-      <div
-        className={`border-b text-xs ${
-          isDark
-            ? 'bg-[#070C1B]/70 border-slate-800/60 text-slate-400'
-            : 'bg-slate-100/80 border-slate-200/80 text-slate-600'
-        }`}
-      >
-        <div className="max-w-[1060px] mx-auto px-6 py-2 flex flex-wrap items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <span className="font-semibold text-blue-400">{company.tagline}</span>
-            <span aria-hidden="true">·</span>
-            <span className="hidden md:inline">
-              Web Development, Web Applications, AI Integration &amp; Digital Solutions
+      {(['admin', 'admin-internships'].includes(activeNav)) && (
+        <div
+          className={`border-b text-xs ${
+            isDark
+              ? 'bg-[#070C1B]/80 border-slate-800/70 text-slate-400'
+              : 'bg-white/70 border-slate-200 text-slate-600'
+          }`}
+        >
+          <div className="max-w-[1060px] mx-auto px-6 py-3 flex items-center justify-between gap-4">
+            <span className="inline-flex items-center gap-2 font-medium">
+              <Lock className="h-3.5 w-3.5 text-violet-500" />
+              Protected administration area
             </span>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-3.5">
             <button
               type="button"
-              onClick={() => navigateTo('internships')}
-              className={`inline-flex items-center gap-1.5 font-medium transition-colors whitespace-nowrap shrink-0 ${
-                activeNav === 'internships'
-                  ? 'text-blue-400 font-semibold'
-                  : isDark
-                  ? 'text-slate-300 hover:text-white'
-                  : 'text-slate-700 hover:text-slate-950'
-              }`}
+              onClick={() => navigateTo('home')}
+              className="font-semibold text-blue-700 transition-colors hover:text-violet-700"
             >
-              <GraduationCap className="w-3.5 h-3.5 text-blue-400" />
-              <span>Careers &amp; Internships</span>
-            </button>
-
-            <span aria-hidden="true">·</span>
-
-            <button
-              type="button"
-              onClick={() => navigateTo('student-dashboard')}
-              className={`inline-flex items-center gap-1.5 font-medium transition-colors whitespace-nowrap shrink-0 ${
-                activeNav === 'student-dashboard'
-                  ? 'text-blue-400 font-semibold'
-                  : isDark
-                  ? 'text-slate-300 hover:text-white'
-                  : 'text-slate-700 hover:text-slate-950'
-              }`}
-            >
-              <UserCheck className="w-3.5 h-3.5 text-blue-400" />
-              <span>Student Portal</span>
-            </button>
-
-            <span aria-hidden="true">·</span>
-
-            <button
-              type="button"
-              onClick={() => navigateTo('verify-certificate')}
-              className={`inline-flex items-center gap-1.5 font-medium transition-colors whitespace-nowrap shrink-0 ${
-                activeNav === 'verify-certificate'
-                  ? 'text-blue-400 font-semibold'
-                  : isDark
-                  ? 'text-slate-300 hover:text-white'
-                  : 'text-slate-700 hover:text-slate-950'
-              }`}
-            >
-              <Award className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Verify Certificate</span>
-            </button>
-
-            <span aria-hidden="true">·</span>
-
-            <button
-              type="button"
-              onClick={() => navigateTo('admin-internships')}
-              className={`inline-flex items-center gap-1.5 font-medium transition-colors whitespace-nowrap shrink-0 ${
-                activeNav === 'admin-internships'
-                  ? 'text-blue-400 font-semibold'
-                  : isDark
-                  ? 'text-slate-300 hover:text-white'
-                  : 'text-slate-700 hover:text-slate-950'
-              }`}
-            >
-              <Settings className="w-3.5 h-3.5 text-violet-400" />
-              <span>Internship Admin</span>
-            </button>
-
-            <span aria-hidden="true">·</span>
-
-            <button
-              type="button"
-              onClick={() => navigateTo('admin')}
-              className={`inline-flex items-center gap-1.5 font-medium transition-colors whitespace-nowrap shrink-0 ${
-                activeNav === 'admin'
-                  ? 'text-blue-400 font-semibold'
-                  : isDark
-                  ? 'text-slate-300 hover:text-white'
-                  : 'text-slate-700 hover:text-slate-950'
-              }`}
-            >
-              <Settings className="w-3.5 h-3.5 text-blue-400" />
-              <span>Site Admin</span>
-            </button>
-
-            <span aria-hidden="true">·</span>
-
-            <button
-              type="button"
-              onClick={() => setIsDark((prev) => !prev)}
-              className={`inline-flex items-center gap-1.5 font-medium transition-colors whitespace-nowrap shrink-0 ${
-                isDark ? 'text-slate-300 hover:text-white' : 'text-slate-700 hover:text-slate-950'
-              }`}
-              aria-label="Toggle color theme"
-            >
-              {isDark ? (
-                <>
-                  <Sun className="w-3.5 h-3.5 text-amber-400" />
-                  <span>Light</span>
-                </>
-              ) : (
-                <>
-                  <Moon className="w-3.5 h-3.5 text-blue-600" />
-                  <span>Dark</span>
-                </>
-              )}
+              Back to public website
             </button>
           </div>
         </div>
-      </div>
       )}
 
       {/* MAIN CONTENT VIEWPORT */}
@@ -1327,86 +1154,6 @@ export default function App() {
               </div>
             </section>
 
-            {/* SECTION 5B: LIGHTWEIGHT INSIGHTS / STARTER GUIDES */}
-            <section className="space-y-7">
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-                <div>
-                  <p className="mb-2 text-xs font-semibold uppercase tracking-[0.16em] text-blue-700">
-                    Ideas, made practical
-                  </p>
-                  <h2 className={`font-display text-3xl sm:text-4xl font-medium tracking-tight ${
-                    isDark ? 'text-white' : 'text-slate-950'
-                  }`}>
-                    A clearer path from idea to launch.
-                  </h2>
-                  <p className={`mt-3 max-w-2xl text-sm leading-relaxed ${
-                    isDark ? 'text-slate-300' : 'text-slate-600'
-                  }`}>
-                    Explore practical starting points for planning a digital product without overcomplicating the first step.
-                  </p>
-                </div>
-                <span className={`text-[11px] font-medium ${
-                  isDark ? 'text-slate-400' : 'text-slate-500'
-                }`}>Starter topics · No account required</span>
-              </div>
-
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-                <article className={`group rounded-2xl border p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${
-                  isDark ? 'bg-[#0B1224] border-slate-800 hover:border-blue-500/50' : 'bg-white border-slate-200 hover:border-blue-300 hover:shadow-blue-100/60'
-                }`}>
-                  <span className="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-blue-50 text-blue-700">
-                    <Code2 className="h-5 w-5" />
-                  </span>
-                  <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.15em] text-blue-700">01 / Websites</p>
-                  <h3 className={`font-display text-xl font-semibold tracking-tight ${
-                    isDark ? 'text-white' : 'text-slate-900'
-                  }`}>Plan your first business website</h3>
-                  <p className={`mt-3 text-sm leading-relaxed ${
-                    isDark ? 'text-slate-300' : 'text-slate-600'
-                  }`}>Start with your audience, key pages, contact flow, and a realistic launch scope.</p>
-                  <button type="button" onClick={() => navigateTo('services')} className="mt-5 inline-flex items-center gap-2 text-xs font-semibold text-blue-700 hover:text-violet-700">
-                    Explore website services <ArrowRight className="h-3.5 w-3.5" />
-                  </button>
-                </article>
-
-                <article className={`group rounded-2xl border p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${
-                  isDark ? 'bg-[#0B1224] border-slate-800 hover:border-blue-500/50' : 'bg-white border-slate-200 hover:border-blue-300 hover:shadow-blue-100/60'
-                }`}>
-                  <span className="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-violet-50 text-violet-700">
-                    <Layers className="h-5 w-5" />
-                  </span>
-                  <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.15em] text-violet-700">02 / Applications</p>
-                  <h3 className={`font-display text-xl font-semibold tracking-tight ${
-                    isDark ? 'text-white' : 'text-slate-900'
-                  }`}>When an idea needs a web app</h3>
-                  <p className={`mt-3 text-sm leading-relaxed ${
-                    isDark ? 'text-slate-300' : 'text-slate-600'
-                  }`}>Understand users, forms, dashboards, data storage, and the smallest useful first version.</p>
-                  <button type="button" onClick={() => navigateTo('solutions')} className="mt-5 inline-flex items-center gap-2 text-xs font-semibold text-blue-700 hover:text-violet-700">
-                    Explore digital solutions <ArrowRight className="h-3.5 w-3.5" />
-                  </button>
-                </article>
-
-                <article className={`group rounded-2xl border p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${
-                  isDark ? 'bg-[#0B1224] border-slate-800 hover:border-blue-500/50' : 'bg-white border-slate-200 hover:border-blue-300 hover:shadow-blue-100/60'
-                }`}>
-                  <span className="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-cyan-50 text-cyan-700">
-                    <Sparkles className="h-5 w-5" />
-                  </span>
-                  <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.15em] text-cyan-700">03 / AI</p>
-                  <h3 className={`font-display text-xl font-semibold tracking-tight ${
-                    isDark ? 'text-white' : 'text-slate-900'
-                  }`}>Use AI where it adds value</h3>
-                  <p className={`mt-3 text-sm leading-relaxed ${
-                    isDark ? 'text-slate-300' : 'text-slate-600'
-                  }`}>Find a specific workflow to improve before adding complexity or ongoing API costs.</p>
-                  <button type="button" onClick={() => navigateTo('solutions')} className="mt-5 inline-flex items-center gap-2 text-xs font-semibold text-blue-700 hover:text-violet-700">
-                    Explore AI solutions <ArrowRight className="h-3.5 w-3.5" />
-                  </button>
-                </article>
-              </div>
-            </section>
-
             {/* SECTION 6: OUR DEVELOPMENT PROCESS */}
             <section className="space-y-8">
               <div className="max-w-2xl">
@@ -1557,7 +1304,7 @@ export default function App() {
                     className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold transition-colors whitespace-nowrap shrink-0"
                   >
                     <GraduationCap className="w-4 h-4" />
-                    <span>Open Internship Portal</span>
+                    <span>View Internship Opportunities</span>
                   </button>
                   <button
                     type="button"
@@ -1810,12 +1557,10 @@ export default function App() {
             service={activeServiceItem}
             allServices={services}
             company={company}
-            configStatus={configStatus}
             isDark={isDark}
             onBackToAllServices={() => navigateTo('services')}
             onSelectService={(slug) => navigateTo('service-detail', slug)}
             onEnquirySubmitted={loadBootstrapData}
-            onOpenAdmin={() => navigateTo('admin')}
           />
         )}
 
@@ -2307,7 +2052,6 @@ export default function App() {
         {activeNav === 'internships' && (
           <InternshipPortalSection
             listings={internshipListings}
-            configStatus={configStatus}
             isDark={isDark}
             onApplicationSubmitted={(
               email: string,
@@ -2318,7 +2062,6 @@ export default function App() {
               loadBootstrapData();
             }}
             onNavigateStudentDashboard={() => navigateTo('student-dashboard')}
-            onNavigateAdminInternships={() => navigateTo('admin-internships')}
           />
         )}
 
@@ -2366,7 +2109,7 @@ export default function App() {
         ========================================================= */}
         {activeNav === 'careers' && (
           <div className="space-y-12">
-            {/* Banner linking to dedicated Internship Management Portal */}
+            {/* Applicant-facing careers and internship shortcuts */}
             <div
               className={`rounded-2xl border p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 ${
                 isDark ? 'bg-[#090F21] border-blue-500/30' : 'bg-blue-50/70 border-blue-200'
@@ -2374,12 +2117,10 @@ export default function App() {
             >
               <div className="space-y-1">
                 <p className="text-xs font-semibold text-blue-400">
-                  Dedicated Student Internship Portal Available (/internships)
+                  Careers & Internship Opportunities
                 </p>
                 <p className={`text-xs ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-                  Looking for structured engineering or design internships, application status
-                  tracking, offer letters, or certificate verification? Open our dedicated
-                  Internship Management Portal.
+                  Explore open internship roles, submit an application, or track one you have already submitted.
                 </p>
               </div>
               <div className="flex flex-wrap items-center gap-2.5 shrink-0">
@@ -2389,7 +2130,7 @@ export default function App() {
                   className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold"
                 >
                   <GraduationCap className="w-3.5 h-3.5" />
-                  <span>Open Internship Portal</span>
+                  <span>View Internship Opportunities</span>
                 </button>
                 <button
                   type="button"
@@ -2421,12 +2162,10 @@ export default function App() {
           <ContactQuoteSection
             company={company}
             services={services}
-            configStatus={configStatus}
             initialService={prefillService}
             initialDescription={prefillDescription}
             isDark={isDark}
             onEnquirySubmitted={loadBootstrapData}
-            onOpenAdmin={() => navigateTo('admin')}
           />
         )}
 
@@ -2434,34 +2173,7 @@ export default function App() {
             12. ADMIN MANAGEMENT & SETUP CONSOLE VIEW
         ========================================================= */}
         {activeNav === 'admin' && (
-          <div className="space-y-8">
-            <div
-              className={`rounded-2xl border p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 ${
-                isDark ? 'bg-[#090F21] border-violet-500/30' : 'bg-indigo-50 border-indigo-200'
-              }`}
-            >
-              <div>
-                <p className="text-xs font-semibold text-violet-400">
-                  Looking for the Internship Management Admin Portal?
-                </p>
-                <p className={`text-xs mt-0.5 ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
-                  Manage internship tracks, review student applications &amp; private resumes, issue
-                  Offer Letters, approve completions, and issue verifiable Completion Certificates in{' '}
-                  <span className="font-mono">/admin/internships</span>.
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={() => navigateTo('admin-internships')}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-violet-600 hover:bg-violet-500 text-white text-xs font-semibold shrink-0"
-              >
-                <GraduationCap className="w-3.5 h-3.5" />
-                <span>Open Internship Admin</span>
-              </button>
-            </div>
-
-            <AdminConsoleSection isDark={isDark} onDataUpdated={loadBootstrapData} />
-          </div>
+          <AdminConsoleSection isDark={isDark} onDataUpdated={loadBootstrapData} />
         )}
       </main>
 
@@ -2519,54 +2231,28 @@ export default function App() {
               </ul>
             </div>
 
-            {/* Column 3: Company, Solutions & Internship Portals */}
+            {/* Company links: keep the footer focused on visitors and prospective clients */}
             <div className="lg:col-span-3 space-y-2.5">
-              <p
-                className={`text-xs font-semibold ${
-                  isDark ? 'text-slate-200' : 'text-slate-900'
-                }`}
-              >
-                Company &amp; Portals
+              <p className={`text-xs font-semibold ${isDark ? 'text-slate-200' : 'text-slate-900'}`}>
+                Company
               </p>
-              <div className="grid grid-cols-1 gap-1.5 text-xs">
-                {navItems.map((item) => (
+              <div className="grid grid-cols-1 gap-2 text-xs">
+                {[
+                  { label: 'Solutions', id: 'solutions' as NavSection },
+                  { label: 'Our Work', id: 'projects' as NavSection },
+                  { label: 'About Lovanstrix', id: 'about' as NavSection },
+                  { label: 'Careers & Internships', id: 'careers' as NavSection },
+                  { label: 'Contact', id: 'contact' as NavSection },
+                ].map((item) => (
                   <button
                     key={item.id}
                     type="button"
                     onClick={() => navigateTo(item.id)}
-                    className="text-left hover:text-blue-400 transition-colors"
+                    className="text-left transition-colors hover:text-blue-500"
                   >
                     {item.label}
                   </button>
                 ))}
-                <button
-                  type="button"
-                  onClick={() => navigateTo('internships')}
-                  className="text-left text-blue-400 hover:text-blue-300 transition-colors"
-                >
-                  Internship Portal (/internships)
-                </button>
-                <button
-                  type="button"
-                  onClick={() => navigateTo('student-dashboard')}
-                  className="text-left text-blue-400 hover:text-blue-300 transition-colors"
-                >
-                  Student Dashboard (/student-dashboard)
-                </button>
-                <button
-                  type="button"
-                  onClick={() => navigateTo('verify-certificate')}
-                  className="text-left text-emerald-400 hover:text-emerald-300 transition-colors"
-                >
-                  Verify Certificate (/verify-certificate)
-                </button>
-                <button
-                  type="button"
-                  onClick={() => navigateTo('admin')}
-                  className="text-left text-violet-400 hover:text-violet-300 transition-colors"
-                >
-                  Admin Console
-                </button>
               </div>
             </div>
 

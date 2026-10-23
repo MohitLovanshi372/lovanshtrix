@@ -45,7 +45,8 @@ export const AdminConsoleSection: React.FC<AdminConsoleSectionProps> = ({
   const [token, setToken] = useState<string>(() => sessionStorage.getItem('lx_admin_token') || '');
   const [passcodeInput, setPasscodeInput] = useState('');
   const [authError, setAuthError] = useState<string | null>(null);
-  const [previewMode, setPreviewMode] = useState<boolean>(true);
+  const [adminAccessDisabled, setAdminAccessDisabled] = useState<boolean>(false);
+  const [previewMode, setPreviewMode] = useState<boolean>(false);
   const [authenticated, setAuthenticated] = useState<boolean>(false);
 
   const [store, setStore] = useState<LovanstrixStore | null>(null);
@@ -112,18 +113,33 @@ export const AdminConsoleSection: React.FC<AdminConsoleSectionProps> = ({
       const resp = await fetch('/api/admin/store', {
         headers: authHeaders(activeToken),
       });
+      const data = await resp.json().catch(() => ({}));
+      if (resp.status === 503) {
+        setAuthenticated(false);
+        setPreviewMode(false);
+        setAdminAccessDisabled(true);
+        setAuthError(data.error || 'Admin access is disabled until a strong server passcode is configured.');
+        return;
+      }
       if (resp.status === 401) {
         setAuthenticated(false);
         setPreviewMode(false);
+        setAdminAccessDisabled(false);
         setLoading(false);
         return;
       }
-      const data = await resp.json();
-      if (resp.ok && data.store) {
+      if (!resp.ok) {
+        setAuthenticated(false);
+        setAuthError(data.error || 'Unable to verify admin access.');
+        return;
+      }
+      if (data.store) {
         setStore(data.store);
         setCompanyForm(data.store.company);
         setConfigStatus(data.configStatus);
-        setPreviewMode(!data.configStatus?.adminAuthConfigured);
+        setPreviewMode(false);
+        setAdminAccessDisabled(false);
+        setAuthError(null);
         setAuthenticated(true);
       }
     } catch {
@@ -148,12 +164,16 @@ export const AdminConsoleSection: React.FC<AdminConsoleSectionProps> = ({
       });
       const data = await resp.json();
       if (!resp.ok) {
+        if (resp.status === 503) setAdminAccessDisabled(true);
+        else setAdminAccessDisabled(false);
         setAuthError(data.error || 'Authentication failed.');
         return;
       }
+      setAdminAccessDisabled(false);
+      setAuthError(null);
       sessionStorage.setItem('lx_admin_token', data.token);
       setToken(data.token);
-      setPreviewMode(Boolean(data.previewMode));
+      setPreviewMode(false);
       setAuthenticated(true);
       await fetchAdminStore(data.token);
     } catch {
@@ -506,6 +526,7 @@ export const AdminConsoleSection: React.FC<AdminConsoleSectionProps> = ({
                 id="admin-passcode"
                 type="password"
                 required
+                disabled={adminAccessDisabled}
                 value={passcodeInput}
                 onChange={(e) => setPasscodeInput(e.target.value)}
                 placeholder="Enter ADMIN_PASSCODE"
@@ -516,10 +537,18 @@ export const AdminConsoleSection: React.FC<AdminConsoleSectionProps> = ({
                 }`}
               />
             </div>
-            {authError && <p className="text-xs text-rose-400">{authError}</p>}
+            {adminAccessDisabled && (
+            <p className={`rounded-lg border p-3 text-xs leading-relaxed ${
+              isDark ? 'border-amber-500/30 bg-amber-500/10 text-amber-200' : 'border-amber-200 bg-amber-50 text-amber-900'
+            }`}>
+              Admin sign-in is disabled until the site owner sets a unique ADMIN_PASSCODE of at least 12 characters in the server environment and restarts the backend.
+            </p>
+          )}
+          {authError && <p className="text-xs text-rose-400">{authError}</p>}
             <button
               type="submit"
-              className="w-full py-2.5 px-4 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold transition-colors"
+              disabled={adminAccessDisabled}
+              className="w-full py-2.5 px-4 rounded-lg bg-blue-600 hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-50 text-white text-xs font-semibold transition-colors"
             >
               Verify & Sign In
             </button>

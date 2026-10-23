@@ -244,8 +244,8 @@ export const SolutionsSection: React.FC<SolutionsSectionProps> = ({
               <span aria-hidden="true">·</span>
               <span>
                 {configStatus.geminiConfigured
-                  ? 'Server-Side Gemini API Active'
-                  : 'Deterministic Template Mode'}
+                  ? 'AI-assisted project planning'
+                  : 'Guided project planning'}
               </span>
             </div>
             <h2

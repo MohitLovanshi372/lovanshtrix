@@ -2,26 +2,21 @@ import React, { useEffect, useState } from 'react';
 import {
   AlertCircle,
   CheckCircle2,
-  Database,
-  Info,
   Link2,
   Mail,
   MessageSquare,
   Send,
-  Settings,
   ShieldCheck,
 } from 'lucide-react';
-import { CompanyDetails, ServiceItem, SystemConfigStatus } from '../types/lovanstrix';
+import { CompanyDetails, ServiceItem } from '../types/lovanstrix';
 
 interface ContactQuoteSectionProps {
   company: CompanyDetails;
   services: ServiceItem[];
-  configStatus: SystemConfigStatus;
   initialService?: string;
   initialDescription?: string;
   isDark: boolean;
   onEnquirySubmitted?: () => void;
-  onOpenAdmin?: () => void;
 }
 
 const BUDGET_RANGES = [
@@ -41,21 +36,15 @@ const TIMELINE_OPTIONS = [
 
 interface EnquirySubmissionFeedback {
   savedToDatabase: boolean;
-  emailConfigured: boolean;
-  emailDelivered: boolean;
-  demoMode: boolean;
-  notice: string;
 }
 
 export const ContactQuoteSection: React.FC<ContactQuoteSectionProps> = ({
   company,
   services,
-  configStatus,
   initialService,
   initialDescription,
   isDark,
   onEnquirySubmitted,
-  onOpenAdmin,
 }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -145,12 +134,6 @@ export const ContactQuoteSection: React.FC<ContactQuoteSectionProps> = ({
       } else {
         setSubmissionResult({
           savedToDatabase: Boolean(data.savedToDatabase),
-          emailConfigured: Boolean(data.emailConfigured),
-          emailDelivered: Boolean(data.emailDelivered),
-          demoMode: Boolean(data.demoMode),
-          notice:
-            data.notice ||
-            'Saved to server database. SMTP_WEBHOOK_URL is optional and not configured—no email was sent.',
         });
         setName('');
         setEmail('');
@@ -162,11 +145,6 @@ export const ContactQuoteSection: React.FC<ContactQuoteSectionProps> = ({
     } catch {
       setSubmissionResult({
         savedToDatabase: false,
-        emailConfigured: false,
-        emailDelivered: false,
-        demoMode: true,
-        notice:
-          'Demo Mode Notice: Neither a live backend database nor SMTP_WEBHOOK_URL is connected right now. Your form inputs were validated in demo mode only—no email was sent.',
       });
       setName('');
       setEmail('');
@@ -203,7 +181,7 @@ export const ContactQuoteSection: React.FC<ContactQuoteSectionProps> = ({
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
-        {/* Left Column: Direct Channels & Optional Email/Database Transparency */}
+        {/* Left Column: Direct Contact Channels */}
         <div className="lg:col-span-5 space-y-6">
           <div
             className={`rounded-2xl border p-6 space-y-6 ${
@@ -267,91 +245,28 @@ export const ContactQuoteSection: React.FC<ContactQuoteSectionProps> = ({
                         isDark ? 'text-slate-300' : 'text-slate-600'
                       }`}
                     >
-                      WhatsApp chat button is currently inactive because no official company phone
-                      number has been configured yet.
+                      WhatsApp is not available at the moment. Please use the email address or enquiry form instead.
                     </p>
-                    {onOpenAdmin && (
-                      <button
-                        type="button"
-                        onClick={onOpenAdmin}
-                        className="inline-flex items-center gap-1.5 text-xs text-blue-400 hover:text-blue-300 font-medium"
-                      >
-                        <Settings className="w-3.5 h-3.5" />
-                        <span>Configure a verified WhatsApp number in Admin Settings →</span>
-                      </button>
-                    )}
+
                   </div>
                 )}
               </div>
             </div>
           </div>
 
-          {/* Transparent Server-Side Email & Database Architecture Card */}
-          <div
-            className={`rounded-2xl border p-6 space-y-3.5 ${
-              isDark
-                ? 'bg-[#090F21] border-slate-800/90'
-                : 'bg-slate-50 border-slate-200'
-            }`}
-          >
-            <div className="flex items-center justify-between gap-2 text-xs font-semibold text-blue-400">
-              <span className="inline-flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4" />
-                <span>Server-Side Enquiry &amp; Email Status</span>
-              </span>
-              <span className="font-mono text-[11px] text-slate-400">POST /api/enquiries</span>
-            </div>
-
-            <div
-              className={`text-xs leading-relaxed space-y-2 ${
-                isDark ? 'text-slate-300' : 'text-slate-600'
-              }`}
-            >
-              <p className="flex items-start gap-2">
-                <Database className="w-3.5 h-3.5 text-blue-400 shrink-0 mt-0.5" />
-                <span>
-                  <strong>Database Storage:</strong>{' '}
-                  {configStatus.databaseAvailable ? (
-                    <>
-                      Active ({configStatus.persistenceMode}). Enquiries are saved directly to the
-                      configured database and can be reviewed in the{' '}
-                      <button
-                        type="button"
-                        onClick={onOpenAdmin}
-                        className="underline text-blue-400 hover:text-blue-300"
-                      >
-                        Admin Console
-                      </button>
-                      .
-                    </>
-                  ) : (
-                    <>
-                      No persistent database connected; submissions run in demo preview mode.
-                    </>
-                  )}
-                </span>
-              </p>
-
-              <p className="flex items-start gap-2">
-                <Mail className="w-3.5 h-3.5 text-blue-400 shrink-0 mt-0.5" />
-                <span>
-                  <strong>
-                    Optional Email Delivery (<code className="font-mono">SMTP_WEBHOOK_URL</code>):
-                  </strong>{' '}
-                  {configStatus.emailWebhookConfigured ? (
-                    <>
-                      Configured on the server. Enquiries are forwarded via the secure server-side
-                      endpoint.
-                    </>
-                  ) : (
-                    <>
-                      Currently unconfigured (optional). <strong>No emails are sent</strong> upon
-                      submission. Email integration remains ready to enable later on the server by
-                      setting <code className="font-mono">SMTP_WEBHOOK_URL</code>.
-                    </>
-                  )}
-                </span>
-              </p>
+          <div className={`rounded-2xl border p-5 ${
+            isDark ? 'bg-[#090F21] border-slate-800/90' : 'bg-slate-50 border-slate-200'
+          }`}>
+            <div className="flex items-start gap-3">
+              <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-blue-500" />
+              <div>
+                <p className={`text-xs font-semibold ${isDark ? 'text-slate-200' : 'text-slate-900'}`}>
+                  Project enquiries
+                </p>
+                <p className={`mt-1.5 text-xs leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                  Share only the project information needed for an initial discussion. Never include passwords, API keys, or other sensitive credentials.
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -377,16 +292,10 @@ export const ContactQuoteSection: React.FC<ContactQuoteSectionProps> = ({
                   Project Enquiry &amp; Quote Specification
                 </h3>
                 <p className={`text-xs mt-1 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                  Fields marked with * are required. Confirmed only after backend verification.
+                  Fields marked with * are required. Share a few details so we can understand your project.
                 </p>
               </div>
-              <span className="text-xs text-slate-400">
-                {configStatus.emailWebhookConfigured
-                  ? 'Database + Email Active'
-                  : configStatus.databaseAvailable
-                  ? 'Database Storage Active · Email Optional (Off)'
-                  : 'Demo Mode · No Email Sent'}
-              </span>
+
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -614,27 +523,27 @@ export const ContactQuoteSection: React.FC<ContactQuoteSectionProps> = ({
               <div
                 role="status"
                 className={`flex items-start gap-3 rounded-xl border p-4 text-xs ${
-                  submissionResult.emailDelivered
-                    ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-200'
-                    : submissionResult.savedToDatabase
-                    ? 'border-blue-500/40 bg-blue-500/10 text-blue-100'
-                    : 'border-amber-500/40 bg-amber-500/10 text-amber-100'
+                  submissionResult.savedToDatabase
+                    ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-900'
+                    : 'border-amber-500/40 bg-amber-500/10 text-amber-900'
                 }`}
               >
-                {submissionResult.emailDelivered ? (
-                  <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5 text-emerald-400" />
+                {submissionResult.savedToDatabase ? (
+                  <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5 text-emerald-600" />
                 ) : (
-                  <Info className="w-4 h-4 shrink-0 mt-0.5 text-blue-400" />
+                  <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-amber-600" />
                 )}
                 <div className="space-y-1">
                   <p className="font-semibold">
-                    {submissionResult.emailDelivered
-                      ? 'Enquiry Saved to Database & Forwarded via Server-Side Email'
-                      : submissionResult.savedToDatabase
-                      ? 'Saved to Configured Database — No Email Was Sent (SMTP_WEBHOOK_URL Optional)'
-                      : 'Demo Mode Notice — No Email Was Sent'}
+                    {submissionResult.savedToDatabase
+                      ? 'Thank you — your enquiry has been received.'
+                      : 'Your enquiry could not be saved in this environment.'}
                   </p>
-                  <p className="leading-relaxed">{submissionResult.notice}</p>
+                  <p className="leading-relaxed">
+                    {submissionResult.savedToDatabase
+                      ? 'Your project details are ready for the Lovanstrix team to review.'
+                      : 'Please contact us directly by email or try again later.'}
+                  </p>
                 </div>
               </div>
             )}
@@ -649,7 +558,7 @@ export const ContactQuoteSection: React.FC<ContactQuoteSectionProps> = ({
                 <span>{submitting ? 'Submitting Enquiry...' : 'Submit Project Enquiry'}</span>
               </button>
               <span className="text-xs text-slate-400">
-                Server-side endpoint · Honest delivery status
+                Please do not include passwords or private credentials.
               </span>
             </div>
           </form>
