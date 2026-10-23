@@ -404,10 +404,10 @@ export default function App() {
       {/* STICKY HEADER & NAVIGATION BAR */}
       <header
         className={`sticky top-0 z-40 backdrop-blur-md border-b transition-colors ${
-          isDark ? 'bg-[#050814]/90 border-slate-800/80' : 'bg-white/95 border-slate-200'
+          isDark ? 'bg-[#050814]/90 border-slate-800/80' : 'bg-[#E4E7EF]/95 border-slate-300/70'
         }`}
       >
-        <div className="max-w-[1240px] mx-auto flex items-center justify-between gap-6 px-6 py-4">
+        <div className="max-w-[1060px] mx-auto flex items-center justify-between gap-6 px-6 py-8">
           {/* Zone 1: Custom LOVANSTRIX Logo linking to Homepage */}
           <a
             href="/"
@@ -695,7 +695,7 @@ export default function App() {
             : 'bg-slate-100/80 border-slate-200/80 text-slate-600'
         }`}
       >
-        <div className="max-w-[1240px] mx-auto px-6 py-2 flex flex-wrap items-center justify-between gap-4">
+        <div className="max-w-[1060px] mx-auto px-6 py-2 flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <span className="font-semibold text-blue-400">{company.tagline}</span>
             <span aria-hidden="true">·</span>
@@ -816,7 +816,7 @@ export default function App() {
       )}
 
       {/* MAIN CONTENT VIEWPORT */}
-      <main className="flex-1 max-w-[1240px] w-full mx-auto px-6 py-12 sm:py-16">
+      <main className="flex-1 max-w-[1060px] w-full mx-auto px-6 py-12 sm:py-16">
         {/* =========================================================
             1. HOMEPAGE VIEW (ALL 10 MAIN SECTIONS + FOOTER)
         ========================================================= */}
@@ -2275,7 +2275,7 @@ export default function App() {
             : 'bg-slate-100 border-slate-200 text-slate-600'
         }`}
       >
-        <div className="max-w-[1240px] mx-auto px-6 py-14 space-y-10">
+        <div className="max-w-[1060px] mx-auto px-6 py-14 space-y-10">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 justify-between">
             {/* Column 1: Brand & Positioning */}
             <div className="lg:col-span-4 space-y-3">
