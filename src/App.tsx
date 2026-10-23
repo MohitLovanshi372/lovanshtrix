@@ -1575,6 +1575,7 @@ export default function App() {
           <SolutionsSection
             solutions={solutions}
             explorations={explorations}
+            configStatus={configStatus}
             isDark={isDark}
             onStartQuoteWithService={handleDiscussService}
           />
@@ -2055,6 +2056,7 @@ export default function App() {
         {activeNav === 'internships' && (
           <InternshipPortalSection
             listings={internshipListings}
+            configStatus={configStatus}
             isDark={isDark}
             onApplicationSubmitted={(
               email: string,
@@ -2065,7 +2067,6 @@ export default function App() {
               loadBootstrapData();
             }}
             onNavigateStudentDashboard={() => navigateTo('student-dashboard')}
-            onNavigateAdminInternships={() => navigateTo('admin-internships')}
           />
         )}
 
