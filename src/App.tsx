@@ -2109,7 +2109,7 @@ export default function App() {
         ========================================================= */}
         {activeNav === 'careers' && (
           <div className="space-y-12">
-            {/* Banner linking to dedicated Internship Management Portal */}
+            {/* Applicant-facing careers and internship shortcuts */}
             <div
               className={`rounded-2xl border p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 ${
                 isDark ? 'bg-[#090F21] border-blue-500/30' : 'bg-blue-50/70 border-blue-200'
@@ -2130,7 +2130,7 @@ export default function App() {
                   className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold"
                 >
                   <GraduationCap className="w-3.5 h-3.5" />
-                  <span>Open Internship Portal</span>
+                  <span>View Internship Opportunities</span>
                 </button>
                 <button
                   type="button"
