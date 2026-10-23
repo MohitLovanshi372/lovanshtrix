@@ -307,10 +307,7 @@ export const InternshipPortalSection: React.FC<InternshipPortalSectionProps> = (
               isDark ? 'text-slate-300' : 'text-slate-600'
             }`}
           >
-            Explore Lovanstrix’s structured learning and project internship tracks. Tracks marked as{' '}
-            <strong>Upcoming</strong> are example curriculum categories preparing for future
-            cohorts; applications are accepted only when an administrator publishes a track as{' '}
-            <strong>Open</strong>.
+            Explore current internship tracks. Applications are accepted only for opportunities marked Open.
           </p>
         </div>
 
@@ -320,7 +317,7 @@ export const InternshipPortalSection: React.FC<InternshipPortalSectionProps> = (
             onClick={onNavigateStudentDashboard}
             className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold transition-colors whitespace-nowrap shrink-0"
           >
-            <span>Student Dashboard (/student-dashboard)</span>
+            <span>Track an Application</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>
@@ -628,11 +625,10 @@ export const InternshipPortalSection: React.FC<InternshipPortalSectionProps> = (
                 }`}
               >
                 <p className="font-semibold">
-                  No Internship Tracks Are Marked &ldquo;Open&rdquo; Yet
+                  No internship openings are available right now
                 </p>
                 <p className="leading-relaxed">
-                  In accordance with Lovanstrix’s transparency policy, all initial tracks are set to{' '}
-                  <strong>Upcoming</strong> until an administrator publishes a genuine opening.
+                  New opportunities will appear here when applications open.
                 </p>
               </div>
             )}
