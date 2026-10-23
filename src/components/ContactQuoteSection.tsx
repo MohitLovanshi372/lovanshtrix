@@ -2,13 +2,10 @@ import React, { useEffect, useState } from 'react';
 import {
   AlertCircle,
   CheckCircle2,
-  Database,
-  Info,
   Link2,
   Mail,
   MessageSquare,
   Send,
-  Settings,
   ShieldCheck,
 } from 'lucide-react';
 import { CompanyDetails, ServiceItem } from '../types/lovanstrix';
@@ -266,16 +263,7 @@ export const ContactQuoteSection: React.FC<ContactQuoteSectionProps> = ({
                       WhatsApp chat button is currently inactive because no official company phone
                       number has been configured yet.
                     </p>
-                    {onOpenAdmin && (
-                      <button
-                        type="button"
-                        onClick={onOpenAdmin}
-                        className="inline-flex items-center gap-1.5 text-xs text-blue-400 hover:text-blue-300 font-medium"
-                      >
-                        <Settings className="w-3.5 h-3.5" />
-                        <span>Configure a verified WhatsApp number in Admin Settings →</span>
-                      </button>
-                    )}
+
                   </div>
                 )}
               </div>
@@ -551,27 +539,27 @@ export const ContactQuoteSection: React.FC<ContactQuoteSectionProps> = ({
               <div
                 role="status"
                 className={`flex items-start gap-3 rounded-xl border p-4 text-xs ${
-                  submissionResult.emailDelivered
-                    ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-200'
-                    : submissionResult.savedToDatabase
-                    ? 'border-blue-500/40 bg-blue-500/10 text-blue-100'
-                    : 'border-amber-500/40 bg-amber-500/10 text-amber-100'
+                  submissionResult.savedToDatabase
+                    ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-900'
+                    : 'border-amber-500/40 bg-amber-500/10 text-amber-900'
                 }`}
               >
-                {submissionResult.emailDelivered ? (
-                  <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5 text-emerald-400" />
+                {submissionResult.savedToDatabase ? (
+                  <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5 text-emerald-600" />
                 ) : (
-                  <Info className="w-4 h-4 shrink-0 mt-0.5 text-blue-400" />
+                  <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-amber-600" />
                 )}
                 <div className="space-y-1">
                   <p className="font-semibold">
-                    {submissionResult.emailDelivered
-                      ? 'Enquiry Saved to Database & Forwarded via Server-Side Email'
-                      : submissionResult.savedToDatabase
-                      ? 'Saved to Configured Database — No Email Was Sent (SMTP_WEBHOOK_URL Optional)'
-                      : 'Demo Mode Notice — No Email Was Sent'}
+                    {submissionResult.savedToDatabase
+                      ? 'Thank you — your enquiry has been received.'
+                      : 'Your enquiry could not be saved in this environment.'}
                   </p>
-                  <p className="leading-relaxed">{submissionResult.notice}</p>
+                  <p className="leading-relaxed">
+                    {submissionResult.savedToDatabase
+                      ? 'Your project details are ready for the Lovanstrix team to review.'
+                      : 'Please contact us directly by email or try again later.'}
+                  </p>
                 </div>
               </div>
             )}
@@ -586,7 +574,7 @@ export const ContactQuoteSection: React.FC<ContactQuoteSectionProps> = ({
                 <span>{submitting ? 'Submitting Enquiry...' : 'Submit Project Enquiry'}</span>
               </button>
               <span className="text-xs text-slate-400">
-                Server-side endpoint · Honest delivery status
+                Please do not include passwords or private credentials.
               </span>
             </div>
           </form>
