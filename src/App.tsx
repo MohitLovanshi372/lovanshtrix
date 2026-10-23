@@ -7,6 +7,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   ArrowRight,
   Award,
+  Box,
   Check,
   ChevronDown,
   Code2,
@@ -38,6 +39,7 @@ import {
   SystemConfigStatus,
 } from './types/lovanstrix';
 import { LovanstrixMark, ProjectVisualCanvas } from './components/BrandVisuals';
+import { Interactive3DCore } from './components/Interactive3DCore';
 import { ServiceDetailView } from './components/ServiceDetailView';
 import { SolutionsSection } from './components/SolutionsSection';
 import { CareersSection } from './components/CareersSection';
@@ -240,6 +242,37 @@ export default function App() {
   const [servicesDropdownOpen, setServicesDropdownOpen] = useState<boolean>(false);
   const [openFaqIdx, setOpenFaqIdx] = useState<number | null>(0);
   const [isDark, setIsDark] = useState<boolean>(false);
+  const [showIntro, setShowIntro] = useState<boolean>(() => {
+    if (initialRoute.section !== 'home') return false;
+    try {
+      return window.sessionStorage.getItem('lovanstrix-intro-seen') !== '1';
+    } catch {
+      return true;
+    }
+  });
+  const [heroVisualMode, setHeroVisualMode] = useState<'image' | '3d'>('image');
+  const finishIntro = useCallback(() => {
+    try {
+      window.sessionStorage.setItem('lovanstrix-intro-seen', '1');
+    } catch {
+      // The intro still works if browser storage is unavailable.
+    }
+    setShowIntro(false);
+  }, []);
+  useEffect(() => {
+    if (!showIntro) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      finishIntro();
+      return;
+    }
+    const oldOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const timer = window.setTimeout(finishIntro, 4200);
+    return () => {
+      window.clearTimeout(timer);
+      document.body.style.overflow = oldOverflow;
+    };
+  }, [showIntro, finishIntro]);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
   // Dynamic Store State loaded from Express Backend
@@ -397,17 +430,74 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#9CADB5] p-0 sm:p-4 lg:p-8">
       <div
+        className={`lovanstrix-intro ${showIntro ? 'is-open' : 'is-closed'}`}
+        aria-hidden={!showIntro}
+      >
+        <div className="lovanstrix-intro__ambient" />
+        <div className="lovanstrix-intro__topline">
+          <span>LOVANSTRIX <span className="text-blue-300">/</span> DIGITAL FUTURES</span>
+          <span className="hidden sm:inline">INDEPENDENT TECHNOLOGY STUDIO</span>
+        </div>
+
+        <div className="lovanstrix-intro__center">
+          <div className="lovanstrix-intro__brand">
+            <img
+              src="/images/lovanstrix-logo.svg"
+              alt=""
+              width="960"
+              height="250"
+              className="h-auto w-[230px] sm:w-[290px]"
+            />
+          </div>
+
+          <div className="lovanstrix-intro__stage" aria-hidden="true">
+            <div className="lovanstrix-intro__orbit lovanstrix-intro__orbit--one" />
+            <div className="lovanstrix-intro__orbit lovanstrix-intro__orbit--two" />
+            <div className="lovanstrix-intro__orbit lovanstrix-intro__orbit--three" />
+            <div className="lovanstrix-intro__cube-wrap">
+              <div className="lovanstrix-intro__cube">
+                {['front', 'back', 'right', 'left', 'top', 'bottom'].map((face) => (
+                  <span key={face} className={`lovanstrix-intro__cube-face lovanstrix-intro__cube-face--${face}`} />
+                ))}
+              </div>
+            </div>
+            <span className="lovanstrix-intro__spark lovanstrix-intro__spark--one" />
+            <span className="lovanstrix-intro__spark lovanstrix-intro__spark--two" />
+          </div>
+
+          <p className="lovanstrix-intro__eyebrow">DESIGN · DEVELOPMENT · INTELLIGENCE</p>
+          <h2 className="lovanstrix-intro__title">
+            <span>WE BUILD</span>
+            <span className="lovanstrix-intro__title-accent">WHAT’S NEXT.</span>
+          </h2>
+          <p className="lovanstrix-intro__subtitle">
+            Thoughtful digital experiences, engineered for what's ahead.
+          </p>
+          <button type="button" className="lovanstrix-intro__enter" onClick={finishIntro}>
+            ENTER EXPERIENCE <ArrowRight className="h-4 w-4" />
+          </button>
+        </div>
+
+        <div className="lovanstrix-intro__footer">
+          <span>WEB <i>·</i> APPS <i>·</i> AI</span>
+          <div className="lovanstrix-intro__progress" aria-hidden="true"><span /></div>
+          <span className="lovanstrix-intro__footer-status">INITIALIZING <b>01—04</b></span>
+        </div>
+      </div>
+
+      <div
         className={`mx-auto max-w-[1600px] min-h-screen overflow-hidden shadow-[0_30px_90px_rgba(15,23,42,0.16)] transition-colors duration-200 ${
           isDark ? 'bg-[#050814] text-slate-100' : 'bg-[#E4E7EF] text-[#111318]'
         }`}
       >
       {/* STICKY HEADER & NAVIGATION BAR */}
       <header
-        className={`sticky top-0 z-40 backdrop-blur-md border-b transition-colors ${
+        data-intro-state={showIntro ? 'waiting' : 'ready'}
+        className={`lovanstrix-site-header sticky top-0 z-40 backdrop-blur-md border-b transition-colors ${
           isDark ? 'bg-[#050814]/90 border-slate-800/80' : 'bg-[#E4E7EF]/95 border-slate-300/70'
         }`}
       >
-        <div className="max-w-[1060px] mx-auto flex items-center justify-between gap-6 px-6 py-8">
+        <div className="lovanstrix-header-row max-w-[1060px] mx-auto flex items-center justify-between gap-6 px-6 py-8">
           {/* Zone 1: Custom LOVANSTRIX Logo linking to Homepage */}
           <a
             href="/"
@@ -835,7 +925,17 @@ export default function App() {
                 </div>
 
                 <h1 className="font-display text-[47px] leading-[1.03] tracking-[-0.055em] sm:text-[58px] xl:text-[70px] font-medium text-[#101216] text-balance max-w-[690px]">
-                  {company.heroHeading}
+                  {company.heroHeading.split(' ').map((word, index, words) => (
+                    <React.Fragment key={`${word}-${index}`}>
+                      <span
+                        className={`lovanstrix-heading-word ${showIntro ? 'is-paused' : ''}`}
+                        style={{ animationDelay: `${0.08 + index * 0.09}s` }}
+                      >
+                        {word}
+                      </span>
+                      {index < words.length - 1 ? ' ' : null}
+                    </React.Fragment>
+                  ))}
                 </h1>
 
                 <p className="mt-6 max-w-[500px] text-[15px] sm:text-[17px] leading-[1.8] text-slate-600">
@@ -886,19 +986,37 @@ export default function App() {
 
               <div className="lg:col-span-6 relative mx-auto w-full max-w-[660px] lg:max-w-none">
                 <div className="pointer-events-none absolute -inset-5 rounded-full bg-gradient-to-br from-blue-200/30 via-transparent to-violet-200/35 blur-3xl" />
-                <figure className="relative mx-auto w-full max-w-[650px] overflow-hidden rounded-[26px] sm:rounded-[32px]">
-                  <img
-                    src="/images/lovanstrix-hero-orbit.svg"
-                    alt="Lovanstrix abstract glass cube with blue and violet fluid details surrounded by orbital lines"
-                    className="lovanstrix-hero-art block h-auto w-full"
-                    width="1200"
-                    height="1000"
-                    fetchPriority="high"
-                  />
-                </figure>
-                <div className="absolute bottom-5 left-3 sm:bottom-8 sm:left-6 inline-flex items-center gap-2 rounded-full border border-white/90 bg-white/85 px-3.5 py-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-600 shadow-md backdrop-blur-md">
+                <div className="relative z-10 flex justify-end pb-3">
+                  <button
+                    type="button"
+                    onClick={() => setHeroVisualMode((mode) => mode === 'image' ? '3d' : 'image')}
+                    aria-pressed={heroVisualMode === '3d'}
+                    className="inline-flex items-center gap-2 rounded-full border border-white/90 bg-white/85 px-4 py-2 text-[11px] font-semibold text-slate-700 shadow-sm backdrop-blur transition-all hover:-translate-y-0.5 hover:border-blue-300 hover:text-blue-700"
+                  >
+                    <Box className="h-3.5 w-3.5 text-blue-600" />
+                    {heroVisualMode === 'image' ? 'Explore interactive 3D' : 'Back to artwork'}
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+                {heroVisualMode === '3d' ? (
+                  <div className="lovanstrix-3d-panel relative overflow-hidden rounded-[26px] sm:rounded-[32px]">
+                    <Interactive3DCore isDark={isDark} compact />
+                  </div>
+                ) : (
+                  <figure className="lovanstrix-hero-figure relative mx-auto w-full max-w-[650px] overflow-hidden rounded-[26px] sm:rounded-[32px]">
+                    <img
+                      src="/images/lovanstrix-hero-orbit.svg"
+                      alt="Lovanstrix abstract glass cube with blue and violet fluid details surrounded by orbital lines"
+                      className="lovanstrix-hero-art block h-auto w-full"
+                      width="1200"
+                      height="1000"
+                      fetchPriority="high"
+                    />
+                  </figure>
+                )}
+                <div className="absolute bottom-5 left-3 sm:bottom-8 sm:left-6 z-20 inline-flex items-center gap-2 rounded-full border border-white/90 bg-white/85 px-3.5 py-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-600 shadow-md backdrop-blur-md">
                   <span className="h-1.5 w-1.5 rounded-full bg-blue-600" />
-                  Web · Apps · AI
+                  {heroVisualMode === 'image' ? 'Web · Apps · AI' : 'Interactive technology core'}
                 </div>
               </div>
             </section>
@@ -1206,6 +1324,86 @@ export default function App() {
                     </div>
                   </article>
                 ))}
+              </div>
+            </section>
+
+            {/* SECTION 5B: LIGHTWEIGHT INSIGHTS / STARTER GUIDES */}
+            <section className="space-y-7">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                  <p className="mb-2 text-xs font-semibold uppercase tracking-[0.16em] text-blue-700">
+                    Ideas, made practical
+                  </p>
+                  <h2 className={`font-display text-3xl sm:text-4xl font-medium tracking-tight ${
+                    isDark ? 'text-white' : 'text-slate-950'
+                  }`}>
+                    A clearer path from idea to launch.
+                  </h2>
+                  <p className={`mt-3 max-w-2xl text-sm leading-relaxed ${
+                    isDark ? 'text-slate-300' : 'text-slate-600'
+                  }`}>
+                    Explore practical starting points for planning a digital product without overcomplicating the first step.
+                  </p>
+                </div>
+                <span className={`text-[11px] font-medium ${
+                  isDark ? 'text-slate-400' : 'text-slate-500'
+                }`}>Starter topics · No account required</span>
+              </div>
+
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                <article className={`group rounded-2xl border p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${
+                  isDark ? 'bg-[#0B1224] border-slate-800 hover:border-blue-500/50' : 'bg-white border-slate-200 hover:border-blue-300 hover:shadow-blue-100/60'
+                }`}>
+                  <span className="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-blue-50 text-blue-700">
+                    <Code2 className="h-5 w-5" />
+                  </span>
+                  <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.15em] text-blue-700">01 / Websites</p>
+                  <h3 className={`font-display text-xl font-semibold tracking-tight ${
+                    isDark ? 'text-white' : 'text-slate-900'
+                  }`}>Plan your first business website</h3>
+                  <p className={`mt-3 text-sm leading-relaxed ${
+                    isDark ? 'text-slate-300' : 'text-slate-600'
+                  }`}>Start with your audience, key pages, contact flow, and a realistic launch scope.</p>
+                  <button type="button" onClick={() => navigateTo('services')} className="mt-5 inline-flex items-center gap-2 text-xs font-semibold text-blue-700 hover:text-violet-700">
+                    Explore website services <ArrowRight className="h-3.5 w-3.5" />
+                  </button>
+                </article>
+
+                <article className={`group rounded-2xl border p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${
+                  isDark ? 'bg-[#0B1224] border-slate-800 hover:border-blue-500/50' : 'bg-white border-slate-200 hover:border-blue-300 hover:shadow-blue-100/60'
+                }`}>
+                  <span className="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-violet-50 text-violet-700">
+                    <Layers className="h-5 w-5" />
+                  </span>
+                  <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.15em] text-violet-700">02 / Applications</p>
+                  <h3 className={`font-display text-xl font-semibold tracking-tight ${
+                    isDark ? 'text-white' : 'text-slate-900'
+                  }`}>When an idea needs a web app</h3>
+                  <p className={`mt-3 text-sm leading-relaxed ${
+                    isDark ? 'text-slate-300' : 'text-slate-600'
+                  }`}>Understand users, forms, dashboards, data storage, and the smallest useful first version.</p>
+                  <button type="button" onClick={() => navigateTo('solutions')} className="mt-5 inline-flex items-center gap-2 text-xs font-semibold text-blue-700 hover:text-violet-700">
+                    Explore digital solutions <ArrowRight className="h-3.5 w-3.5" />
+                  </button>
+                </article>
+
+                <article className={`group rounded-2xl border p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${
+                  isDark ? 'bg-[#0B1224] border-slate-800 hover:border-blue-500/50' : 'bg-white border-slate-200 hover:border-blue-300 hover:shadow-blue-100/60'
+                }`}>
+                  <span className="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-cyan-50 text-cyan-700">
+                    <Sparkles className="h-5 w-5" />
+                  </span>
+                  <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.15em] text-cyan-700">03 / AI</p>
+                  <h3 className={`font-display text-xl font-semibold tracking-tight ${
+                    isDark ? 'text-white' : 'text-slate-900'
+                  }`}>Use AI where it adds value</h3>
+                  <p className={`mt-3 text-sm leading-relaxed ${
+                    isDark ? 'text-slate-300' : 'text-slate-600'
+                  }`}>Find a specific workflow to improve before adding complexity or ongoing API costs.</p>
+                  <button type="button" onClick={() => navigateTo('solutions')} className="mt-5 inline-flex items-center gap-2 text-xs font-semibold text-blue-700 hover:text-violet-700">
+                    Explore AI solutions <ArrowRight className="h-3.5 w-3.5" />
+                  </button>
+                </article>
               </div>
             </section>
 
