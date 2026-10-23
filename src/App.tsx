@@ -6,7 +6,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   ArrowRight,
-  Award,
   Box,
   Check,
   ChevronDown,
@@ -16,13 +15,10 @@ import {
   GraduationCap,
   HelpCircle,
   Layers,
+  Lock,
   Menu,
-  Moon,
-  Settings,
   ShieldCheck,
   Sparkles,
-  Sun,
-  UserCheck,
   X,
 } from 'lucide-react';
 import {
@@ -242,7 +238,7 @@ export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
   const [servicesDropdownOpen, setServicesDropdownOpen] = useState<boolean>(false);
   const [openFaqIdx, setOpenFaqIdx] = useState<number | null>(0);
-  const [isDark, setIsDark] = useState<boolean>(false);
+  const isDark = false;
   const [showIntro, setShowIntro] = useState<boolean>(() => {
     if (initialRoute.section !== 'home') return false;
     try {
@@ -1308,7 +1304,7 @@ export default function App() {
                     className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold transition-colors whitespace-nowrap shrink-0"
                   >
                     <GraduationCap className="w-4 h-4" />
-                    <span>Open Internship Portal</span>
+                    <span>View Internship Opportunities</span>
                   </button>
                   <button
                     type="button"
@@ -2056,7 +2052,6 @@ export default function App() {
         {activeNav === 'internships' && (
           <InternshipPortalSection
             listings={internshipListings}
-            configStatus={configStatus}
             isDark={isDark}
             onApplicationSubmitted={(
               email: string,
@@ -2122,12 +2117,10 @@ export default function App() {
             >
               <div className="space-y-1">
                 <p className="text-xs font-semibold text-blue-400">
-                  Dedicated Student Internship Portal Available (/internships)
+                  Careers & Internship Opportunities
                 </p>
                 <p className={`text-xs ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-                  Looking for structured engineering or design internships, application status
-                  tracking, offer letters, or certificate verification? Open our dedicated
-                  Internship Management Portal.
+                  Explore open internship roles, submit an application, or track one you have already submitted.
                 </p>
               </div>
               <div className="flex flex-wrap items-center gap-2.5 shrink-0">
