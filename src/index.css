@@ -34,7 +34,7 @@
 /* Lovanstrix light-first agency theme refinements */
 @layer base {
   html:not(.dark) body {
-    background: #ffffff;
+    background: #9CADB5;
     color: #0f172a;
   }
 
@@ -77,6 +77,7 @@
 .lovanstrix-hero-art {
   animation: lovanstrix-artwork-float 7s ease-in-out infinite;
   transform-origin: center;
+  filter: drop-shadow(0 22px 38px rgb(61 94 147 / 8%));
 }
 
 @media (prefers-reduced-motion: reduce) {

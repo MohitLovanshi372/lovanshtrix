@@ -78,7 +78,8 @@ function loadStore(): LovanstrixStore {
       heroHeading:
         !parsed.company?.heroHeading ||
         parsed.company?.heroHeading === 'We Build Digital Experiences That Move Ideas Forward.' ||
-        parsed.company?.heroHeading === 'Technology Solutions Built Around Your Ideas.'
+        parsed.company?.heroHeading === 'Technology Solutions Built Around Your Ideas.' ||
+        parsed.company?.heroHeading === 'We Build Digital Ideas Into Reality.'
           ? INITIAL_STORE.company.heroHeading
           : parsed.company.heroHeading,
       heroSubtitle:

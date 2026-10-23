@@ -7,7 +7,6 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   ArrowRight,
   Award,
-  Box,
   Check,
   ChevronDown,
   Code2,
@@ -38,12 +37,7 @@ import {
   ServiceItem,
   SystemConfigStatus,
 } from './types/lovanstrix';
-import {
-  HeroGeometricIllustration,
-  LovanstrixMark,
-  ProjectVisualCanvas,
-} from './components/BrandVisuals';
-import { Interactive3DCore } from './components/Interactive3DCore';
+import { LovanstrixMark, ProjectVisualCanvas } from './components/BrandVisuals';
 import { ServiceDetailView } from './components/ServiceDetailView';
 import { SolutionsSection } from './components/SolutionsSection';
 import { CareersSection } from './components/CareersSection';
@@ -242,7 +236,6 @@ export default function App() {
   const [studentSessionPrefill, setStudentSessionPrefill] = useState<
     { email: string; accessKey: string } | undefined
   >(undefined);
-  const [heroVisualMode, setHeroVisualMode] = useState<'3d' | '2d' | 'image'>('image');
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
   const [servicesDropdownOpen, setServicesDropdownOpen] = useState<boolean>(false);
   const [openFaqIdx, setOpenFaqIdx] = useState<number | null>(0);
@@ -402,18 +395,19 @@ export default function App() {
   ];
 
   return (
-    <div
-      className={`min-h-screen flex flex-col transition-colors duration-200 ${
-        isDark ? 'bg-[#050814] text-slate-100' : 'bg-[#F8FAFC] text-slate-900'
-      }`}
-    >
+    <div className="min-h-screen bg-[#9CADB5] p-0 sm:p-4 lg:p-8">
+      <div
+        className={`mx-auto max-w-[1600px] min-h-screen overflow-hidden shadow-[0_30px_90px_rgba(15,23,42,0.16)] transition-colors duration-200 ${
+          isDark ? 'bg-[#050814] text-slate-100' : 'bg-[#E4E7EF] text-[#111318]'
+        }`}
+      >
       {/* STICKY HEADER & NAVIGATION BAR */}
       <header
         className={`sticky top-0 z-40 backdrop-blur-md border-b transition-colors ${
-          isDark ? 'bg-[#050814]/90 border-slate-800/80' : 'bg-white/95 border-slate-200'
+          isDark ? 'bg-[#050814]/90 border-slate-800/80' : 'bg-[#E4E7EF]/95 border-slate-300/70'
         }`}
       >
-        <div className="max-w-[1240px] mx-auto flex items-center justify-between gap-6 px-6 py-4">
+        <div className="max-w-[1060px] mx-auto flex items-center justify-between gap-6 px-6 py-8">
           {/* Zone 1: Custom LOVANSTRIX Logo linking to Homepage */}
           <a
             href="/"
@@ -693,7 +687,7 @@ export default function App() {
         )}
       </header>
 
-      {/* Secondary Workspace Bar (Careers & Internships Link, Certificate Verification, Admin & Theme Switch) */}
+      {(['admin', 'admin-internships', 'student-dashboard', 'verify-certificate'].includes(activeNav)) && (
       <div
         className={`border-b text-xs ${
           isDark
@@ -701,7 +695,7 @@ export default function App() {
             : 'bg-slate-100/80 border-slate-200/80 text-slate-600'
         }`}
       >
-        <div className="max-w-[1240px] mx-auto px-6 py-2 flex flex-wrap items-center justify-between gap-4">
+        <div className="max-w-[1060px] mx-auto px-6 py-2 flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <span className="font-semibold text-blue-400">{company.tagline}</span>
             <span aria-hidden="true">·</span>
@@ -819,188 +813,129 @@ export default function App() {
           </div>
         </div>
       </div>
+      )}
 
       {/* MAIN CONTENT VIEWPORT */}
-      <main className="flex-1 max-w-[1240px] w-full mx-auto px-6 py-12 sm:py-16">
+      <main className="flex-1 max-w-[1060px] w-full mx-auto px-6 py-12 sm:py-16">
         {/* =========================================================
             1. HOMEPAGE VIEW (ALL 10 MAIN SECTIONS + FOOTER)
         ========================================================= */}
         {activeNav === 'home' && (
-          <div className="space-y-24">
-            {/* SECTION 1: HERO SECTION WITH ORIGINAL TECHNOLOGY VISUALS */}
-            <section className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-stretch">
-              <div className="lg:col-span-6 flex flex-col justify-center space-y-6">
-                <div className="flex items-center gap-2 text-xs font-medium text-blue-400">
-                  <span>LOVANSTRIX</span>
-                  <span aria-hidden="true">·</span>
-                  <span>{company.tagline}</span>
-                  <span aria-hidden="true">·</span>
-                  <span>IT Services &amp; Software Engineering</span>
+          <div className="space-y-20">
+            {/* SECTION 1: PREMIUM REFERENCE-INSPIRED HERO */}
+            <section className="relative grid grid-cols-1 lg:grid-cols-12 gap-9 lg:gap-8 xl:gap-12 items-center pt-3 sm:pt-5 pb-8 min-h-[520px]">
+              <div className="lg:col-span-6 flex flex-col justify-center py-5 sm:py-9 lg:py-12">
+                <div className="inline-flex items-center gap-2.5 mb-5 text-[12px] font-medium text-slate-700">
+                  <span className="inline-flex items-center gap-2 rounded-full bg-white/85 border border-white px-4 py-2 shadow-sm">
+                    <span className="w-2 h-2 rounded-full bg-blue-600" /> Innovate
+                  </span>
+                  <span className="text-slate-500">Visualize</span>
+                  <span className="ml-1 text-slate-400">/</span>
+                  <span className="text-slate-500">Build</span>
                 </div>
 
-                <h1
-                  className={`font-display text-4xl sm:text-5xl lg:text-[52px] font-bold tracking-tight leading-[1.1] text-balance ${
-                    isDark ? 'text-white' : 'text-slate-950'
-                  }`}
-                >
+                <h1 className="font-display text-[47px] leading-[1.03] tracking-[-0.055em] sm:text-[58px] xl:text-[70px] font-medium text-[#101216] text-balance max-w-[690px]">
                   {company.heroHeading}
                 </h1>
 
-                <p
-                  className={`text-base sm:text-lg leading-relaxed max-w-2xl ${
-                    isDark ? 'text-slate-300' : 'text-slate-600'
-                  }`}
-                >
+                <p className="mt-6 max-w-[500px] text-[15px] sm:text-[17px] leading-[1.8] text-slate-600">
                   {company.heroSubtitle}
                 </p>
 
-                {/* Primary CTA: Get a Quote | Secondary CTA: Explore Our Services */}
-                <div className="flex flex-wrap items-center gap-3.5 pt-2">
+                <div className="mt-7 flex flex-wrap items-center gap-4">
                   <button
                     type="button"
                     onClick={() => navigateTo('contact')}
-                    className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-500 hover:to-violet-500 text-white text-xs sm:text-sm font-semibold transition-all whitespace-nowrap shrink-0"
+                    className="group inline-flex items-center justify-center gap-3 rounded-full bg-[#111214] px-6 py-3.5 text-[12px] font-semibold tracking-wide text-white shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-blue-700 hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                   >
-                    <span>Get a Quote</span>
-                    <ArrowRight className="w-4 h-4" />
+                    <span className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-white/50">
+                      <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
+                    </span>
+                    LET’S BUILD TOGETHER
                   </button>
-
                   <button
                     type="button"
                     onClick={() => navigateTo('services')}
-                    className={`inline-flex items-center gap-2 px-6 py-3 rounded-lg border text-xs sm:text-sm font-semibold transition-colors whitespace-nowrap shrink-0 ${
-                      isDark
-                        ? 'border-slate-700 bg-slate-900/70 text-white hover:bg-slate-800'
-                        : 'border-slate-300 bg-white text-slate-900 hover:bg-slate-100'
-                    }`}
+                    className="inline-flex items-center gap-2 rounded-full px-2 py-3 text-[13px] font-semibold text-slate-700 transition-colors hover:text-blue-700"
                   >
-                    <span>Explore Our Services</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => navigateTo('projects')}
-                    className={`inline-flex items-center gap-2 px-5 py-3 rounded-lg border text-xs sm:text-sm font-semibold transition-colors whitespace-nowrap shrink-0 ${
-                      isDark
-                        ? 'border-blue-500/40 bg-blue-500/10 text-blue-400 hover:bg-blue-500/20'
-                        : 'border-blue-300 bg-blue-50 text-blue-700 hover:bg-blue-100'
-                    }`}
-                  >
-                    <span>Our Work</span>
+                    Explore services <ArrowRight className="h-4 w-4" />
                   </button>
                 </div>
 
-                {/* Honest Early-Stage Startup Introduction Strip */}
-                <div
-                  className={`mt-4 pt-6 border-t grid grid-cols-1 sm:grid-cols-3 gap-6 ${
-                    isDark ? 'border-slate-800/80' : 'border-slate-200'
-                  }`}
-                >
-                  <div>
-                    <p className="text-xs text-blue-400 font-semibold">11 Core IT Services</p>
-                    <p
-                      className={`text-xs mt-1 leading-relaxed ${
-                        isDark ? 'text-slate-400' : 'text-slate-600'
-                      }`}
-                    >
-                      Websites, custom web apps, e-commerce, UI/UX, APIs, databases, and AI.
-                    </p>
+                <div className="mt-10 grid max-w-[490px] grid-cols-2 gap-5 border-t border-slate-300/80 pt-5">
+                  <div className="flex gap-3">
+                    <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white text-blue-700 shadow-sm">
+                      <Sparkles className="h-4 w-4" />
+                    </span>
+                    <div>
+                      <p className="text-[13px] font-semibold text-slate-900">Thoughtful by design</p>
+                      <p className="mt-1 text-[11px] leading-relaxed text-slate-500">Clear, user-focused digital experiences.</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-xs text-blue-400 font-semibold">Founder-Led Quality</p>
-                    <p
-                      className={`text-xs mt-1 leading-relaxed ${
-                        isDark ? 'text-slate-400' : 'text-slate-600'
-                      }`}
-                    >
-                      Direct engineering execution with TypeScript, React, and Node.js.
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-blue-400 font-semibold">Transparent Stage</p>
-                    <p
-                      className={`text-xs mt-1 leading-relaxed ${
-                        isDark ? 'text-slate-400' : 'text-slate-600'
-                      }`}
-                    >
-                      Honest scoping, verifiable prototypes, and structured student internships.
-                    </p>
+                  <div className="flex gap-3">
+                    <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white text-blue-700 shadow-sm">
+                      <Layers className="h-4 w-4" />
+                    </span>
+                    <div>
+                      <p className="text-[13px] font-semibold text-slate-900">Built to grow</p>
+                      <p className="mt-1 text-[11px] leading-relaxed text-slate-500">Practical websites, apps and AI tools.</p>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              {/* Right Column: Interactive 3D Innovation Core (with 2D Blueprint Toggle) */}
-              <div className="lg:col-span-6 flex flex-col gap-3">
-                <div className="flex items-center justify-between">
-                  <span className="inline-flex items-center gap-1.5 text-xs font-mono text-blue-400">
-                    <Box className="w-3.5 h-3.5" />
-                    <span>Lovanstrix Interactive Technology Visual</span>
-                  </span>
-                  <div
-                    className={`inline-flex items-center gap-1 p-0.5 rounded-lg border text-xs ${
-                      isDark ? 'bg-[#090F21] border-slate-800' : 'bg-slate-100 border-slate-200'
-                    }`}
-                  >
-                    <button
-                      type="button"
-                      onClick={() => setHeroVisualMode('3d')}
-                      className={`px-2.5 py-1 rounded-md font-semibold transition-colors ${
-                        heroVisualMode === '3d'
-                          ? 'bg-blue-600 text-white'
-                          : isDark
-                          ? 'text-slate-400 hover:text-white'
-                          : 'text-slate-600 hover:text-slate-900'
-                      }`}
-                    >
-                      3D Interactive Core
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setHeroVisualMode('2d')}
-                      className={`px-2.5 py-1 rounded-md font-semibold transition-colors ${
-                        heroVisualMode === '2d'
-                          ? 'bg-blue-600 text-white'
-                          : isDark
-                          ? 'text-slate-400 hover:text-white'
-                          : 'text-slate-600 hover:text-slate-900'
-                      }`}
-                    >
-                      2D Blueprint
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setHeroVisualMode('image')}
-                      className={`px-2.5 py-1 rounded-md font-semibold transition-colors ${
-                        heroVisualMode === 'image'
-                          ? 'bg-blue-600 text-white'
-                          : isDark
-                          ? 'text-slate-400 hover:text-white'
-                          : 'text-slate-600 hover:text-slate-900'
-                      }`}
-                    >
-                      3D Image
-                    </button>
-                  </div>
+              <div className="lg:col-span-6 relative mx-auto w-full max-w-[660px] lg:max-w-none">
+                <div className="pointer-events-none absolute -inset-5 rounded-full bg-gradient-to-br from-blue-200/30 via-transparent to-violet-200/35 blur-3xl" />
+                <figure className="relative mx-auto w-full max-w-[650px] overflow-hidden rounded-[26px] sm:rounded-[32px]">
+                  <img
+                    src="/images/lovanstrix-hero-orbit.svg"
+                    alt="Lovanstrix abstract glass cube with blue and violet fluid details surrounded by orbital lines"
+                    className="lovanstrix-hero-art block h-auto w-full"
+                    width="1200"
+                    height="1000"
+                    fetchPriority="high"
+                  />
+                </figure>
+                <div className="absolute bottom-5 left-3 sm:bottom-8 sm:left-6 inline-flex items-center gap-2 rounded-full border border-white/90 bg-white/85 px-3.5 py-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-600 shadow-md backdrop-blur-md">
+                  <span className="h-1.5 w-1.5 rounded-full bg-blue-600" />
+                  Web · Apps · AI
                 </div>
+              </div>
+            </section>
 
-                {heroVisualMode === '3d' ? (
-                  <Interactive3DCore isDark={isDark} />
-                ) : heroVisualMode === 'image' ? (
-                  <figure className="relative overflow-hidden rounded-2xl border border-blue-100 bg-white shadow-[0_24px_80px_-32px_rgba(37,99,235,0.35)]">
-                    <img
-                      src="/images/lovanstrix-hero-orbit.svg"
-                      alt="Lovanstrix abstract 3D innovation artwork with blue and violet geometric forms"
-                      className="block w-full h-auto"
-                      width="1200"
-                      height="980"
-                    />
-                    <figcaption className="absolute bottom-4 left-4 rounded-full border border-white/80 bg-white/85 px-3 py-1.5 text-[11px] font-medium text-slate-600 shadow-sm backdrop-blur">
-                      Design · Develop · Innovate
-                    </figcaption>
-                  </figure>
-                ) : (
-                  <HeroGeometricIllustration isDark={isDark} />
-                )}
+            {/* SECTION 1B: BRAND PROMISE STRIP — NO FABRICATED CLIENT METRICS */}
+            <section className="grid grid-cols-1 gap-7 border-y border-slate-300/80 py-7 md:grid-cols-12 md:items-center md:gap-9">
+              <div className="md:col-span-7 flex items-start gap-4 sm:gap-5">
+                <div className="mt-1 flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-300 via-blue-500 to-violet-600 text-white shadow-lg shadow-blue-500/20">
+                  <Sparkles className="h-6 w-6" />
+                </div>
+                <div>
+                  <h2 className="font-display text-xl sm:text-2xl font-medium tracking-tight text-slate-950">
+                    Built for startups, growing businesses and bold new ideas.
+                  </h2>
+                  <p className="mt-2 max-w-[540px] text-sm leading-relaxed text-slate-600">
+                    Direct collaboration, clear project scope, and modern digital solutions shaped around your goals.
+                  </p>
+                </div>
+              </div>
+              <div className="md:col-span-5 md:border-l md:border-dashed md:border-slate-400/80 md:pl-9">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.17em] text-slate-500">
+                  Design beyond dimensions. Build for the future.
+                </p>
+                <div className="mt-3 flex flex-wrap items-baseline gap-x-4 gap-y-1 text-slate-950">
+                  <span className="font-display text-3xl sm:text-4xl font-medium tracking-tight">WEB</span>
+                  <span className="text-lg text-blue-500">/</span>
+                  <span className="font-display text-3xl sm:text-4xl font-medium tracking-tight">APPS</span>
+                  <span className="text-lg text-violet-500">/</span>
+                  <span className="font-display text-3xl sm:text-4xl font-medium tracking-tight">AI</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => navigateTo('projects')}
+                  className="mt-3 inline-flex items-center gap-2 text-xs font-semibold text-blue-700 transition-colors hover:text-violet-700"
+                >
+                  Explore our work <ArrowRight className="h-3.5 w-3.5" />
+                </button>
               </div>
             </section>
 
@@ -2340,7 +2275,7 @@ export default function App() {
             : 'bg-slate-100 border-slate-200 text-slate-600'
         }`}
       >
-        <div className="max-w-[1240px] mx-auto px-6 py-14 space-y-10">
+        <div className="max-w-[1060px] mx-auto px-6 py-14 space-y-10">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 justify-between">
             {/* Column 1: Brand & Positioning */}
             <div className="lg:col-span-4 space-y-3">
@@ -2481,6 +2416,7 @@ export default function App() {
           </div>
         </div>
       </footer>
+      </div>
     </div>
   );
 }
