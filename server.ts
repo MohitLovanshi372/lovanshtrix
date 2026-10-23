@@ -269,7 +269,7 @@ function getSystemConfigStatus(currentStore: LovanstrixStore): SystemConfigStatu
   return {
     backendConnected: true,
     databaseAvailable: databaseWritable,
-    adminAuthConfigured: adminPasscode.length > 0,
+    adminAuthConfigured: adminPasscode.length >= 12,
     emailWebhookConfigured: isEmailWebhookConfigured(),
     whatsappConfigured: /^\+?[1-9]\d{7,14}$/.test(whatsapp.replace(/[\s-]/g, '')),
     geminiConfigured: isRealSecret(geminiKey, 'MY_GEMINI_API_KEY'),
@@ -281,9 +281,11 @@ function getSystemConfigStatus(currentStore: LovanstrixStore): SystemConfigStatu
   };
 }
 
-const TOKEN_SECRET = process.env.ADMIN_PASSCODE
-  ? crypto.createHash('sha256').update(process.env.ADMIN_PASSCODE).digest('hex')
-  : 'preview-mode-secret';
+const INITIAL_ADMIN_PASSCODE = process.env.ADMIN_PASSCODE?.trim() || '';
+const TOKEN_SECRET =
+  INITIAL_ADMIN_PASSCODE.length >= 12
+    ? crypto.createHash('sha256').update(INITIAL_ADMIN_PASSCODE).digest('hex')
+    : crypto.randomBytes(32).toString('hex');
 
 function createAdminToken(passcode: string): string {
   return crypto.createHmac('sha256', TOKEN_SECRET).update(passcode).digest('hex');
@@ -317,16 +319,19 @@ function verifyStudentSessionToken(token: string): { email: string } | null {
 }
 
 function requireAdminAuth(req: Request, res: Response, next: NextFunction) {
-  const configuredPasscode = process.env.ADMIN_PASSCODE?.trim();
-  if (!configuredPasscode) {
-    return next();
+  const configuredPasscode = process.env.ADMIN_PASSCODE?.trim() || '';
+  if (configuredPasscode.length < 12) {
+    return res.status(503).json({
+      error: 'Admin access is disabled. Set a unique ADMIN_PASSCODE of at least 12 characters in the server environment, then restart the backend.',
+    });
   }
   const authHeader = req.headers.authorization || '';
   const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : '';
-  const expectedToken = createAdminToken(configuredPasscode);
-  if (!token || token !== expectedToken) {
+  const expected = Buffer.from(createAdminToken(configuredPasscode));
+  const supplied = Buffer.from(token);
+  if (supplied.length !== expected.length || !crypto.timingSafeEqual(supplied, expected)) {
     return res.status(401).json({
-      error: 'Unauthorized. Valid server-side ADMIN_PASSCODE session is required.',
+      error: 'Unauthorized. Enter the configured server-side admin passcode.',
     });
   }
   return next();
@@ -1835,19 +1840,24 @@ Provide a realistic, grounded early-stage engineering scope breakdown in JSON wi
 
   // Admin Authentication
   app.post('/api/admin/login', (req: Request, res: Response) => {
-    const configuredPasscode = process.env.ADMIN_PASSCODE?.trim();
-    if (!configuredPasscode) {
-      return res.json({
-        authenticated: true,
-        previewMode: true,
-        token: 'preview-mode-token',
-        message:
-          'ADMIN_PASSCODE is not set in environment variables. Running in Preview Admin Mode.',
+    const configuredPasscode = process.env.ADMIN_PASSCODE?.trim() || '';
+    if (configuredPasscode.length < 12) {
+      return res.status(503).json({
+        error: 'Admin sign-in is disabled. The site owner must configure a unique ADMIN_PASSCODE of at least 12 characters in the server environment and restart the backend.',
       });
     }
 
-    const { passcode } = req.body || {};
-    if (!passcode || passcode !== configuredPasscode) {
+    if (!checkRateLimit(`admin-login:${req.ip}`, 8, 15 * 60 * 1000)) {
+      return res.status(429).json({
+        error: 'Too many admin sign-in attempts. Please wait 15 minutes before trying again.',
+      });
+    }
+
+    const provided = Buffer.from(
+      typeof req.body?.passcode === 'string' ? req.body.passcode : ''
+    );
+    const expected = Buffer.from(configuredPasscode);
+    if (provided.length !== expected.length || !crypto.timingSafeEqual(provided, expected)) {
       return res.status(401).json({ error: 'Invalid administrator passcode.' });
     }
 
