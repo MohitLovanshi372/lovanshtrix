@@ -604,7 +604,7 @@ function App() {
         1. HOMEPAGE VIEW (ALL 10 MAIN SECTIONS + FOOTER)
     ========================================================= */
   }
-        {activeNav === "home" && <div className="space-y-20">
+        {activeNav === "home" && <div className="lovanstrix-ribbon-home space-y-20">
             {
     /* SECTION 1: PREMIUM REFERENCE-INSPIRED HERO */
   }
