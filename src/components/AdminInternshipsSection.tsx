@@ -160,7 +160,7 @@ export const AdminInternshipsSection: React.FC<AdminInternshipsSectionProps> = (
         setCertificates(st.certificateRecords || []);
         setAuditLogs(st.adminAuditLogs || []);
         setConfigStatus(data.configStatus);
-        setPreviewMode(!data.configStatus?.adminAuthConfigured);
+        setPreviewMode(false);
         setAuthenticated(true);
       }
     } catch {

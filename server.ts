@@ -75,13 +75,18 @@ function loadStore(): LovanstrixStore {
     const upgradedCompany = {
       ...INITIAL_STORE.company,
       ...(parsed.company || {}),
-      heroHeading:
-        parsed.company?.heroHeading === 'We Build Digital Experiences That Move Ideas Forward.'
-          ? INITIAL_STORE.company.heroHeading
-          : parsed.company?.heroHeading || INITIAL_STORE.company.heroHeading,
+      heroHeading: [
+        'We Build Digital Experiences That Move Ideas Forward.',
+        'Technology Solutions Built Around Your Ideas.',
+      ].includes(parsed.company?.heroHeading ?? '')
+        ? INITIAL_STORE.company.heroHeading
+        : parsed.company?.heroHeading || INITIAL_STORE.company.heroHeading,
       heroSubtitle:
         parsed.company?.heroSubtitle?.startsWith(
           'Lovanstrix is an emerging technology venture focused on web development'
+        ) ||
+        parsed.company?.heroSubtitle?.startsWith(
+          'Lovanstrix helps individuals, startups, and businesses explore digital possibilities'
         )
           ? INITIAL_STORE.company.heroSubtitle
           : parsed.company?.heroSubtitle || INITIAL_STORE.company.heroSubtitle,
@@ -96,6 +101,25 @@ function loadStore(): LovanstrixStore {
       parsed.projects[0]?.problemStatement
         ? parsed.projects
         : structuredClone(INITIAL_STORE.projects);
+
+    // Drop unverified placeholder GitHub/LinkedIn links from earlier seeds. Admin-entered links are kept.
+    const PLACEHOLDER_LINKS = new Set([
+      'https://github.com/lovanstrix',
+      'https://linkedin.com/company/lovanstrix',
+    ]);
+    if (PLACEHOLDER_LINKS.has(upgradedCompany.githubUrl ?? '')) {
+      upgradedCompany.githubUrl = INITIAL_STORE.company.githubUrl;
+    }
+    if (PLACEHOLDER_LINKS.has(upgradedCompany.linkedinUrl ?? '')) {
+      upgradedCompany.linkedinUrl = '';
+    }
+    for (const proj of upgradedProjects) {
+      if (proj.githubUrl && PLACEHOLDER_LINKS.has(proj.githubUrl)) {
+        proj.githubUrl = proj.id === INITIAL_STORE.projects[0]?.id
+          ? INITIAL_STORE.projects[0].githubUrl
+          : undefined;
+      }
+    }
 
     const merged: LovanstrixStore = {
       ...INITIAL_STORE,
@@ -278,12 +302,46 @@ function getSystemConfigStatus(currentStore: LovanstrixStore): SystemConfigStatu
   };
 }
 
-const TOKEN_SECRET = process.env.ADMIN_PASSCODE
-  ? crypto.createHash('sha256').update(process.env.ADMIN_PASSCODE).digest('hex')
-  : 'preview-mode-secret';
+// Session tokens are HMAC-signed, role-scoped and expire. The signing secret comes from
+// SESSION_SECRET; if it is not set, a random per-process secret is used (sessions then end
+// whenever the server restarts). It is never derived from a hard-coded string.
+const TOKEN_SECRET: string =
+  process.env.SESSION_SECRET?.trim() || crypto.randomBytes(32).toString('hex');
+const ADMIN_SESSION_TTL_MS = 8 * 60 * 60 * 1000;
+const STUDENT_SESSION_TTL_MS = 12 * 60 * 60 * 1000;
 
-function createAdminToken(passcode: string): string {
-  return crypto.createHmac('sha256', TOKEN_SECRET).update(passcode).digest('hex');
+function safeEqual(a: string, b: string): boolean {
+  const ha = crypto.createHash('sha256').update(a).digest();
+  const hb = crypto.createHash('sha256').update(b).digest();
+  return crypto.timingSafeEqual(ha, hb);
+}
+
+function signToken(payload: { role: 'admin' | 'student'; sub: string; exp: number }): string {
+  const body = Buffer.from(JSON.stringify(payload)).toString('base64url');
+  const sig = crypto.createHmac('sha256', TOKEN_SECRET).update(body).digest('base64url');
+  return `${body}.${sig}`;
+}
+
+function verifyToken(
+  token: string,
+  role: 'admin' | 'student'
+): { sub: string; exp: number } | null {
+  try {
+    const [body, sig] = token.split('.');
+    if (!body || !sig) return null;
+    const expected = crypto.createHmac('sha256', TOKEN_SECRET).update(body).digest('base64url');
+    if (!safeEqual(sig, expected)) return null;
+    const payload = JSON.parse(Buffer.from(body, 'base64url').toString('utf-8'));
+    if (payload?.role !== role || typeof payload.sub !== 'string') return null;
+    if (typeof payload.exp !== 'number' || payload.exp < Date.now()) return null;
+    return { sub: payload.sub, exp: payload.exp };
+  } catch {
+    return null;
+  }
+}
+
+function createAdminToken(): string {
+  return signToken({ role: 'admin', sub: 'admin', exp: Date.now() + ADMIN_SESSION_TTL_MS });
 }
 
 function hashAccessKey(key: string): string {
@@ -291,39 +349,31 @@ function hashAccessKey(key: string): string {
 }
 
 function createStudentSessionToken(email: string): string {
-  const normalizedEmail = email.trim().toLowerCase();
-  const sig = crypto.createHmac('sha256', TOKEN_SECRET).update(normalizedEmail).digest('hex');
-  return Buffer.from(JSON.stringify({ email: normalizedEmail, sig })).toString('base64url');
+  return signToken({
+    role: 'student',
+    sub: email.trim().toLowerCase(),
+    exp: Date.now() + STUDENT_SESSION_TTL_MS,
+  });
 }
 
 function verifyStudentSessionToken(token: string): { email: string } | null {
-  try {
-    const decoded = JSON.parse(Buffer.from(token, 'base64url').toString('utf-8'));
-    if (!decoded || typeof decoded.email !== 'string') {
-      return null;
-    }
-    const expectedSig = crypto
-      .createHmac('sha256', TOKEN_SECRET)
-      .update(decoded.email)
-      .digest('hex');
-    if (decoded.sig !== expectedSig) return null;
-    return { email: decoded.email };
-  } catch {
-    return null;
-  }
+  const v = verifyToken(token, 'student');
+  return v ? { email: v.sub } : null;
 }
 
 function requireAdminAuth(req: Request, res: Response, next: NextFunction) {
-  const configuredPasscode = process.env.ADMIN_PASSCODE?.trim();
-  if (!configuredPasscode) {
-    return next();
+  // Fail closed: without a server-side ADMIN_PASSCODE the admin API is disabled entirely.
+  if (!process.env.ADMIN_PASSCODE?.trim()) {
+    return res.status(503).json({
+      error:
+        'Admin API is disabled because ADMIN_PASSCODE is not configured on the server. Set it in the server environment and restart.',
+    });
   }
   const authHeader = req.headers.authorization || '';
   const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : '';
-  const expectedToken = createAdminToken(configuredPasscode);
-  if (!token || token !== expectedToken) {
+  if (!token || !verifyToken(token, 'admin')) {
     return res.status(401).json({
-      error: 'Unauthorized. Valid server-side ADMIN_PASSCODE session is required.',
+      error: 'Unauthorized. Please sign in to the admin console again.',
     });
   }
   return next();
@@ -344,7 +394,7 @@ function recordAuditLog(
     action,
     targetId,
     summary,
-    actor: process.env.ADMIN_PASSCODE ? 'Verified Admin' : 'Admin (Preview Session)',
+    actor: 'Verified Admin',
     emailDispatched,
     createdAt: new Date().toISOString(),
   };
@@ -664,6 +714,13 @@ async function startServer() {
     }
 
     const normalizedEmail = email.trim().toLowerCase();
+    const loginIp = req.ip || req.socket.remoteAddress || 'unknown';
+    if (
+      !checkRateLimit(`student-login-ip:${loginIp}`, 20, 15 * 60 * 1000) ||
+      !checkRateLimit(`student-login-email:${normalizedEmail}`, 8, 15 * 60 * 1000)
+    ) {
+      return res.status(429).json({ error: 'Too many sign-in attempts. Try again in 15 minutes.' });
+    }
     const cleanedSecret = referenceOrAccessKey.trim().toUpperCase();
     const candidateHash = hashAccessKey(cleanedSecret);
 
@@ -1535,6 +1592,9 @@ async function startServer() {
 
   // Submit a Project Quote Enquiry via secure server-side endpoint
   app.post('/api/enquiries', async (req: Request, res: Response) => {
+    if (!checkRateLimit(`enquiry:${req.ip || 'unknown-ip'}`, 10, 10 * 60 * 1000)) {
+      return res.status(429).json({ error: 'Too many requests. Please try again in a few minutes.' });
+    }
     const {
       name,
       email,
@@ -1553,6 +1613,15 @@ async function startServer() {
     }
     if (!email || typeof email !== 'string' || !isValidEmail(email.trim())) {
       return res.status(400).json({ error: 'Please provide a valid email address.' });
+    }
+    if (
+      name.length > 120 ||
+      email.length > 200 ||
+      (organization && String(organization).length > 200) ||
+      (typeof projectDescription === 'string' && projectDescription.length > 5000) ||
+      (referenceUrl && String(referenceUrl).length > 500)
+    ) {
+      return res.status(400).json({ error: 'One or more fields exceed the allowed length.' });
     }
     if (!serviceRequired || typeof serviceRequired !== 'string') {
       return res.status(400).json({ error: 'Please select a required service category.' });
@@ -1652,6 +1721,9 @@ async function startServer() {
 
   // Submit Career / Future Internship Interest
   app.post('/api/career-interest', async (req: Request, res: Response) => {
+    if (!checkRateLimit(`career:${req.ip || 'unknown-ip'}`, 10, 10 * 60 * 1000)) {
+      return res.status(429).json({ error: 'Too many requests. Please try again in a few minutes.' });
+    }
     const { name, email, areaOfInterest, skills, portfolioUrl, introduction } = req.body || {};
 
     if (!name || typeof name !== 'string' || name.trim().length < 2) {
@@ -1729,6 +1801,9 @@ async function startServer() {
 
   // Server-side Technical Architecture & Project Scope Planner
   app.post('/api/scope-estimator', async (req: Request, res: Response) => {
+    if (!checkRateLimit(`scope:${req.ip || 'unknown-ip'}`, 15, 10 * 60 * 1000)) {
+      return res.status(429).json({ error: 'Too many requests. Please try again in a few minutes.' });
+    }
     const { projectGoal, category, timeline } = req.body || {};
     if (!projectGoal || typeof projectGoal !== 'string' || projectGoal.trim().length < 10) {
       return res.status(400).json({
@@ -1834,24 +1909,25 @@ Provide a realistic, grounded early-stage engineering scope breakdown in JSON wi
   app.post('/api/admin/login', (req: Request, res: Response) => {
     const configuredPasscode = process.env.ADMIN_PASSCODE?.trim();
     if (!configuredPasscode) {
-      return res.json({
-        authenticated: true,
-        previewMode: true,
-        token: 'preview-mode-token',
-        message:
-          'ADMIN_PASSCODE is not set in environment variables. Running in Preview Admin Mode.',
+      return res.status(503).json({
+        error:
+          'Admin sign-in is disabled: ADMIN_PASSCODE is not configured on the server.',
       });
+    }
+    const ip = req.ip || req.socket.remoteAddress || 'unknown';
+    if (!checkRateLimit(`admin-login:${ip}`, 8, 15 * 60 * 1000)) {
+      return res.status(429).json({ error: 'Too many sign-in attempts. Try again in 15 minutes.' });
     }
 
     const { passcode } = req.body || {};
-    if (!passcode || passcode !== configuredPasscode) {
+    if (typeof passcode !== 'string' || !passcode || !safeEqual(passcode, configuredPasscode)) {
       return res.status(401).json({ error: 'Invalid administrator passcode.' });
     }
 
     return res.json({
       authenticated: true,
       previewMode: false,
-      token: createAdminToken(configuredPasscode),
+      token: createAdminToken(),
     });
   });
 

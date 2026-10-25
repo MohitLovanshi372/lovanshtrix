@@ -43,7 +43,9 @@ import {
   LovanstrixMark,
   ProjectVisualCanvas,
 } from './components/BrandVisuals';
-import { Interactive3DCore } from './components/Interactive3DCore';
+import { HomePage } from './components/HomePage';
+import { ScrollBackdrop } from './components/Motion';
+import { IntroSplash } from './components/IntroSplash';
 import { ServiceDetailView } from './components/ServiceDetailView';
 import { SolutionsSection } from './components/SolutionsSection';
 import { CareersSection } from './components/CareersSection';
@@ -220,6 +222,7 @@ function parseInitialRoute(): {
   if (pathname === '/careers') return { section: 'careers', certId: '', serviceSlug: '' };
   if (pathname === '/contact') return { section: 'contact', certId: '', serviceSlug: '' };
   if (pathname === '/internships') return { section: 'internships', certId: '', serviceSlug: '' };
+  if (pathname === '/admin') return { section: 'admin', certId: '', serviceSlug: '' };
   if (pathname === '/student-dashboard') {
     return { section: 'student-dashboard', certId: '', serviceSlug: '' };
   }
@@ -246,7 +249,8 @@ export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
   const [servicesDropdownOpen, setServicesDropdownOpen] = useState<boolean>(false);
   const [openFaqIdx, setOpenFaqIdx] = useState<number | null>(0);
-  const [isDark, setIsDark] = useState<boolean>(true);
+  const [isDark] = useState<boolean>(false);
+  const [scrolled, setScrolled] = useState<boolean>(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
   // Dynamic Store State loaded from Express Backend
@@ -309,6 +313,13 @@ export default function App() {
     }
   }, [isDark]);
 
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   // Close Services dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -357,6 +368,7 @@ export default function App() {
         internships: '/internships',
         'student-dashboard': '/student-dashboard',
         'admin-internships': '/admin/internships',
+        admin: '/admin',
         'verify-certificate': param
           ? `/verify-certificate/${encodeURIComponent(param)}`
           : '/verify-certificate',
@@ -402,126 +414,123 @@ export default function App() {
   ];
 
   return (
-    <div
-      className={`min-h-screen flex flex-col transition-colors duration-200 ${
-        isDark ? 'bg-[#050814] text-slate-100' : 'bg-[#F8FAFC] text-slate-900'
-      }`}
-    >
+    <div className="relative z-0 min-h-screen flex flex-col text-[#102B59]">
+      <ScrollBackdrop />
+      <IntroSplash enabled={initialRoute.section === 'home'} />
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] focus:px-4 focus:py-2 focus:rounded-lg focus:bg-[#155EEF] focus:text-white"
+      >
+        Skip to main content
+      </a>
+
       {/* STICKY HEADER & NAVIGATION BAR */}
       <header
-        className={`sticky top-0 z-40 backdrop-blur-md border-b transition-colors ${
-          isDark ? 'bg-[#050814]/90 border-slate-800/80' : 'bg-white/95 border-slate-200'
+        className={`sticky top-0 z-40 backdrop-blur-xl border-b transition-all duration-300 ${
+          scrolled
+            ? 'bg-white/90 border-[#e2e8f4] shadow-[0_8px_24px_-16px_rgba(16,43,89,0.25)]'
+            : 'bg-white/70 border-transparent'
         }`}
       >
-        <div className="max-w-[1240px] mx-auto flex items-center justify-between gap-6 px-6 py-4">
-          {/* Zone 1: Custom LOVANSTRIX Logo linking to Homepage */}
+        <div className="max-w-[1240px] mx-auto flex items-center justify-between gap-6 px-5 sm:px-6 py-3.5">
           <a
             href="/"
             onClick={(e) => {
               e.preventDefault();
               navigateTo('home');
             }}
-            className="focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-lg shrink-0"
+            aria-label="LOVANSTRIX home"
+            className="focus:outline-none focus-visible:ring-2 focus-visible:ring-[#155EEF] rounded-lg shrink-0"
           >
-            <LovanstrixMark isDark={isDark} />
+            <LovanstrixMark isDark={false} />
           </a>
 
-          {/* Zone 2: Primary Navigation with Services Dropdown */}
           <nav
-            className="hidden lg:flex items-center gap-6 text-sm font-medium"
+            className="hidden lg:flex items-center gap-1 text-sm font-medium"
             aria-label="Primary Navigation"
           >
             {navItems.map((item) => {
-              if (item.id === 'services') {
-                const isServicesActive =
-                  activeNav === 'services' || activeNav === 'service-detail';
-                return (
-                  <div key={item.id} className="relative" ref={dropdownRef}>
-                    <div className="inline-flex items-center gap-1">
-                      <a
-                        href="/services"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          navigateTo('services');
-                        }}
-                        className={`py-1 transition-colors whitespace-nowrap shrink-0 border-b-2 ${
-                          isServicesActive
-                            ? isDark
-                              ? 'border-blue-500 text-white font-semibold'
-                              : 'border-blue-600 text-slate-950 font-semibold'
-                            : isDark
-                            ? 'border-transparent text-slate-300 hover:text-white hover:border-slate-600'
-                            : 'border-transparent text-slate-600 hover:text-slate-950 hover:border-slate-300'
-                        }`}
-                      >
-                        Services
-                      </a>
-                      <button
-                        type="button"
-                        onClick={() => setServicesDropdownOpen((prev) => !prev)}
-                        aria-label="Toggle Services dropdown menu"
-                        aria-expanded={servicesDropdownOpen}
-                        className={`p-1 rounded transition-colors ${
-                          isDark
-                            ? 'text-slate-400 hover:text-white'
-                            : 'text-slate-600 hover:text-slate-950'
-                        }`}
-                      >
-                        <ChevronDown
-                          className={`w-3.5 h-3.5 transition-transform ${
-                            servicesDropdownOpen ? 'rotate-180 text-blue-400' : ''
-                          }`}
-                        />
-                      </button>
-                    </div>
+              const isActive =
+                item.id === 'services'
+                  ? activeNav === 'services' || activeNav === 'service-detail'
+                  : activeNav === item.id ||
+                    (item.id === 'careers' &&
+                      (activeNav === 'internships' ||
+                        activeNav === 'student-dashboard' ||
+                        activeNav === 'verify-certificate'));
+              const linkClass = `relative px-3 py-2 rounded-lg whitespace-nowrap transition-colors ${
+                isActive
+                  ? 'text-[#155EEF] font-semibold bg-[#eef4ff]'
+                  : 'text-[#34476b] hover:text-[#155EEF] hover:bg-[#f3f7ff]'
+              }`;
+              const href = `/${
+                item.id === 'home' ? '' : item.id === 'projects' ? 'our-work' : item.id
+              }`;
 
-                    {/* Services Dropdown Panel */}
-                    {servicesDropdownOpen && (
-                      <div
-                        className={`absolute left-0 mt-3 w-[560px] rounded-2xl border p-5 shadow-2xl z-50 ${
-                          isDark
-                            ? 'bg-[#090F21] border-slate-800 text-slate-100'
-                            : 'bg-white border-slate-200 text-slate-900'
+              if (item.id === 'services') {
+                return (
+                  <div key={item.id} className="relative flex items-center" ref={dropdownRef}>
+                    <a
+                      href={href}
+                      aria-current={isActive ? 'page' : undefined}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        navigateTo('services');
+                      }}
+                      className={linkClass}
+                    >
+                      Services
+                    </a>
+                    <button
+                      type="button"
+                      onClick={() => setServicesDropdownOpen((prev) => !prev)}
+                      aria-label="Toggle Services dropdown menu"
+                      aria-expanded={servicesDropdownOpen}
+                      aria-haspopup="true"
+                      className="p-1 -ml-1 rounded text-[#546179] hover:text-[#155EEF]"
+                    >
+                      <ChevronDown
+                        className={`w-3.5 h-3.5 transition-transform ${
+                          servicesDropdownOpen ? 'rotate-180 text-[#155EEF]' : ''
                         }`}
-                      >
-                        <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-800/60">
+                      />
+                    </button>
+
+                    {servicesDropdownOpen && (
+                      <div className="absolute left-0 top-full mt-3 w-[560px] rounded-2xl border border-[#e2e8f4] bg-white p-5 shadow-[0_24px_48px_-16px_rgba(16,43,89,0.3)] z-50 lx-reveal">
+                        <div className="flex items-center justify-between pb-3 mb-3 border-b border-[#e2e8f4]">
                           <div>
-                            <p className="text-xs font-semibold text-blue-400">
-                              Lovanstrix IT Services Catalog
+                            <p className="text-xs font-semibold text-[#155EEF]">
+                              LOVANSTRIX Services
                             </p>
-                            <p className="text-[11px] text-slate-400">
-                              Select any service to inspect deliverables, tech stack, and FAQs
+                            <p className="text-[11px] text-[#546179]">
+                              Pick a service to see deliverables, tech stack and FAQs
                             </p>
                           </div>
                           <button
                             type="button"
                             onClick={() => navigateTo('services')}
-                            className="text-xs font-semibold text-blue-400 hover:text-blue-300 inline-flex items-center gap-1"
+                            className="text-xs font-semibold text-[#155EEF] hover:text-[#104bc4] inline-flex items-center gap-1"
                           >
-                            <span>View All ({services.length})</span>
+                            <span>View all ({services.length})</span>
                             <ArrowRight className="w-3 h-3" />
                           </button>
                         </div>
-
                         <div className="grid grid-cols-2 gap-1.5 max-h-[360px] overflow-y-auto">
                           {services.map((srv) => (
                             <button
                               key={srv.id}
                               type="button"
                               onClick={() => openServiceDetail(srv)}
-                              className={`text-left p-2.5 rounded-xl transition-colors ${
-                                isDark
-                                  ? 'hover:bg-[#0F172A] text-slate-200'
-                                  : 'hover:bg-slate-50 text-slate-800'
-                              }`}
+                              className="text-left p-2.5 rounded-xl transition-colors hover:bg-[#f3f7ff] text-[#102B59]"
                             >
                               <p className="text-xs font-semibold leading-snug">
-                                <span className="font-mono text-blue-400 mr-1.5">
+                                <span className="font-mono text-[#155EEF] mr-1.5">
                                   {srv.index}.
                                 </span>
                                 {srv.title}
                               </p>
-                              <p className="text-[11px] text-slate-400 truncate mt-0.5">
+                              <p className="text-[11px] text-[#546179] truncate mt-0.5">
                                 {srv.category}
                               </p>
                             </button>
@@ -533,30 +542,16 @@ export default function App() {
                 );
               }
 
-              const isActive =
-                activeNav === item.id ||
-                (item.id === 'careers' &&
-                  (activeNav === 'internships' ||
-                    activeNav === 'student-dashboard' ||
-                    activeNav === 'verify-certificate'));
-
               return (
                 <a
                   key={item.id}
-                  href={`/${item.id === 'home' ? '' : item.id === 'projects' ? 'our-work' : item.id}`}
+                  href={href}
+                  aria-current={isActive ? 'page' : undefined}
                   onClick={(e) => {
                     e.preventDefault();
                     navigateTo(item.id);
                   }}
-                  className={`py-1 transition-colors whitespace-nowrap shrink-0 border-b-2 ${
-                    isActive
-                      ? isDark
-                        ? 'border-blue-500 text-white font-semibold'
-                        : 'border-blue-600 text-slate-950 font-semibold'
-                      : isDark
-                      ? 'border-transparent text-slate-300 hover:text-white hover:border-slate-600'
-                      : 'border-transparent text-slate-600 hover:text-slate-950 hover:border-slate-300'
-                  }`}
+                  className={linkClass}
                 >
                   {item.label}
                 </a>
@@ -564,38 +559,33 @@ export default function App() {
             })}
           </nav>
 
-          {/* Zone 3: Request a Quote Button + Mobile Hamburger Menu */}
           <div className="flex items-center gap-3 shrink-0">
             <button
               type="button"
               onClick={() => navigateTo('contact')}
-              className="px-4 py-2 text-xs font-semibold text-white bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-500 hover:to-violet-500 rounded-lg transition-all whitespace-nowrap shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
+              className="lx-btn-primary hidden sm:inline-flex items-center gap-1.5 px-5 py-2.5 text-sm font-semibold rounded-full whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#155EEF]"
             >
-              Request a Quote
+              <span>Let&apos;s Talk</span>
+              <ArrowRight className="w-4 h-4" />
             </button>
 
             <button
               type="button"
               onClick={() => setMobileMenuOpen((prev) => !prev)}
-              className={`lg:hidden p-2 rounded-lg border ${
-                isDark
-                  ? 'border-slate-800 text-slate-200 hover:bg-slate-900'
-                  : 'border-slate-200 text-slate-700 hover:bg-slate-100'
-              }`}
+              className="lg:hidden p-2.5 rounded-xl border border-[#e2e8f4] text-[#102B59] hover:bg-[#f3f7ff]"
               aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
               aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-nav"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>
 
-        {/* Responsive Mobile Navigation Drawer */}
         {mobileMenuOpen && (
           <div
-            className={`lg:hidden border-t px-6 py-5 space-y-4 ${
-              isDark ? 'bg-[#070C1E] border-slate-800' : 'bg-white border-slate-200'
-            }`}
+            id="mobile-nav"
+            className="lg:hidden border-t border-[#e2e8f4] bg-white px-5 py-5 space-y-4 max-h-[calc(100vh-64px)] overflow-y-auto"
           >
             <div className="grid grid-cols-2 gap-2">
               {navItems.map((item) => (
@@ -603,88 +593,40 @@ export default function App() {
                   key={item.id}
                   type="button"
                   onClick={() => navigateTo(item.id)}
-                  className={`text-left px-3 py-2 rounded-lg text-xs font-medium ${
+                  aria-current={activeNav === item.id ? 'page' : undefined}
+                  className={`text-left px-3.5 py-3 rounded-xl text-sm font-medium ${
                     activeNav === item.id
-                      ? 'bg-blue-600 text-white'
-                      : isDark
-                      ? 'text-slate-300 hover:bg-slate-800/70'
-                      : 'text-slate-700 hover:bg-slate-100'
+                      ? 'bg-[#155EEF] text-white'
+                      : 'text-[#34476b] bg-[#f3f7ff] hover:bg-[#eaf1ff]'
                   }`}
                 >
                   {item.label}
                 </button>
               ))}
-              <button
-                type="button"
-                onClick={() => navigateTo('internships')}
-                className={`text-left px-3 py-2 rounded-lg text-xs font-medium ${
-                  activeNav === 'internships'
-                    ? 'bg-blue-600 text-white'
-                    : isDark
-                    ? 'text-blue-400 hover:bg-slate-800/70'
-                    : 'text-blue-600 hover:bg-slate-100'
-                }`}
-              >
-                Internships Portal
-              </button>
-              <button
-                type="button"
-                onClick={() => navigateTo('student-dashboard')}
-                className={`text-left px-3 py-2 rounded-lg text-xs font-medium ${
-                  activeNav === 'student-dashboard'
-                    ? 'bg-blue-600 text-white'
-                    : isDark
-                    ? 'text-slate-300 hover:bg-slate-800/70'
-                    : 'text-slate-700 hover:bg-slate-100'
-                }`}
-              >
-                Student Dashboard
-              </button>
-              <button
-                type="button"
-                onClick={() => navigateTo('verify-certificate')}
-                className={`text-left px-3 py-2 rounded-lg text-xs font-medium ${
-                  activeNav === 'verify-certificate'
-                    ? 'bg-blue-600 text-white'
-                    : isDark
-                    ? 'text-slate-300 hover:bg-slate-800/70'
-                    : 'text-slate-700 hover:bg-slate-100'
-                }`}
-              >
-                Verify Certificate
-              </button>
-              <button
-                type="button"
-                onClick={() => navigateTo('admin')}
-                className={`text-left px-3 py-2 rounded-lg text-xs font-medium ${
-                  activeNav === 'admin'
-                    ? 'bg-blue-600 text-white'
-                    : isDark
-                    ? 'text-blue-400 hover:bg-slate-800/70'
-                    : 'text-blue-600 hover:bg-slate-100'
-                }`}
-              >
-                Site Admin Console
-              </button>
             </div>
-
-            <div className="pt-3 border-t border-slate-800/60">
-              <p className="text-[11px] font-semibold text-blue-400 mb-2">
-                Direct Service Pages
-              </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 max-h-48 overflow-y-auto">
-                {services.map((srv) => (
+            <button
+              type="button"
+              onClick={() => navigateTo('contact')}
+              className="lx-btn-primary w-full inline-flex items-center justify-center gap-2 px-5 py-3 text-sm font-semibold rounded-full"
+            >
+              <span>Let&apos;s Talk</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+            <div className="pt-3 border-t border-[#e2e8f4]">
+              <p className="text-[11px] font-semibold text-[#155EEF] mb-2">Learning &amp; credentials</p>
+              <div className="grid grid-cols-1 gap-1.5">
+                {[
+                  { id: 'internships' as NavSection, label: 'Internship Portal' },
+                  { id: 'student-dashboard' as NavSection, label: 'Application Status / Student Portal' },
+                  { id: 'verify-certificate' as NavSection, label: 'Verify Certificate' },
+                ].map((l) => (
                   <button
-                    key={srv.id}
+                    key={l.id}
                     type="button"
-                    onClick={() => openServiceDetail(srv)}
-                    className={`text-left px-2.5 py-1.5 rounded text-xs truncate ${
-                      isDark
-                        ? 'text-slate-300 hover:bg-slate-800'
-                        : 'text-slate-700 hover:bg-slate-100'
-                    }`}
+                    onClick={() => navigateTo(l.id)}
+                    className="text-left px-3 py-2.5 rounded-lg text-sm text-[#34476b] hover:bg-[#f3f7ff]"
                   >
-                    {srv.index}. {srv.title}
+                    {l.label}
                   </button>
                 ))}
               </div>
@@ -693,831 +635,33 @@ export default function App() {
         )}
       </header>
 
-      {/* Secondary Workspace Bar (Careers & Internships Link, Certificate Verification, Admin & Theme Switch) */}
-      <div
-        className={`border-b text-xs ${
-          isDark
-            ? 'bg-[#070C1B]/70 border-slate-800/60 text-slate-400'
-            : 'bg-slate-100/80 border-slate-200/80 text-slate-600'
-        }`}
-      >
-        <div className="max-w-[1240px] mx-auto px-6 py-2 flex flex-wrap items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <span className="font-semibold text-blue-400">{company.tagline}</span>
-            <span aria-hidden="true">·</span>
-            <span className="hidden md:inline">
-              Web Development, Web Applications, AI Integration &amp; Digital Solutions
-            </span>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-3.5">
-            <button
-              type="button"
-              onClick={() => navigateTo('internships')}
-              className={`inline-flex items-center gap-1.5 font-medium transition-colors whitespace-nowrap shrink-0 ${
-                activeNav === 'internships'
-                  ? 'text-blue-400 font-semibold'
-                  : isDark
-                  ? 'text-slate-300 hover:text-white'
-                  : 'text-slate-700 hover:text-slate-950'
-              }`}
-            >
-              <GraduationCap className="w-3.5 h-3.5 text-blue-400" />
-              <span>Careers &amp; Internships</span>
-            </button>
-
-            <span aria-hidden="true">·</span>
-
-            <button
-              type="button"
-              onClick={() => navigateTo('student-dashboard')}
-              className={`inline-flex items-center gap-1.5 font-medium transition-colors whitespace-nowrap shrink-0 ${
-                activeNav === 'student-dashboard'
-                  ? 'text-blue-400 font-semibold'
-                  : isDark
-                  ? 'text-slate-300 hover:text-white'
-                  : 'text-slate-700 hover:text-slate-950'
-              }`}
-            >
-              <UserCheck className="w-3.5 h-3.5 text-blue-400" />
-              <span>Student Portal</span>
-            </button>
-
-            <span aria-hidden="true">·</span>
-
-            <button
-              type="button"
-              onClick={() => navigateTo('verify-certificate')}
-              className={`inline-flex items-center gap-1.5 font-medium transition-colors whitespace-nowrap shrink-0 ${
-                activeNav === 'verify-certificate'
-                  ? 'text-blue-400 font-semibold'
-                  : isDark
-                  ? 'text-slate-300 hover:text-white'
-                  : 'text-slate-700 hover:text-slate-950'
-              }`}
-            >
-              <Award className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Verify Certificate</span>
-            </button>
-
-            <span aria-hidden="true">·</span>
-
-            <button
-              type="button"
-              onClick={() => navigateTo('admin-internships')}
-              className={`inline-flex items-center gap-1.5 font-medium transition-colors whitespace-nowrap shrink-0 ${
-                activeNav === 'admin-internships'
-                  ? 'text-blue-400 font-semibold'
-                  : isDark
-                  ? 'text-slate-300 hover:text-white'
-                  : 'text-slate-700 hover:text-slate-950'
-              }`}
-            >
-              <Settings className="w-3.5 h-3.5 text-violet-400" />
-              <span>Internship Admin</span>
-            </button>
-
-            <span aria-hidden="true">·</span>
-
-            <button
-              type="button"
-              onClick={() => navigateTo('admin')}
-              className={`inline-flex items-center gap-1.5 font-medium transition-colors whitespace-nowrap shrink-0 ${
-                activeNav === 'admin'
-                  ? 'text-blue-400 font-semibold'
-                  : isDark
-                  ? 'text-slate-300 hover:text-white'
-                  : 'text-slate-700 hover:text-slate-950'
-              }`}
-            >
-              <Settings className="w-3.5 h-3.5 text-blue-400" />
-              <span>Site Admin</span>
-            </button>
-
-            <span aria-hidden="true">·</span>
-
-            <button
-              type="button"
-              onClick={() => setIsDark((prev) => !prev)}
-              className={`inline-flex items-center gap-1.5 font-medium transition-colors whitespace-nowrap shrink-0 ${
-                isDark ? 'text-slate-300 hover:text-white' : 'text-slate-700 hover:text-slate-950'
-              }`}
-              aria-label="Toggle color theme"
-            >
-              {isDark ? (
-                <>
-                  <Sun className="w-3.5 h-3.5 text-amber-400" />
-                  <span>Light</span>
-                </>
-              ) : (
-                <>
-                  <Moon className="w-3.5 h-3.5 text-blue-600" />
-                  <span>Dark</span>
-                </>
-              )}
-            </button>
-          </div>
-        </div>
-      </div>
-
       {/* MAIN CONTENT VIEWPORT */}
-      <main className="flex-1 max-w-[1240px] w-full mx-auto px-6 py-12 sm:py-16">
+      <main
+        id="main-content"
+        className={
+          activeNav === 'home'
+            ? 'flex-1 w-full'
+            : 'flex-1 max-w-[1240px] w-full mx-auto px-5 sm:px-6 py-10 sm:py-16'
+        }
+      >
         {/* =========================================================
             1. HOMEPAGE VIEW (ALL 10 MAIN SECTIONS + FOOTER)
         ========================================================= */}
         {activeNav === 'home' && (
-          <div className="space-y-24">
-            {/* SECTION 1: HERO SECTION WITH ORIGINAL TECHNOLOGY VISUALS */}
-            <section className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-stretch">
-              <div className="lg:col-span-6 flex flex-col justify-center space-y-6">
-                <div className="flex items-center gap-2 text-xs font-medium text-blue-400">
-                  <span>LOVANSTRIX</span>
-                  <span aria-hidden="true">·</span>
-                  <span>{company.tagline}</span>
-                  <span aria-hidden="true">·</span>
-                  <span>IT Services &amp; Software Engineering</span>
-                </div>
-
-                <h1
-                  className={`font-display text-4xl sm:text-5xl lg:text-[52px] font-bold tracking-tight leading-[1.1] text-balance ${
-                    isDark ? 'text-white' : 'text-slate-950'
-                  }`}
-                >
-                  {company.heroHeading}
-                </h1>
-
-                <p
-                  className={`text-base sm:text-lg leading-relaxed max-w-2xl ${
-                    isDark ? 'text-slate-300' : 'text-slate-600'
-                  }`}
-                >
-                  {company.heroSubtitle}
-                </p>
-
-                {/* Primary CTA: Get a Quote | Secondary CTA: Explore Our Services */}
-                <div className="flex flex-wrap items-center gap-3.5 pt-2">
-                  <button
-                    type="button"
-                    onClick={() => navigateTo('contact')}
-                    className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-500 hover:to-violet-500 text-white text-xs sm:text-sm font-semibold transition-all whitespace-nowrap shrink-0"
-                  >
-                    <span>Get a Quote</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => navigateTo('services')}
-                    className={`inline-flex items-center gap-2 px-6 py-3 rounded-lg border text-xs sm:text-sm font-semibold transition-colors whitespace-nowrap shrink-0 ${
-                      isDark
-                        ? 'border-slate-700 bg-slate-900/70 text-white hover:bg-slate-800'
-                        : 'border-slate-300 bg-white text-slate-900 hover:bg-slate-100'
-                    }`}
-                  >
-                    <span>Explore Our Services</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => navigateTo('projects')}
-                    className={`inline-flex items-center gap-2 px-5 py-3 rounded-lg border text-xs sm:text-sm font-semibold transition-colors whitespace-nowrap shrink-0 ${
-                      isDark
-                        ? 'border-blue-500/40 bg-blue-500/10 text-blue-400 hover:bg-blue-500/20'
-                        : 'border-blue-300 bg-blue-50 text-blue-700 hover:bg-blue-100'
-                    }`}
-                  >
-                    <span>Our Work</span>
-                  </button>
-                </div>
-
-                {/* Honest Early-Stage Startup Introduction Strip */}
-                <div
-                  className={`mt-4 pt-6 border-t grid grid-cols-1 sm:grid-cols-3 gap-6 ${
-                    isDark ? 'border-slate-800/80' : 'border-slate-200'
-                  }`}
-                >
-                  <div>
-                    <p className="text-xs text-blue-400 font-semibold">11 Core IT Services</p>
-                    <p
-                      className={`text-xs mt-1 leading-relaxed ${
-                        isDark ? 'text-slate-400' : 'text-slate-600'
-                      }`}
-                    >
-                      Websites, custom web apps, e-commerce, UI/UX, APIs, databases, and AI.
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-blue-400 font-semibold">Founder-Led Quality</p>
-                    <p
-                      className={`text-xs mt-1 leading-relaxed ${
-                        isDark ? 'text-slate-400' : 'text-slate-600'
-                      }`}
-                    >
-                      Direct engineering execution with TypeScript, React, and Node.js.
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-blue-400 font-semibold">Transparent Stage</p>
-                    <p
-                      className={`text-xs mt-1 leading-relaxed ${
-                        isDark ? 'text-slate-400' : 'text-slate-600'
-                      }`}
-                    >
-                      Honest scoping, verifiable prototypes, and structured student internships.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Right Column: Interactive 3D Innovation Core (with 2D Blueprint Toggle) */}
-              <div className="lg:col-span-6 flex flex-col gap-3">
-                <div className="flex items-center justify-between">
-                  <span className="inline-flex items-center gap-1.5 text-xs font-mono text-blue-400">
-                    <Box className="w-3.5 h-3.5" />
-                    <span>Lovanstrix Interactive Technology Visual</span>
-                  </span>
-                  <div
-                    className={`inline-flex items-center gap-1 p-0.5 rounded-lg border text-xs ${
-                      isDark ? 'bg-[#090F21] border-slate-800' : 'bg-slate-100 border-slate-200'
-                    }`}
-                  >
-                    <button
-                      type="button"
-                      onClick={() => setHeroVisualMode('3d')}
-                      className={`px-2.5 py-1 rounded-md font-semibold transition-colors ${
-                        heroVisualMode === '3d'
-                          ? 'bg-blue-600 text-white'
-                          : isDark
-                          ? 'text-slate-400 hover:text-white'
-                          : 'text-slate-600 hover:text-slate-900'
-                      }`}
-                    >
-                      3D Interactive Core
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setHeroVisualMode('2d')}
-                      className={`px-2.5 py-1 rounded-md font-semibold transition-colors ${
-                        heroVisualMode === '2d'
-                          ? 'bg-blue-600 text-white'
-                          : isDark
-                          ? 'text-slate-400 hover:text-white'
-                          : 'text-slate-600 hover:text-slate-900'
-                      }`}
-                    >
-                      2D SVG Blueprint
-                    </button>
-                  </div>
-                </div>
-
-                {heroVisualMode === '3d' ? (
-                  <Interactive3DCore isDark={isDark} />
-                ) : (
-                  <HeroGeometricIllustration isDark={isDark} />
-                )}
-              </div>
-            </section>
-
-            {/* SECTION 2: SHORT ABOUT LOVANSTRIX SECTION */}
-            <section
-              className={`rounded-2xl border p-8 sm:p-10 ${
-                isDark ? 'bg-[#090F21] border-slate-800/90' : 'bg-white border-slate-200'
-              }`}
-            >
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-                <div className="lg:col-span-8 space-y-3">
-                  <p className="text-xs font-medium text-blue-400">
-                    About Lovanstrix · Ideas Into Innovation
-                  </p>
-                  <h2
-                    className={`font-display text-2xl sm:text-3xl font-bold tracking-tight text-balance ${
-                      isDark ? 'text-white' : 'text-slate-900'
-                    }`}
-                  >
-                    Engineering Dependable Websites, Web Applications &amp; Digital Solutions
-                  </h2>
-                  <p
-                    className={`text-sm sm:text-base leading-relaxed ${
-                      isDark ? 'text-slate-300' : 'text-slate-600'
-                    }`}
-                  >
-                    {company.shortIntroduction}
-                  </p>
-                  <p
-                    className={`text-xs leading-relaxed pt-1 ${
-                      isDark ? 'text-slate-400' : 'text-slate-500'
-                    }`}
-                  >
-                    {company.stageDisclosure}
-                  </p>
-                </div>
-                <div className="lg:col-span-4 flex flex-wrap lg:justify-end gap-3">
-                  <button
-                    type="button"
-                    onClick={() => navigateTo('about')}
-                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-blue-500/40 bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 text-xs font-semibold transition-colors whitespace-nowrap shrink-0"
-                  >
-                    <span>About Us &amp; Founder Vision</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              </div>
-            </section>
-
-            {/* SECTION 3: SERVICES GRID (ALL 11 IT SERVICES) */}
-            <section className="space-y-8">
-              <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-800/80 pb-6">
-                <div>
-                  <p className="text-xs font-medium text-blue-400 mb-2">
-                    IT Services &amp; Software Capabilities
-                  </p>
-                  <h2
-                    className={`font-display text-3xl font-bold tracking-tight ${
-                      isDark ? 'text-white' : 'text-slate-950'
-                    }`}
-                  >
-                    Comprehensive Web, Application &amp; AI Services
-                  </h2>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => navigateTo('services')}
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-400 hover:text-blue-300 whitespace-nowrap shrink-0"
-                >
-                  <span>Explore All {services.length} Service Pages</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </button>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {services.map((srv, idx) => (
-                  <article
-                    key={srv.id}
-                    className={`rounded-2xl border p-7 flex flex-col justify-between transition-colors ${
-                      idx < 3
-                        ? isDark
-                          ? 'bg-[#0B1224] border-slate-800 hover:border-blue-500/50'
-                          : 'bg-white border-slate-200 hover:border-blue-400 shadow-sm'
-                        : isDark
-                        ? 'bg-[#090F21] border-slate-800/80 hover:border-slate-700'
-                        : 'bg-white border-slate-200 hover:border-slate-300'
-                    }`}
-                  >
-                    <div>
-                      <div className="flex items-center justify-between gap-2 text-xs text-slate-400 mb-3">
-                        <span className="font-mono text-blue-400 tabular-nums">
-                          {srv.index} · {srv.category}
-                        </span>
-                      </div>
-                      <h3
-                        className={`font-display text-xl font-semibold tracking-tight ${
-                          isDark ? 'text-white' : 'text-slate-900'
-                        }`}
-                      >
-                        <button
-                          type="button"
-                          onClick={() => openServiceDetail(srv)}
-                          className="text-left hover:text-blue-400 transition-colors"
-                        >
-                          {srv.title}
-                        </button>
-                      </h3>
-                      <p
-                        className={`mt-3 text-xs sm:text-sm leading-relaxed ${
-                          isDark ? 'text-slate-300' : 'text-slate-600'
-                        }`}
-                      >
-                        {srv.summary}
-                      </p>
-                    </div>
-
-                    <div className="mt-6 pt-4 border-t border-slate-800/60 flex items-center justify-between gap-3">
-                      <button
-                        type="button"
-                        onClick={() => openServiceDetail(srv)}
-                        className="inline-flex items-center gap-1 text-xs font-semibold text-blue-400 hover:text-blue-300 whitespace-nowrap shrink-0"
-                      >
-                        <span>Service Details</span>
-                        <ArrowRight className="w-3.5 h-3.5" />
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() => handleDiscussService(srv.title)}
-                        className={`text-xs font-medium transition-colors whitespace-nowrap shrink-0 ${
-                          isDark
-                            ? 'text-slate-400 hover:text-white'
-                            : 'text-slate-600 hover:text-slate-950'
-                        }`}
-                      >
-                        Get a Quote →
-                      </button>
-                    </div>
-                  </article>
-                ))}
-              </div>
-            </section>
-
-            {/* SECTION 4: TECHNOLOGIES AND CAPABILITIES */}
-            <section
-              className={`rounded-2xl border p-8 ${
-                isDark ? 'bg-[#090F21] border-slate-800' : 'bg-white border-slate-200 shadow-sm'
-              }`}
-            >
-              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
-                <div className="max-w-md">
-                  <div className="flex items-center gap-2 text-xs font-medium text-blue-400 mb-2">
-                    <Code2 className="w-4 h-4" />
-                    <span>Technologies &amp; Capabilities</span>
-                  </div>
-                  <h2
-                    className={`font-display text-2xl font-bold tracking-tight ${
-                      isDark ? 'text-white' : 'text-slate-900'
-                    }`}
-                  >
-                    Modern, Maintainable Engineering Stack
-                  </h2>
-                  <p
-                    className={`mt-2 text-xs sm:text-sm leading-relaxed ${
-                      isDark ? 'text-slate-300' : 'text-slate-600'
-                    }`}
-                  >
-                    We build with proven web standards and cloud-ready architectures so your website
-                    or application remains fast, secure, and straightforward to scale.
-                  </p>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 flex-1">
-                  {TECH_STACK_GROUPS.map((group) => (
-                    <div
-                      key={group.category}
-                      className={`rounded-xl border p-5 ${
-                        isDark ? 'bg-[#050814] border-slate-800' : 'bg-slate-50 border-slate-200'
-                      }`}
-                    >
-                      <h3 className="text-xs font-semibold text-blue-400 mb-3">
-                        {group.category}
-                      </h3>
-                      <ul className="space-y-1.5 text-xs">
-                        {group.items.map((tech) => (
-                          <li
-                            key={tech}
-                            className={isDark ? 'text-slate-300' : 'text-slate-700'}
-                          >
-                            {tech}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </section>
-
-            {/* SECTION 5: FEATURED PROJECTS AND PROTOTYPES */}
-            <section className="space-y-8">
-              <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-800/80 pb-6">
-                <div>
-                  <p className="text-xs font-medium text-blue-400 mb-2">
-                    Our Work · Transparent Status Labels
-                  </p>
-                  <h2
-                    className={`font-display text-3xl font-bold tracking-tight ${
-                      isDark ? 'text-white' : 'text-slate-950'
-                    }`}
-                  >
-                    Featured Projects, Demos &amp; Prototypes
-                  </h2>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => navigateTo('projects')}
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-400 hover:text-blue-300 whitespace-nowrap shrink-0"
-                >
-                  <span>Explore Full Portfolio ({projects.length})</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </button>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {projects.slice(0, 4).map((proj) => (
-                  <article
-                    key={proj.id}
-                    className={`rounded-2xl border overflow-hidden flex flex-col justify-between ${
-                      isDark ? 'bg-[#0B1224] border-slate-800' : 'bg-white border-slate-200'
-                    }`}
-                  >
-                    <div>
-                      <ProjectVisualCanvas visualType={proj.visualType} title={proj.title} />
-                      <div className="p-6">
-                        <div className="flex flex-wrap items-center gap-2 text-xs text-blue-400 mb-2">
-                          <span>{proj.category}</span>
-                          <span aria-hidden="true">·</span>
-                          <span className="font-semibold">{proj.classification}</span>
-                        </div>
-                        <h3
-                          className={`font-display text-xl font-semibold ${
-                            isDark ? 'text-white' : 'text-slate-900'
-                          }`}
-                        >
-                          {proj.title}
-                        </h3>
-                        <p
-                          className={`mt-2 text-xs sm:text-sm leading-relaxed ${
-                            isDark ? 'text-slate-300' : 'text-slate-600'
-                          }`}
-                        >
-                          {proj.objective}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="px-6 py-4 border-t border-slate-800/60 flex items-center justify-between text-xs">
-                      <span className="font-mono text-slate-400 truncate">
-                        {proj.technologies.slice(0, 4).join(' · ')}
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() => navigateTo('projects')}
-                        className="text-blue-400 hover:text-blue-300 font-semibold whitespace-nowrap shrink-0"
-                      >
-                        Inspect Work →
-                      </button>
-                    </div>
-                  </article>
-                ))}
-              </div>
-            </section>
-
-            {/* SECTION 6: OUR DEVELOPMENT PROCESS */}
-            <section className="space-y-8">
-              <div className="max-w-2xl">
-                <p className="text-xs font-medium text-blue-400 mb-2">Our Development Process</p>
-                <h2
-                  className={`font-display text-3xl font-bold tracking-tight ${
-                    isDark ? 'text-white' : 'text-slate-950'
-                  }`}
-                >
-                  How We Move Ideas From Concept to Launch
-                </h2>
-                <p
-                  className={`mt-2 text-sm leading-relaxed ${
-                    isDark ? 'text-slate-300' : 'text-slate-600'
-                  }`}
-                >
-                  Every engagement follows a structured six-step lifecycle so project scope,
-                  milestones, and quality remain transparent from day one.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
-                {APPROACH_STEPS.map((phase) => (
-                  <div
-                    key={phase.step}
-                    className={`rounded-2xl border p-5 flex flex-col justify-between ${
-                      isDark ? 'bg-[#0B1224] border-slate-800/90' : 'bg-white border-slate-200'
-                    }`}
-                  >
-                    <div>
-                      <span className="text-xs font-mono text-blue-400 tabular-nums">
-                        Step {phase.step}
-                      </span>
-                      <h3
-                        className={`font-display text-lg font-semibold mt-1 ${
-                          isDark ? 'text-white' : 'text-slate-900'
-                        }`}
-                      >
-                        {phase.name}
-                      </h3>
-                      <p
-                        className={`mt-2 text-xs leading-relaxed ${
-                          isDark ? 'text-slate-300' : 'text-slate-600'
-                        }`}
-                      >
-                        {phase.detail}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            {/* SECTION 7: WHY WORK WITH LOVANSTRIX? (Clean Light/Dark Contrast Section) */}
-            <section
-              className={`rounded-2xl border p-8 sm:p-10 space-y-8 ${
-                isDark
-                  ? 'bg-[#0B1224] border-slate-800'
-                  : 'bg-white border-slate-200 shadow-sm'
-              }`}
-            >
-              <div className="max-w-2xl">
-                <div className="flex items-center gap-2 text-xs font-medium text-blue-400 mb-2">
-                  <Sparkles className="w-4 h-4" />
-                  <span>Why Work With Lovanstrix?</span>
-                </div>
-                <h2
-                  className={`font-display text-3xl font-bold tracking-tight ${
-                    isDark ? 'text-white' : 'text-slate-950'
-                  }`}
-                >
-                  Engineering Discipline Without Agency Bloat
-                </h2>
-                <p
-                  className={`mt-2 text-sm leading-relaxed ${
-                    isDark ? 'text-slate-300' : 'text-slate-600'
-                  }`}
-                >
-                  We combine custom software craftsmanship with complete transparency around scope,
-                  budget, and delivery milestones.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {WHY_WORK_WITH_US.map((item) => (
-                  <div
-                    key={item.code}
-                    className={`rounded-xl border p-6 space-y-2.5 ${
-                      isDark ? 'bg-[#070C1B] border-slate-800/90' : 'bg-slate-50 border-slate-200'
-                    }`}
-                  >
-                    <span className="text-xs font-mono text-blue-400 tabular-nums">
-                      {item.code}
-                    </span>
-                    <h3
-                      className={`font-display text-base font-bold ${
-                        isDark ? 'text-white' : 'text-slate-900'
-                      }`}
-                    >
-                      {item.title}
-                    </h3>
-                    <p
-                      className={`text-xs leading-relaxed ${
-                        isDark ? 'text-slate-300' : 'text-slate-600'
-                      }`}
-                    >
-                      {item.description}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            {/* SECTION 8: CAREERS AND FUTURE INTERNSHIP OPPORTUNITIES */}
-            <section
-              className={`rounded-2xl border p-8 sm:p-10 ${
-                isDark ? 'bg-[#090F21] border-slate-800' : 'bg-white border-slate-200'
-              }`}
-            >
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-                <div className="lg:col-span-8 space-y-3">
-                  <div className="flex items-center gap-2 text-xs font-medium text-blue-400">
-                    <GraduationCap className="w-4 h-4" />
-                    <span>Careers &amp; Student Internship Management System</span>
-                  </div>
-                  <h2
-                    className={`font-display text-2xl sm:text-3xl font-bold tracking-tight ${
-                      isDark ? 'text-white' : 'text-slate-900'
-                    }`}
-                  >
-                    Collaborate With Lovanstrix or Explore Mentored Internships
-                  </h2>
-                  <p
-                    className={`text-sm leading-relaxed ${
-                      isDark ? 'text-slate-300' : 'text-slate-600'
-                    }`}
-                  >
-                    We are building a learning-focused internship portal across Frontend, Backend,
-                    Full-Stack, UI/UX Design, AI/ML, and IoT. Students can inspect program tracks,
-                    submit validated applications when roles are open, track status in the Student
-                    Dashboard, and verify official certificates online.
-                  </p>
-                </div>
-                <div className="lg:col-span-4 flex flex-wrap lg:justify-end gap-3">
-                  <button
-                    type="button"
-                    onClick={() => navigateTo('internships')}
-                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold transition-colors whitespace-nowrap shrink-0"
-                  >
-                    <GraduationCap className="w-4 h-4" />
-                    <span>Open Internship Portal</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => navigateTo('careers')}
-                    className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border text-xs font-semibold transition-colors whitespace-nowrap shrink-0 ${
-                      isDark
-                        ? 'border-slate-700 text-slate-200 hover:bg-slate-800'
-                        : 'border-slate-300 text-slate-800 hover:bg-slate-100'
-                    }`}
-                  >
-                    <span>Careers Overview</span>
-                  </button>
-                </div>
-              </div>
-            </section>
-
-            {/* SECTION 9: FREQUENTLY ASKED QUESTIONS (FAQ SECTION) */}
-            <section className="space-y-8">
-              <div className="max-w-2xl">
-                <div className="flex items-center gap-2 text-xs font-medium text-blue-400 mb-2">
-                  <HelpCircle className="w-4 h-4" />
-                  <span>Frequently Asked Questions</span>
-                </div>
-                <h2
-                  className={`font-display text-3xl font-bold tracking-tight ${
-                    isDark ? 'text-white' : 'text-slate-950'
-                  }`}
-                >
-                  Common Questions About Working With Lovanstrix
-                </h2>
-              </div>
-
-              <div className="space-y-3">
-                {HOMEPAGE_FAQS.map((faq, idx) => {
-                  const isOpen = openFaqIdx === idx;
-                  return (
-                    <div
-                      key={idx}
-                      className={`rounded-2xl border transition-colors ${
-                        isDark ? 'bg-[#0B1224] border-slate-800' : 'bg-white border-slate-200'
-                      }`}
-                    >
-                      <button
-                        type="button"
-                        onClick={() => setOpenFaqIdx(isOpen ? null : idx)}
-                        className="w-full px-6 py-4 text-left flex items-center justify-between gap-4"
-                        aria-expanded={isOpen}
-                      >
-                        <span
-                          className={`font-display text-sm sm:text-base font-semibold ${
-                            isDark ? 'text-white' : 'text-slate-900'
-                          }`}
-                        >
-                          {faq.question}
-                        </span>
-                        <ChevronDown
-                          className={`w-4 h-4 text-blue-400 shrink-0 transition-transform ${
-                            isOpen ? 'rotate-180' : ''
-                          }`}
-                        />
-                      </button>
-                      {isOpen && (
-                        <div className="px-6 pb-5 pt-1 border-t border-slate-800/50">
-                          <p
-                            className={`text-xs sm:text-sm leading-relaxed ${
-                              isDark ? 'text-slate-300' : 'text-slate-600'
-                            }`}
-                          >
-                            {faq.answer}
-                          </p>
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            </section>
-
-            {/* SECTION 10: CONTACT AND PROJECT ENQUIRY CTA */}
-            <section
-              className={`rounded-2xl border p-8 sm:p-12 bg-gradient-to-br ${
-                isDark
-                  ? 'from-[#0B1224] via-[#090F21] to-[#130F2E] border-slate-800'
-                  : 'from-slate-900 via-slate-900 to-indigo-950 border-slate-800 text-white'
-              }`}
-            >
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-                <div className="lg:col-span-8 space-y-3">
-                  <p className="text-xs font-medium text-blue-400">
-                    Start a Conversation · Ideas Into Innovation
-                  </p>
-                  <h2 className="font-display text-2xl sm:text-3xl font-bold text-white tracking-tight text-balance">
-                    Have a Website, Web Application, E-Commerce, or AI Project in Mind?
-                  </h2>
-                  <p className="text-sm text-slate-300 leading-relaxed max-w-2xl">
-                    Share your objectives, target timeline, and budget range. We will respond with a
-                    structured technical scope and milestone breakdown.
-                  </p>
-                </div>
-                <div className="lg:col-span-4 flex flex-wrap lg:justify-end gap-3">
-                  <button
-                    type="button"
-                    onClick={() => navigateTo('contact')}
-                    className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs sm:text-sm font-semibold transition-colors whitespace-nowrap shrink-0"
-                  >
-                    <span>Request a Quote</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => navigateTo('solutions')}
-                    className="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-slate-700 bg-slate-900/60 hover:bg-slate-800 text-slate-200 text-xs sm:text-sm font-semibold transition-colors whitespace-nowrap shrink-0"
-                  >
-                    <span>Explore Solutions</span>
-                  </button>
-                </div>
-              </div>
-            </section>
-          </div>
+          <HomePage
+            company={company}
+            services={services}
+            projects={projects}
+            openings={openings}
+            internshipListings={internshipListings}
+            configStatus={configStatus}
+            prefillService={prefillService}
+            prefillDescription={prefillDescription}
+            onNavigate={(section) => navigateTo(section)}
+            onOpenService={openServiceDetail}
+            onDiscussService={handleDiscussService}
+            onEnquirySubmitted={loadBootstrapData}
+          />
         )}
 
         {/* =========================================================
@@ -1885,7 +1029,7 @@ export default function App() {
                             }}
                             className="inline-flex items-center gap-1 text-blue-400 hover:text-blue-300 whitespace-nowrap shrink-0"
                           >
-                            <span>Explore Live Demo</span>
+                            <span>{/^https?:\/\//i.test(project.liveDemoUrl) ? 'Explore Live Demo' : 'View related page on this site'}</span>
                             <ArrowRight className="w-3.5 h-3.5" />
                           </a>
                         )}
@@ -2307,42 +1451,30 @@ export default function App() {
       </main>
 
       {/* SECTION 11: PROFESSIONAL MULTI-COLUMN FOOTER */}
-      <footer
-        className={`border-t mt-20 ${
-          isDark
-            ? 'bg-[#040610] border-slate-800/80 text-slate-400'
-            : 'bg-slate-100 border-slate-200 text-slate-600'
-        }`}
-      >
-        <div className="max-w-[1240px] mx-auto px-6 py-14 space-y-10">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 justify-between">
-            {/* Column 1: Brand & Positioning */}
-            <div className="lg:col-span-4 space-y-3">
-              <LovanstrixMark isDark={isDark} />
-              <p className="text-xs font-semibold text-blue-400">{company.tagline}</p>
-              <p className="text-xs leading-relaxed max-w-sm">
-                Lovanstrix is an emerging IT services and software venture providing website
-                development, custom web applications, e-commerce systems, UI/UX design, backend APIs,
-                and applied AI integration.
+      <footer className="bg-[#102B59] text-[#c7d6f5] mt-0">
+        <div className="max-w-[1240px] mx-auto px-5 sm:px-6 pt-16 pb-8 space-y-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10">
+            <div className="lg:col-span-4 space-y-4">
+              <span className="inline-flex items-center gap-2 font-display text-2xl font-bold tracking-tight text-white">
+                <span className="inline-block h-3 w-3 rounded-sm bg-gradient-to-br from-[#5b8cff] to-[#7C5CFA]" aria-hidden="true" />
+                LOVANSTRIX
+              </span>
+              <p className="text-sm font-semibold text-[#8fb4ff]">{company.tagline}</p>
+              <p className="text-sm leading-relaxed max-w-sm">
+                An early-stage, founder-led IT studio building websites, web applications, backend
+                APIs, UI/UX and practical AI integrations.
               </p>
             </div>
 
-            {/* Column 2: Core IT Services */}
-            <div className="lg:col-span-3 space-y-2.5">
-              <p
-                className={`text-xs font-semibold ${
-                  isDark ? 'text-slate-200' : 'text-slate-900'
-                }`}
-              >
-                IT Services
-              </p>
-              <ul className="space-y-1.5 text-xs">
+            <nav aria-label="Footer services" className="lg:col-span-3 space-y-3">
+              <p className="text-sm font-semibold text-white">Services</p>
+              <ul className="space-y-2 text-sm">
                 {services.slice(0, 6).map((srv) => (
                   <li key={srv.id}>
                     <button
                       type="button"
                       onClick={() => openServiceDetail(srv)}
-                      className="text-left hover:text-blue-400 transition-colors"
+                      className="text-left hover:text-white transition-colors"
                     >
                       {srv.title}
                     </button>
@@ -2352,104 +1484,92 @@ export default function App() {
                   <button
                     type="button"
                     onClick={() => navigateTo('services')}
-                    className="text-left text-blue-400 hover:text-blue-300 font-semibold"
+                    className="text-left font-semibold text-[#8fb4ff] hover:text-white"
                   >
-                    View All {services.length} Services →
+                    View all {services.length} services →
                   </button>
                 </li>
               </ul>
-            </div>
+            </nav>
 
-            {/* Column 3: Company, Solutions & Internship Portals */}
-            <div className="lg:col-span-3 space-y-2.5">
-              <p
-                className={`text-xs font-semibold ${
-                  isDark ? 'text-slate-200' : 'text-slate-900'
-                }`}
-              >
-                Company &amp; Portals
-              </p>
-              <div className="grid grid-cols-1 gap-1.5 text-xs">
-                {navItems.map((item) => (
-                  <button
-                    key={item.id}
-                    type="button"
-                    onClick={() => navigateTo(item.id)}
-                    className="text-left hover:text-blue-400 transition-colors"
-                  >
-                    {item.label}
+            <nav aria-label="Footer company" className="lg:col-span-3 space-y-3">
+              <p className="text-sm font-semibold text-white">Company</p>
+              <ul className="space-y-2 text-sm">
+                {navItems
+                  .filter((i) => i.id !== 'services')
+                  .map((item) => (
+                    <li key={item.id}>
+                      <button
+                        type="button"
+                        onClick={() => navigateTo(item.id)}
+                        className="text-left hover:text-white transition-colors"
+                      >
+                        {item.label}
+                      </button>
+                    </li>
+                  ))}
+                <li>
+                  <button type="button" onClick={() => navigateTo('internships')} className="text-left hover:text-white">
+                    Internship Portal
                   </button>
-                ))}
-                <button
-                  type="button"
-                  onClick={() => navigateTo('internships')}
-                  className="text-left text-blue-400 hover:text-blue-300 transition-colors"
-                >
-                  Internship Portal (/internships)
-                </button>
-                <button
-                  type="button"
-                  onClick={() => navigateTo('student-dashboard')}
-                  className="text-left text-blue-400 hover:text-blue-300 transition-colors"
-                >
-                  Student Dashboard (/student-dashboard)
-                </button>
-                <button
-                  type="button"
-                  onClick={() => navigateTo('verify-certificate')}
-                  className="text-left text-emerald-400 hover:text-emerald-300 transition-colors"
-                >
-                  Verify Certificate (/verify-certificate)
-                </button>
-                <button
-                  type="button"
-                  onClick={() => navigateTo('admin')}
-                  className="text-left text-violet-400 hover:text-violet-300 transition-colors"
-                >
-                  Admin Console
-                </button>
-              </div>
-            </div>
+                </li>
+                <li>
+                  <button type="button" onClick={() => navigateTo('student-dashboard')} className="text-left hover:text-white">
+                    Application Status
+                  </button>
+                </li>
+                <li>
+                  <button type="button" onClick={() => navigateTo('verify-certificate')} className="text-left hover:text-white">
+                    Verify Certificate
+                  </button>
+                </li>
+              </ul>
+            </nav>
 
-            {/* Column 4: Direct Contact & Project Enquiry */}
-            <div className="lg:col-span-2 space-y-2.5 text-xs">
-              <p
-                className={`font-semibold ${
-                  isDark ? 'text-slate-200' : 'text-slate-900'
-                }`}
+            <div className="lg:col-span-2 space-y-3 text-sm">
+              <p className="font-semibold text-white">Contact</p>
+              {company.email && (
+                <p className="break-all">
+                  <a href={`mailto:${company.email}`} className="hover:text-white underline-offset-4 hover:underline">
+                    {company.email}
+                  </a>
+                </p>
+              )}
+              {company.githubUrl && (
+                <p>
+                  <a href={company.githubUrl} target="_blank" rel="noopener noreferrer" className="hover:text-white underline-offset-4 hover:underline">
+                    GitHub<span className="sr-only"> (opens in a new tab)</span>
+                  </a>
+                </p>
+              )}
+              <p className="text-[#8fa6d6]">Remote-first · Transparent scoping</p>
+              <button
+                type="button"
+                onClick={() => navigateTo('contact')}
+                className="inline-flex items-center gap-1.5 rounded-full bg-white px-4 py-2 font-semibold text-[#102B59] hover:bg-[#eef4ff] transition-colors"
               >
-                Direct Contact
-              </p>
-              <p className="break-all">
-                <a href={`mailto:${company.email}`} className="hover:text-blue-400">
-                  {company.email}
-                </a>
-              </p>
-              <p className="text-slate-500">
-                Remote-First Engineering · Transparent Scoping
-              </p>
-              <div className="pt-2">
-                <button
-                  type="button"
-                  onClick={() => navigateTo('contact')}
-                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold transition-colors"
-                >
-                  <span>Get a Quote</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </button>
-              </div>
+                <span>Let&apos;s Talk</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
             </div>
           </div>
 
-          <div className="pt-8 border-t border-slate-800/60 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
+          <div className="pt-6 border-t border-white/15 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#8fa6d6]">
             <p>
-              © {new Date().getFullYear()} {company.name}. All rights reserved. Built with
-              transparent early-stage disclosures.
+              © {new Date().getFullYear()} {company.name}. All rights reserved.
             </p>
-            <div className="flex items-center gap-4">
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
               <span className="inline-flex items-center gap-1.5">
-                <ShieldCheck className="w-3.5 h-3.5 text-blue-400" />
-                <span>Original Lovanstrix Identity · Zero Fabricated Claims</span>
+                <ShieldCheck className="w-3.5 h-3.5" aria-hidden="true" />
+                No fabricated clients or testimonials
+              </span>
+              <span className="flex items-center gap-4">
+                <button type="button" onClick={() => navigateTo('admin')} className="hover:text-white">
+                  Admin
+                </button>
+                <button type="button" onClick={() => navigateTo('admin-internships')} className="hover:text-white">
+                  Internship Admin
+                </button>
               </span>
             </div>
           </div>

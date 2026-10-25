@@ -18,9 +18,9 @@ export const LovanstrixMark: React.FC<LovanstrixMarkProps> = ({ isDark }) => {
       >
         <defs>
           <linearGradient id="lovanstrix-prism-a" x1="4" y1="4" x2="32" y2="32" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stopColor="#3B82F6" />
-            <stop offset="55%" stopColor="#6366F1" />
-            <stop offset="100%" stopColor="#8B5CF6" />
+            <stop offset="0%" stopColor="#155EEF" />
+            <stop offset="55%" stopColor="#4f5bf0" />
+            <stop offset="100%" stopColor="#7C5CFA" />
           </linearGradient>
           <linearGradient id="lovanstrix-prism-b" x1="30" y1="6" x2="8" y2="30" gradientUnits="userSpaceOnUse">
             <stop offset="0%" stopColor="#60A5FA" />
@@ -342,7 +342,7 @@ interface ProjectVisualCanvasProps {
 
 export const ProjectVisualCanvas: React.FC<ProjectVisualCanvasProps> = ({ visualType, title }) => {
   return (
-    <div className="relative w-full aspect-[16/9] bg-[#070C1B] border-b border-slate-800/80 overflow-hidden flex items-center justify-center p-6">
+    <div className="relative w-full aspect-[16/9] bg-gradient-to-br from-[#102B59] to-[#2d2f9a] border-b border-[#e2e8f4] overflow-hidden flex items-center justify-center p-6">
       <svg
         viewBox="0 0 400 200"
         className="w-full h-full max-h-[160px]"

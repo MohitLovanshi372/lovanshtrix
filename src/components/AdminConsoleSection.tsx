@@ -119,11 +119,16 @@ export const AdminConsoleSection: React.FC<AdminConsoleSectionProps> = ({
         return;
       }
       const data = await resp.json();
+      if (resp.status === 503) {
+        setAuthenticated(false);
+        setAuthError(data.error || 'Admin API is not configured on the server.');
+        return;
+      }
       if (resp.ok && data.store) {
         setStore(data.store);
         setCompanyForm(data.store.company);
         setConfigStatus(data.configStatus);
-        setPreviewMode(!data.configStatus?.adminAuthConfigured);
+        setPreviewMode(false);
         setAuthenticated(true);
       }
     } catch {
@@ -153,7 +158,7 @@ export const AdminConsoleSection: React.FC<AdminConsoleSectionProps> = ({
       }
       sessionStorage.setItem('lx_admin_token', data.token);
       setToken(data.token);
-      setPreviewMode(Boolean(data.previewMode));
+      setPreviewMode(false);
       setAuthenticated(true);
       await fetchAdminStore(data.token);
     } catch {
@@ -774,7 +779,7 @@ export const AdminConsoleSection: React.FC<AdminConsoleSectionProps> = ({
                       {configStatus.adminAuthConfigured ? (
                         <span className="text-emerald-400">Configured (Locked)</span>
                       ) : (
-                        <span className="text-amber-400">Preview Mode (Awaiting ADMIN_PASSCODE)</span>
+                        <span className="text-amber-400">Not configured — admin API disabled until ADMIN_PASSCODE is set</span>
                       )}
                     </td>
                     <td className="py-3.5 pl-4 text-slate-400">
