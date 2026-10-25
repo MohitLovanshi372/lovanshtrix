@@ -693,15 +693,18 @@ function App() {
                 </div>
                 {heroVisualMode === "3d" ? <div className="lovanstrix-3d-panel relative overflow-hidden rounded-[26px] sm:rounded-[32px]">
                     <Interactive3DCore isDark={isDark} compact />
-                  </div> : <figure className="lovanstrix-hero-figure relative mx-auto w-full max-w-[650px] overflow-hidden rounded-[26px] sm:rounded-[32px]">
+                  </div> : <figure className="lovanstrix-logo-showcase relative mx-auto w-full max-w-[650px]">
                     <img
-    src="/images/lovanstrix-hero-orbit.svg"
-    alt="Lovanstrix abstract glass cube with blue and violet fluid details surrounded by orbital lines"
-    className="lovanstrix-hero-art block h-auto w-full"
-    width="1200"
-    height="1000"
-    fetchPriority="high"
-  />
+                      src="/images/lovanshtrix-premium-brand.svg"
+                      alt="Lovanshtrix blue and gold LX logo with Ideas Into Innovation tagline"
+                      width="800"
+                      height="800"
+                      fetchPriority="high"
+                    />
+                    <figcaption className="lovanstrix-glass-note">
+                      <span>LOVANSHTRIX / PREMIUM DIGITAL EXPERIENCES</span>
+                      <span aria-hidden="true">✦</span>
+                    </figcaption>
                   </figure>}
                 <div className="absolute bottom-5 left-3 sm:bottom-8 sm:left-6 z-20 inline-flex items-center gap-2 rounded-full border border-white/90 bg-white/85 px-3.5 py-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-600 shadow-md backdrop-blur-md">
                   <span className="h-1.5 w-1.5 rounded-full bg-blue-600" />
