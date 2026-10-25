@@ -1,10 +1,9 @@
 import { jsPDF } from 'jspdf';
-import { CertificateRecord, OfferLetterDocument } from '../types/lovanstrix';
 
 /**
  * Formats any ISO or YYYY-MM-DD date string into "21 October 2026" format.
  */
-export function formatOfficialDate(dateStr?: string): string {
+export function formatOfficialDate(dateStr) {
   if (!dateStr) return 'Not Specified';
   // If already formatted like "21 October 2026", return as-is
   if (/^\d{1,2}\s+[A-Za-z]+\s+\d{4}$/.test(dateStr.trim())) {
@@ -23,16 +22,17 @@ export function formatOfficialDate(dateStr?: string): string {
  * Draws a deterministic verification matrix (QR-style visual code) in jsPDF
  * representing the verification identifier.
  */
-function drawVerificationMatrix(doc: jsPDF, code: string, x: number, y: number, size: number) {
+function drawVerificationMatrix(doc, code, x, y, size) {
   const cells = 9;
   const cellSize = size / cells;
   doc.setDrawColor(30, 58, 138);
   doc.setLineWidth(0.3);
   doc.rect(x, y, size, size);
 
+  const safeCode = String(code || 'LOVANSTRIX');
   let hash = 2166136261;
-  for (let i = 0; i < code.length; i++) {
-    hash ^= code.charCodeAt(i);
+  for (let i = 0; i < safeCode.length; i++) {
+    hash ^= safeCode.charCodeAt(i);
     hash = Math.imul(hash, 16777619);
   }
 
@@ -52,7 +52,7 @@ function drawVerificationMatrix(doc: jsPDF, code: string, x: number, y: number, 
 /**
  * Generates and downloads an official Lovanstrix Offer Letter PDF.
  */
-export function downloadOfferLetterPdf(offer: OfferLetterDocument): void {
+export function downloadOfferLetterPdf(offer) {
   const doc = new jsPDF({
     orientation: 'portrait',
     unit: 'mm',
@@ -158,8 +158,8 @@ export function downloadOfferLetterPdf(offer: OfferLetterDocument): void {
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(9);
   const combinedPoints = [
-    ...offer.responsibilities.slice(0, 3),
-    ...offer.learningObjectives.slice(0, 2),
+    ...(offer.responsibilities || []).slice(0, 3),
+    ...(offer.learningObjectives || []).slice(0, 2),
   ];
   combinedPoints.forEach((pt) => {
     const lines = doc.splitTextToSize(`• ${pt}`, 176);
@@ -175,7 +175,7 @@ export function downloadOfferLetterPdf(offer: OfferLetterDocument): void {
 
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(8.5);
-  offer.termsAndConditions.slice(0, 4).forEach((term) => {
+  (offer.termsAndConditions || []).slice(0, 4).forEach((term) => {
     const lines = doc.splitTextToSize(`• ${term}`, 176);
     doc.text(lines, 18, y);
     y += lines.length * 4.2 + 1;
@@ -210,13 +210,13 @@ export function downloadOfferLetterPdf(offer: OfferLetterDocument): void {
   doc.text(`Verification Code: ${offer.verificationCode}`, 168, footerY + 8, { align: 'right' });
   doc.text('Issued electronically via Lovanstrix Portal', 168, footerY + 13, { align: 'right' });
 
-  doc.save(`${offer.offerNumber}_${offer.candidateName.replace(/\s+/g, '_')}.pdf`);
+  doc.save(`${offer.offerNumber}_${String(offer.candidateName || 'Candidate').replace(/\s+/g, '_')}.pdf`);
 }
 
 /**
  * Generates and downloads an official Lovanstrix Certificate of Internship Completion PDF.
  */
-export function downloadCertificatePdf(cert: CertificateRecord): void {
+export function downloadCertificatePdf(cert) {
   const doc = new jsPDF({
     orientation: 'landscape',
     unit: 'mm',
@@ -342,5 +342,5 @@ export function downloadCertificatePdf(cert: CertificateRecord): void {
   doc.rect(246, bottomY - 1, 24, 24, 'F');
   drawVerificationMatrix(doc, cert.id, 248, bottomY + 1, 20);
 
-  doc.save(`${cert.id}_${cert.internName.replace(/\s+/g, '_')}.pdf`);
+  doc.save(`${cert.id}_${String(cert.internName || 'Intern').replace(/\s+/g, '_')}.pdf`);
 }

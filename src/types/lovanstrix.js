@@ -1,400 +1,17 @@
-export type NavSection =
-  | 'home'
-  | 'services'
-  | 'service-detail'
-  | 'solutions'
-  | 'projects'
-  | 'internships'
-  | 'student-dashboard'
-  | 'admin-internships'
-  | 'verify-certificate'
-  | 'about'
-  | 'careers'
-  | 'contact'
-  | 'admin';
-
-export interface CompanyDetails {
-  name: string;
-  tagline: string;
-  heroHeading: string;
-  heroSubtitle: string;
-  shortIntroduction: string;
-  mission: string;
-  vision: string;
-  stageDisclosure: string;
-  email: string;
-  whatsappNumber: string; // Empty string until a real company number is supplied
-  githubUrl: string;
-  linkedinUrl: string;
-  portfolioComingSoonMode: boolean;
-  careerStatusBanner: string;
-  // Founder Introduction (using details supplied by the founder; never fabricated)
-  founderName: string;
-  founderRole: string;
-  founderBio: string;
-  // Official signatory configuration for Offer Letters & Certificates (never fabricated)
-  authorizedSignatoryName: string;
-  authorizedSignatoryDesignation: string;
-  officialSupervisorDefault: string;
-}
-
-export interface ServiceFaqItem {
-  question: string;
-  answer: string;
-}
-
-export type ServiceAvailability =
-  | 'Available for New Projects'
-  | 'Available Upon Project Review'
-  | 'Consultation & Scoping'
-  | 'Planned Capability';
-
-export interface ServiceItem {
-  id: string;
-  slug: string;
-  index: string;
-  title: string;
-  category: string;
-  summary: string;
-  overview: string;
-  problemsAddressed: string[];
-  deliverables: string[];
-  technologies: string[];
-  processSteps: string[];
-  faqs: ServiceFaqItem[];
-  availability: ServiceAvailability;
-  featured: boolean;
-}
-
-export interface BusinessSolutionItem {
-  id: string;
-  index: string;
-  title: string;
-  category: string;
-  useCase: string;
-  summary: string;
-  potentialFeatures: string[];
-  recommendedService: string;
-  integrationDisclosure: string;
-  readinessStatus: 'Available for Scoping' | 'Prototype & Custom Build' | 'Experimental R&D';
-}
-
-export type ProjectCategory =
-  | 'Websites'
-  | 'Web Applications'
-  | 'AI Projects'
-  | 'IoT and Hardware'
-  | 'Experimental Prototypes';
-
-export type ProjectDevelopmentStatus =
-  | 'Prototype'
-  | 'Demo Project'
-  | 'In Development'
-  | 'Internal Concept Prototype'
-  | 'Architecture Demo'
-  | 'Published Project';
-
-export interface ProjectItem {
-  id: string;
-  title: string;
-  category: ProjectCategory;
-  classification: ProjectDevelopmentStatus;
-  objective: string;
-  problemStatement?: string;
-  proposedSolution?: string;
-  technologies: string[];
-  features: string[];
-  liveDemoUrl?: string;
-  githubUrl?: string;
-  previewImageUrl?: string;
-  visualType: 'webapp' | 'ai' | 'website' | 'iot';
-  published: boolean;
-  publishedAt: string;
-}
-
-export interface ExplorationArea {
-  id: string;
-  index: string;
-  title: string;
-  statusLabel:
-    | 'Active Service Track'
-    | 'Internal Prototype Stage'
-    | 'Concept Exploration'
-    | 'Long-Term Research Horizon';
-  summary: string;
-  practicalFocus: string[];
-  honestNote: string;
-}
-
-export interface CareerOpening {
-  id: string;
-  title: string;
-  track:
-    | 'Frontend Development'
-    | 'Backend Development'
-    | 'Full-Stack Development'
-    | 'UI/UX Design'
-    | 'AI & Software Research'
-    | 'General Engineering';
-  type: 'Project Collaboration' | 'Part-Time Collaboration' | 'Full-Time Role';
-  status: 'Open' | 'Closed';
-  eligibility: string;
-  duration: string;
-  responsibilities: string[];
-  deadline: string;
-  applicationLink?: string;
-  createdAt: string;
-}
-
-export interface ProjectEnquiry {
-  id: string;
-  name: string;
-  email: string;
-  organization?: string;
-  serviceRequired: string;
-  projectDescription: string;
-  estimatedBudget: string;
-  expectedTimeline: string;
-  referenceUrl?: string;
-  status: 'New' | 'Reviewed' | 'Archived';
-  savedToDatabase: boolean;
-  emailDelivered: boolean;
-  deliveryMode: 'database_and_email' | 'database_only_no_email' | 'demo_only_no_email';
-  createdAt: string;
-}
-
-export interface CareerInterestSubmission {
-  id: string;
-  name: string;
-  email: string;
-  areaOfInterest: string;
-  skills: string;
-  portfolioUrl?: string;
-  introduction: string;
-  status: 'Registered' | 'Reviewed';
-  savedToDatabase: boolean;
-  emailDelivered: boolean;
-  createdAt: string;
-}
-
-// ============================================================================
-// INTERNSHIP MANAGEMENT SYSTEM TYPES
-// ============================================================================
-
-export type InternshipDepartment =
-  | 'Frontend Development'
-  | 'Backend Development'
-  | 'Full-Stack Development'
-  | 'UI/UX Design'
-  | 'AI/ML'
-  | 'IoT';
-
-export type InternshipWorkMode = 'Remote' | 'Hybrid' | 'On-Site';
-
-export type InternshipCompensationType =
-  | 'Unpaid / Academic Learning'
-  | 'Paid Stipend'
-  | 'Performance-Based Stipend';
-
-export type InternshipListingStatus = 'Open' | 'Closed' | 'Upcoming' | 'Archived';
-
-export interface InternshipListing {
-  id: string;
-  code: string;
-  title: string;
-  department: InternshipDepartment;
-  description: string;
-  techStack: string[];
-  workMode: InternshipWorkMode;
-  compensationType: InternshipCompensationType;
-  stipendDetails: string;
-  duration: string;
-  weeklyCommitment: string;
-  eligibility: string;
-  requiredSkills: string[];
-  responsibilities: string[];
-  learningObjectives: string[];
-  selectionCriteria: string;
-  positionsCount?: number;
-  deadline: string;
-  status: InternshipListingStatus;
-  createdAt: string;
-}
-
-export type ApplicationStatus =
-  | 'Submitted'
-  | 'Under Review'
-  | 'Shortlisted'
-  | 'Selected'
-  | 'Rejected'
-  | 'Withdrawn';
-
-export interface InternshipTaskItem {
-  id: string;
-  title: string;
-  description: string;
-  status: 'Pending' | 'In Progress' | 'Completed';
-  dueDate?: string;
-}
-
-export interface InternshipApplication {
-  id: string;
-  referenceNumber: string; // e.g., LX-INT-2026-4821
-  listingId: string;
-  roleTitle: string;
-  department: InternshipDepartment;
-  fullName: string;
-  email: string;
-  phone?: string;
-  college: string;
-  courseAndYear: string;
-  skills: string[];
-  portfolioUrl?: string;
-  githubUrl?: string;
-  linkedinUrl?: string;
-  resumeFileName?: string;
-  resumeMimeType?: string;
-  resumeSize?: number;
-  hasPrivateResume: boolean;
-  motivation: string;
-  availability: string;
-  preferredStartDate: string;
-  privacyConsent: boolean;
-  status: ApplicationStatus;
-  // Admin-assigned internship management fields
-  assignedSupervisor?: string;
-  officialStartDate?: string;
-  officialEndDate?: string;
-  officialDuration?: string;
-  workMode?: InternshipWorkMode;
-  stipendTerms?: string;
-  acceptanceDeadline?: string;
-  assignedTasks: InternshipTaskItem[];
-  // Completion tracking
-  progressStatus: 'Not Started' | 'Active' | 'Completed' | 'Discontinued';
-  completionApproved: boolean;
-  completionApprovedAt?: string;
-  completedWorkSummary?: string;
-  // Linked documents
-  latestOfferLetterId?: string;
-  latestCertificateId?: string;
-  // Server-only fields (stripped from student view)
-  internalNotes?: string;
-  studentAccessKeyHash?: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface OfferLetterDocument {
-  id: string;
-  offerNumber: string; // e.g., LX-OFFER-2026-101
-  version: number;
-  applicationId: string;
-  referenceNumber: string;
-  candidateName: string;
-  candidateEmail: string;
-  roleTitle: string;
-  department: string;
-  startDate: string; // e.g. "01 November 2026"
-  endDate: string; // e.g. "31 January 2027"
-  duration: string;
-  workMode: InternshipWorkMode;
-  stipendDetails: string;
-  responsibilities: string[];
-  learningObjectives: string[];
-  supervisor: string;
-  termsAndConditions: string[];
-  acceptanceDeadline: string;
-  signatoryName: string;
-  signatoryDesignation: string;
-  issueDate: string; // e.g., "21 October 2026"
-  verificationCode: string;
-  status: 'Issued' | 'Superseded' | 'Revoked';
-  revokedReason?: string;
-  revokedAt?: string;
-  createdAt: string;
-}
-
-export interface CertificateRecord {
-  id: string; // Unguessable public verification ID, e.g., LX-CERT-2026-8F92A1C4
-  certificateNumber: string;
-  version: number;
-  applicationId: string;
-  referenceNumber: string;
-  internName: string;
-  roleTitle: string;
-  department: string;
-  startDate: string;
-  endDate: string;
-  issueDate: string; // e.g., "21 October 2026"
-  workCompletedSummary: string;
-  signatoryName: string;
-  signatoryDesignation: string;
-  verificationUrl: string;
-  status: 'Valid' | 'Revoked';
-  revokedReason?: string;
-  revokedAt?: string;
-  createdAt: string;
-}
-
-export interface AdminAuditLog {
-  id: string;
-  action:
-    | 'LISTING_CREATED'
-    | 'LISTING_UPDATED'
-    | 'APPLICATION_STATUS_CHANGED'
-    | 'OFFER_LETTER_ISSUED'
-    | 'OFFER_LETTER_REVOKED'
-    | 'COMPLETION_APPROVED'
-    | 'CERTIFICATE_ISSUED'
-    | 'CERTIFICATE_REVOKED'
-    | 'SIGNATORY_UPDATED';
-  targetId: string;
-  summary: string;
-  actor: string;
-  emailDispatched: boolean;
-  createdAt: string;
-}
-
-export interface SystemConfigStatus {
-  backendConnected: boolean;
-  databaseAvailable: boolean;
-  adminAuthConfigured: boolean;
-  emailWebhookConfigured: boolean;
-  whatsappConfigured: boolean;
-  geminiConfigured: boolean;
-  signatoryConfigured: boolean;
-  persistenceMode: 'Server Database (JSON Store)' | 'In-Memory Demo Fallback';
-  emailEndpointPath: '/api/enquiries';
-}
-
-export interface LovanstrixStore {
-  company: CompanyDetails;
-  services: ServiceItem[];
-  solutions: BusinessSolutionItem[];
-  projects: ProjectItem[];
-  explorations: ExplorationArea[];
-  openings: CareerOpening[];
-  enquiries: ProjectEnquiry[];
-  careerSubmissions: CareerInterestSubmission[];
-  // Internship Management Collections
-  internshipListings: InternshipListing[];
-  internshipApplications: InternshipApplication[];
-  internshipDocuments: OfferLetterDocument[];
-  certificateRecords: CertificateRecord[];
-  adminAuditLogs: AdminAuditLog[];
-}
+/**
+ * LOVANSTRIX — Shared Data Structures & Default Seed Store (ES Module)
+ */
 
 const DEFAULT_PROCESS_STEPS = [
   'Discover: Understand your objectives, users, and practical constraints.',
   'Plan: Define system architecture, data models, and milestone deliverables.',
   'Design: Create accessible wireframes, high-contrast UI components, and responsive layouts.',
-  'Develop: Write clean TypeScript, React, and backend API code.',
+  'Develop: Write clean JavaScript, React, and backend API code.',
   'Test: Validate forms, cross-device responsiveness, and edge cases.',
   'Launch: Deploy to cloud hosting with documentation and handover.',
 ];
 
-export const INITIAL_STORE: LovanstrixStore = {
+export const INITIAL_STORE = {
   company: {
     name: 'LOVANSTRIX',
     tagline: 'Ideas Into Innovation.',
@@ -415,10 +32,10 @@ export const INITIAL_STORE: LovanstrixStore = {
     portfolioComingSoonMode: false,
     careerStatusBanner:
       'Lovanstrix is growing its engineering and design collaborations. Explore published roles or register in our talent network for upcoming project opportunities.',
-    founderName: 'Founder & Lead Engineer (Lovanstrix)',
-    founderRole: 'Founder-Led Engineering & Product Architecture',
+    founderName: 'Mohit Lovanshi',
+    founderRole: 'Founder & CEO',
     founderBio:
-      'Lovanstrix is led directly by its founder with a focus on full-stack web engineering, clean TypeScript architectures, and applied AI workflows. Specific founder biography and credentials can be updated anytime via the Admin Console.',
+      'Lovanstrix is led directly by its founder with a focus on full-stack MERN web engineering, clean JavaScript architectures, and applied AI workflows. Specific founder biography and credentials can be updated anytime via the Admin Console.',
     authorizedSignatoryName: '',
     authorizedSignatoryDesignation: '',
     officialSupervisorDefault: '',
@@ -433,7 +50,7 @@ export const INITIAL_STORE: LovanstrixStore = {
       summary:
         'Custom, mobile-responsive websites engineered from scratch with modern typography, fast load times, and semantic SEO.',
       overview:
-        'We design and develop modern websites tailored to your brand identity and audience. Instead of bloated page-builders, we write clean, maintainable React, TypeScript, and semantic HTML/CSS so your website loads fast and scales cleanly as your organization grows.',
+        'We design and develop modern websites tailored to your brand identity and audience. Instead of bloated page-builders, we write clean, maintainable React, modern JavaScript, and semantic HTML/CSS so your website loads fast and scales cleanly as your organization grows.',
       problemsAddressed: [
         'Outdated, non-responsive websites that break on mobile and tablet screens',
         'Slow-loading template sites with poor search visibility and cluttered navigation',
@@ -445,7 +62,7 @@ export const INITIAL_STORE: LovanstrixStore = {
         'Accessible contact and enquiry forms with client + server validation',
         'Cross-browser testing across desktop, tablet, and mobile viewports',
       ],
-      technologies: ['React 19', 'TypeScript', 'Tailwind CSS', 'HTML5 / CSS3', 'Vite'],
+      technologies: ['React 19', 'JavaScript (ES6+)', 'Tailwind CSS', 'HTML5 / CSS3', 'Vite'],
       processSteps: DEFAULT_PROCESS_STEPS,
       faqs: [
         {
@@ -483,7 +100,7 @@ export const INITIAL_STORE: LovanstrixStore = {
         'Adaptive Dark & Light mode support if desired',
         'Fast asset optimization and deployment setup',
       ],
-      technologies: ['React', 'TypeScript', 'Tailwind CSS', 'Express API', 'SEO Schema'],
+      technologies: ['React', 'JavaScript (ES6+)', 'Tailwind CSS', 'Express API', 'SEO Schema'],
       processSteps: DEFAULT_PROCESS_STEPS,
       faqs: [
         {
@@ -502,21 +119,21 @@ export const INITIAL_STORE: LovanstrixStore = {
       title: 'Web Application Development',
       category: 'Custom Web Software',
       summary:
-        'Admin dashboards, management portals, booking systems, client portals, and full-stack web applications.',
+        'Admin dashboards, management portals, booking systems, client portals, and full-stack MERN web applications.',
       overview:
-        'We build interactive, state-driven web applications that replace manual spreadsheets and disconnected forms. From role-based admin consoles and client portals to internal workflow trackers, our web apps combine responsive React frontends with structured Node.js backends.',
+        'We build interactive, state-driven web applications that replace manual spreadsheets and disconnected forms. From role-based admin consoles and client portals to internal workflow trackers, our web apps combine responsive React frontends with structured Node.js and MongoDB backends.',
       problemsAddressed: [
         'Manual operations tracked across scattered spreadsheets and email threads',
         'Need for role-based dashboards where admins and users have scoped permissions',
         'Lack of custom workflow logic such as status tracking, document generation, or audit logs',
       ],
       deliverables: [
-        'Interactive React + TypeScript frontend with search, filtering, and role views',
+        'Interactive React frontend with search, filtering, and role views',
         'Node.js + Express REST API with strict payload validation',
-        'Database persistence (PostgreSQL, Firestore, or structured JSON store)',
+        'Database persistence (MongoDB, PostgreSQL, or structured JSON store)',
         'Role-based authorization, exportable CSV reports, and PDF document generation',
       ],
-      technologies: ['React 19', 'TypeScript', 'Node.js', 'Express', 'PostgreSQL / Firestore'],
+      technologies: ['React 19', 'Node.js', 'Express.js', 'MongoDB', 'Tailwind CSS'],
       processSteps: DEFAULT_PROCESS_STEPS,
       faqs: [
         {
@@ -549,7 +166,7 @@ export const INITIAL_STORE: LovanstrixStore = {
         'Cart / order-enquiry workflow saved to database',
         'Payment gateway integration available upon project review and merchant account setup',
       ],
-      technologies: ['React', 'TypeScript', 'Tailwind CSS', 'Node.js', 'REST APIs'],
+      technologies: ['React', 'JavaScript', 'Tailwind CSS', 'Node.js', 'MongoDB'],
       processSteps: DEFAULT_PROCESS_STEPS,
       faqs: [
         {
@@ -582,7 +199,7 @@ export const INITIAL_STORE: LovanstrixStore = {
         'Graceful deterministic fallback templates when paid API keys are not active',
         'Custom UI panels integrated into your existing web application',
       ],
-      technologies: ['Gemini API (@google/genai)', 'Node.js Proxy', 'TypeScript', 'JSON Schema'],
+      technologies: ['Gemini API (@google/genai)', 'Node.js Proxy', 'Express.js', 'JSON Schema'],
       processSteps: DEFAULT_PROCESS_STEPS,
       faqs: [
         {
@@ -636,7 +253,7 @@ export const INITIAL_STORE: LovanstrixStore = {
       summary:
         'RESTful API architecture, authentication middleware, rate limiting, audit logging, and secure server-side webhooks.',
       overview:
-        'Every reliable web application depends on a well-structured backend. We build type-safe Node.js and Express services with input validation, role-based access control, private file handling, and clean API contracts.',
+        'Every reliable web application depends on a well-structured backend. We build modular Node.js and Express services with input validation, role-based access control, private file handling, and clean API contracts.',
       problemsAddressed: [
         'Frontend-only prototypes that lack persistent data storage or server-side security',
         'Unvalidated API endpoints vulnerable to malformed payloads or duplicate submissions',
@@ -648,13 +265,13 @@ export const INITIAL_STORE: LovanstrixStore = {
         'Rate limiting, duplicate submission guards, and append-only audit logs',
         'Optional server-side email/webhook notification integration',
       ],
-      technologies: ['Node.js', 'Express', 'TypeScript', 'REST APIs', 'HMAC / Token Auth'],
+      technologies: ['Node.js', 'Express.js', 'MongoDB / Mongoose', 'REST APIs', 'HMAC / Token Auth'],
       processSteps: DEFAULT_PROCESS_STEPS,
       faqs: [
         {
           question: 'How do you handle sensitive files like applicant resumes?',
           answer:
-            'Sensitive files are validated for file type and size and stored in private server directories outside public static assets, accessible only to authenticated administrators.',
+            'Sensitive files are validated for file type and size and stored in private server storage outside public static assets, accessible only to authenticated administrators.',
         },
       ],
       availability: 'Available for New Projects',
@@ -667,27 +284,27 @@ export const INITIAL_STORE: LovanstrixStore = {
       title: 'Database Design and Integration',
       category: 'Data Architecture & Security',
       summary:
-        'Relational (PostgreSQL) and document (Firestore) schema modeling, data validation, and access-control rules.',
+        'Document (MongoDB / Mongoose) and relational schema modeling, data validation, indexing, and access-control rules.',
       overview:
-        'We design normalized relational schemas and structured document collections that keep your application data consistent, queryable, and protected by strict ownership and role rules.',
+        'We design structured MongoDB document collections and normalized schemas that keep your application data consistent, indexed, queryable, and protected by strict ownership and role rules.',
       problemsAddressed: [
         'Poorly structured data models that become slow or difficult to query as records grow',
-        'Missing security rules in cloud document databases',
-        'Need to migrate from temporary browser storage to persistent server databases',
+        'Missing validation or indexes in cloud document databases',
+        'Need to migrate from temporary browser or JSON storage to persistent MongoDB databases',
       ],
       deliverables: [
-        'Entity-relationship and collection schema blueprints',
-        'Firestore security rules (`firestore.rules`) or SQL table definitions',
-        'CRUD data access layer with TypeScript interfaces',
+        'Collection schema blueprints and Mongoose models with indexes',
+        'Idempotent migration scripts for existing JSON or legacy records',
+        'CRUD data access layer with validation and pagination',
         'CSV data export utilities for administrators',
       ],
-      technologies: ['PostgreSQL / SQL', 'Firebase Firestore', 'Security Rules', 'TypeScript'],
+      technologies: ['MongoDB Atlas', 'Mongoose ODM', 'PostgreSQL / SQL', 'Data Validation'],
       processSteps: DEFAULT_PROCESS_STEPS,
       faqs: [
         {
-          question: 'Do you write Firestore security rules?',
+          question: 'Can you migrate our existing JSON data to MongoDB?',
           answer:
-            'Yes. We design explicit `firestore.rules` enforcing user ownership and server-verified admin roles so private collections are never exposed publicly.',
+            'Yes. We build idempotent migration scripts with dry-run validation and automatic backups so your existing records transition safely into MongoDB collections.',
         },
       ],
       availability: 'Available for New Projects',
@@ -700,9 +317,9 @@ export const INITIAL_STORE: LovanstrixStore = {
       title: 'Website Maintenance and Bug Fixing',
       category: 'Codebase Health & Reliability',
       summary:
-        'Troubleshooting UI glitches, fixing broken forms or API routes, TypeScript refactoring, and performance optimization.',
+        'Troubleshooting UI glitches, fixing broken forms or API routes, codebase refactoring, and performance optimization.',
       overview:
-        'Already have a website or web application that needs attention? We diagnose layout regressions, resolve TypeScript and build errors, fix broken responsive views, and clean up technical debt.',
+        'Already have a website or web application that needs attention? We diagnose layout regressions, resolve build and runtime errors, fix broken responsive views, and clean up technical debt.',
       problemsAddressed: [
         'Broken mobile layouts, overlapping navigation bars, or non-working buttons',
         'Build failures, dependency conflicts, or unhandled runtime errors',
@@ -711,14 +328,14 @@ export const INITIAL_STORE: LovanstrixStore = {
       deliverables: [
         'Root-cause diagnosis and targeted code fixes',
         'Responsive breakpoint cleanup across mobile, tablet, and desktop',
-        'TypeScript type-safety and linter error resolution',
+        'Linter and syntax error resolution',
         'Verified production build check',
       ],
-      technologies: ['React', 'TypeScript', 'HTML/CSS', 'Node.js', 'Vite / Webpack'],
+      technologies: ['React', 'JavaScript (ES6+)', 'HTML/CSS', 'Node.js', 'Vite / Webpack'],
       processSteps: DEFAULT_PROCESS_STEPS,
       faqs: [
         {
-          question: 'Can you work with an existing React or TypeScript repository?',
+          question: 'Can you work with an existing React or Node.js repository?',
           answer:
             'Yes. We review your existing codebase, preserve working features, and implement clean, non-destructive improvements.',
         },
@@ -733,11 +350,11 @@ export const INITIAL_STORE: LovanstrixStore = {
       title: 'Deployment and Technical Support',
       category: 'Cloud Hosting & Operations',
       summary:
-        'Cloud Run, Vercel, Netlify, or VPS deployment configuration, environment variable setup, SSL, and handover documentation.',
+        'Cloud Run, Render, Vercel, or VPS deployment configuration, MongoDB Atlas setup, environment variable security, and handover documentation.',
       overview:
-        'We help individuals and startups take their web applications from local development to live cloud hosting using cost-effective free-tier or scalable cloud platforms, complete with environment secret configuration and operational documentation.',
+        'We help individuals and startups take their MERN web applications from local development to live cloud hosting using cost-effective free-tier or scalable cloud platforms, complete with environment secret configuration and operational documentation.',
       problemsAddressed: [
-        'Difficulty deploying full-stack Node.js + React apps to production environments',
+        'Difficulty deploying full-stack Node.js + React + MongoDB apps to production environments',
         'Misconfigured environment variables, CORS issues, or broken SPA routing on refresh',
         'Lack of clear setup documentation for future maintainers',
       ],
@@ -747,13 +364,13 @@ export const INITIAL_STORE: LovanstrixStore = {
         'Custom domain, SSL, and SPA fallback routing setup guidance',
         'Step-by-step deployment and administration runbook',
       ],
-      technologies: ['Google Cloud Run', 'Vercel / Netlify', 'Node.js', 'Docker / Buildpacks', 'Git'],
+      technologies: ['Google Cloud Run', 'MongoDB Atlas', 'Node.js', 'Docker / Buildpacks', 'Git'],
       processSteps: DEFAULT_PROCESS_STEPS,
       faqs: [
         {
           question: 'Do you prioritize free-tier friendly hosting options?',
           answer:
-            'Yes. For early-stage projects and startups, we recommend hosting architectures with generous free tiers and scale-to-zero efficiency.',
+            'Yes. For early-stage projects and startups, we recommend hosting architectures like MongoDB Atlas M0 and scale-to-zero cloud containers.',
         },
       ],
       availability: 'Available for New Projects',
@@ -780,7 +397,7 @@ export const INITIAL_STORE: LovanstrixStore = {
         'Full source-code ownership and documentation upon completion',
         'Extensibility roadmap for future phases',
       ],
-      technologies: ['React 19', 'TypeScript', 'Node.js', 'Three.js / WebGL', 'PDF & Data Engines'],
+      technologies: ['React 19', 'Node.js', 'MongoDB', 'Three.js / WebGL', 'PDF & Data Engines'],
       processSteps: DEFAULT_PROCESS_STEPS,
       faqs: [
         {
@@ -811,7 +428,7 @@ export const INITIAL_STORE: LovanstrixStore = {
       ],
       recommendedService: 'Web Application Development',
       integrationDisclosure:
-        'Built using modular web technologies. Any external ERP, accounting, or email webhook integration is scoped and verified per engagement.',
+        'Built using modular MERN technologies. Any external ERP, accounting, or email webhook integration is scoped and verified per engagement.',
       readinessStatus: 'Available for Scoping',
     },
     {
@@ -831,7 +448,7 @@ export const INITIAL_STORE: LovanstrixStore = {
       ],
       recommendedService: 'Custom Software Solutions',
       integrationDisclosure:
-        'Engineered with modular React frontends and Node.js REST APIs tailored to your organization’s workflow.',
+        'Engineered with modular React frontends, Node.js REST APIs, and MongoDB persistence tailored to your organization’s workflow.',
       readinessStatus: 'Available for Scoping',
     },
     {
@@ -882,10 +499,10 @@ export const INITIAL_STORE: LovanstrixStore = {
       useCase:
         'For solo founders and early-stage startups who need to turn a product concept into a working, testable web application to validate with real users.',
       summary:
-        'Focused, milestone-driven MVP engineering that prioritizes core user flows, clean UI/UX, and maintainable TypeScript code over unnecessary complexity.',
+        'Focused, milestone-driven MVP engineering that prioritizes core user flows, clean UI/UX, and maintainable MERN stack code over unnecessary complexity.',
       potentialFeatures: [
         'Interactive UI prototype and core full-stack workflow implementation',
-        'User authentication, database schema design, and admin management controls',
+        'User authentication, MongoDB schema design, and admin management controls',
         'Responsive desktop and mobile browser compatibility',
         'Clean codebase handover ready for future team expansion',
       ],
@@ -942,12 +559,12 @@ export const INITIAL_STORE: LovanstrixStore = {
       category: 'Web Applications',
       classification: 'Demo Project',
       objective:
-        'Demonstrate a full-stack IT services agency portal with 11 dedicated service detail views, validated quote intake, live admin content management, and transparent delivery reporting.',
+        'Demonstrate a full-stack MERN IT services agency portal with 11 dedicated service detail views, validated quote intake, live admin content management, and transparent delivery reporting.',
       problemStatement:
         'Service businesses need a way to present detailed technical offerings, capture structured client project briefs, and manage website content without relying on heavy CMS plugins.',
       proposedSolution:
-        'Engineered a modular React + Express platform with individual service detail pages, pre-filled quote routing, database persistence, and an authenticated Admin Console.',
-      technologies: ['React 19', 'TypeScript', 'Node.js', 'Express', 'Tailwind CSS'],
+        'Engineered a modular React + Express + MongoDB platform with individual service detail pages, pre-filled quote routing, database persistence, and an authenticated Admin Console.',
+      technologies: ['React 19', 'Node.js', 'Express.js', 'MongoDB', 'Tailwind CSS'],
       features: [
         'Client and server input validation for project quotes with optional reference links',
         'Role-protected Admin Management Console with live service and portfolio publishing',
@@ -970,7 +587,7 @@ export const INITIAL_STORE: LovanstrixStore = {
         'Prospective clients often struggle to translate a high-level business idea into concrete software milestones and technology stack choices.',
       proposedSolution:
         'Created an interactive scope planner backed by a server-side Gemini API route with strict JSON schema output and a zero-cost deterministic template fallback.',
-      technologies: ['TypeScript', 'Gemini API (Server-Side)', 'JSON Schema', 'React'],
+      technologies: ['JavaScript (ES6+)', 'Gemini API (Server-Side)', 'JSON Schema', 'React'],
       features: [
         '4-phase milestone breakdown (Discover, Design, Build, Launch)',
         'Zero frontend API key exposure with server-side proxy architecture',
@@ -993,7 +610,7 @@ export const INITIAL_STORE: LovanstrixStore = {
         'Standard 3D web embeds often suffer from poor text contrast, runaway GPU frame loops, or lack of keyboard/fallback accessibility.',
       proposedSolution:
         'Built a custom Three.js scene with studio environment reflections, raycastable lifecycle satellites (Discover → Launch), OrbitControls, and a 2D SVG blueprint toggle.',
-      technologies: ['Three.js', 'WebGL', 'React 19', 'TypeScript', 'Tailwind CSS'],
+      technologies: ['Three.js', 'WebGL', 'React 19', 'JavaScript (ES6+)', 'Tailwind CSS'],
       features: [
         'Interactive orbital stage inspection with live telemetry HUD',
         'Software-WebGL detection and reduced-motion accessibility compliance',
@@ -1016,7 +633,7 @@ export const INITIAL_STORE: LovanstrixStore = {
         'Low-power edge microcontrollers require compact, predictable HTTP/MQTT payload schemas and lightweight web dashboards to visualize threshold alerts.',
       proposedSolution:
         'Developing a reference Node.js ingestion schema and time-series visualization prototype for future IoT and AgriTech collaborations.',
-      technologies: ['Node.js', 'TypeScript', 'REST Ingestion', 'Time-Series Schema'],
+      technologies: ['Node.js', 'Express.js', 'REST Ingestion', 'Time-Series Schema'],
       features: [
         'Lightweight payload specification for edge microcontrollers',
         'Configurable threshold rule evaluation prototype',
@@ -1038,7 +655,7 @@ export const INITIAL_STORE: LovanstrixStore = {
         'Many B2B suppliers and custom manufacturers need a digital product catalogue that routes into a tailored quote enquiry rather than a fixed retail cart.',
       proposedSolution:
         'Architected a reusable React catalogue grid with category filtering, specification comparison, and direct quote-form prefill.',
-      technologies: ['React', 'TypeScript', 'Tailwind CSS', 'REST API'],
+      technologies: ['React', 'JavaScript', 'Tailwind CSS', 'REST API'],
       features: [
         'Instant category and specification filtering',
         'Direct integration with server-side quote enquiry storage',
@@ -1072,7 +689,7 @@ export const INITIAL_STORE: LovanstrixStore = {
       title: 'Web Applications',
       statusLabel: 'Active Service Track',
       summary:
-        'Modern full-stack web applications that replace scattered spreadsheets with unified dashboards, portals, and operational tools.',
+        'Modern full-stack MERN web applications that replace scattered spreadsheets with unified dashboards, portals, and operational tools.',
       practicalFocus: [
         'Internal operations dashboards and inventory/booking trackers',
         'Client portals with role-based views and status workflows',

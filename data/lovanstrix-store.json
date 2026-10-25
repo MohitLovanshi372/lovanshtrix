@@ -1,0 +1,837 @@
+{
+  "company": {
+    "name": "LOVANSTRIX",
+    "tagline": "Ideas Into Innovation.",
+    "heroHeading": "Turn ideas into immersive digital experiences.",
+    "heroSubtitle": "We shape business websites, custom applications, and practical AI tools into digital experiences built around your next big idea.",
+    "shortIntroduction": "Founded as an emerging technology venture, Lovanstrix works directly with individuals, founders, educators, and growing businesses to turn practical ideas into clean, maintainable digital products and software systems.",
+    "mission": "Build useful, accessible, and innovative digital solutions.",
+    "vision": "To grow into a multidisciplinary technology company that develops useful digital products, builds innovative web and AI applications, and collaborates with talented engineers and builders.",
+    "stageDisclosure": "Lovanstrix is an emerging early-stage technology venture. We focus on direct founder-led engineering, transparent project scoping, and verifiable prototypes—never fabricating client logos, team headcount, or commercial claims.",
+    "email": "mgcodestack528@gmail.com",
+    "whatsappNumber": "8815934500",
+    "githubUrl": "https://github.com/lovanstrix",
+    "linkedinUrl": "https://linkedin.com/company/lovanstrix",
+    "portfolioComingSoonMode": false,
+    "careerStatusBanner": "Lovanstrix is growing its engineering and design collaborations. Explore published roles or register in our talent network for upcoming project opportunities.",
+    "founderName": "Mohit Lovanshi",
+    "founderRole": "Founder & CEO",
+    "founderBio": "Lovanstrix is led directly by its founder with a focus on full-stack MERN web engineering, clean JavaScript architectures, and applied AI workflows. Specific founder biography and credentials can be updated anytime via the Admin Console.",
+    "authorizedSignatoryName": "",
+    "authorizedSignatoryDesignation": "",
+    "officialSupervisorDefault": ""
+  },
+  "services": [
+    {
+      "id": "srv-web-design-dev",
+      "slug": "website-design-and-development",
+      "index": "01",
+      "title": "Website Design and Development",
+      "category": "Websites & Digital Presence",
+      "summary": "Custom, mobile-responsive websites engineered from scratch with modern typography, fast load times, and semantic SEO.",
+      "overview": "We design and develop modern websites tailored to your brand identity and audience. Instead of bloated page-builders, we write clean, maintainable React, TypeScript, and semantic HTML/CSS so your website loads fast and scales cleanly as your organization grows.",
+      "problemsAddressed": [
+        "Outdated, non-responsive websites that break on mobile and tablet screens",
+        "Slow-loading template sites with poor search visibility and cluttered navigation",
+        "Difficulty updating service pages or company announcements without breaking layouts"
+      ],
+      "deliverables": [
+        "Custom responsive multi-page or single-page website architecture",
+        "Semantic HTML5 structure, OpenGraph social cards, and Schema.org metadata",
+        "Accessible contact and enquiry forms with client + server validation",
+        "Cross-browser testing across desktop, tablet, and mobile viewports"
+      ],
+      "technologies": [
+        "React 19",
+        "TypeScript",
+        "Tailwind CSS",
+        "HTML5 / CSS3",
+        "Vite"
+      ],
+      "processSteps": [
+        "Discover: Understand your objectives, users, and practical constraints.",
+        "Plan: Define system architecture, data models, and milestone deliverables.",
+        "Design: Create accessible wireframes, high-contrast UI components, and responsive layouts.",
+        "Develop: Write clean TypeScript, React, and backend API code.",
+        "Test: Validate forms, cross-device responsiveness, and edge cases.",
+        "Launch: Deploy to cloud hosting with documentation and handover."
+      ],
+      "faqs": [
+        {
+          "question": "Do you use pre-made generic templates?",
+          "answer": "No. Every Lovanstrix website is architected with custom components tailored to your specific content, brand colors, and goals."
+        },
+        {
+          "question": "Can I update text and projects later?",
+          "answer": "Yes. We can include a lightweight Admin Console so you can update company copy, services, and portfolio items without editing source code."
+        }
+      ],
+      "availability": "Available for New Projects",
+      "featured": true
+    },
+    {
+      "id": "srv-business-landing",
+      "slug": "business-websites-and-landing-pages",
+      "index": "02",
+      "title": "Business Websites and Landing Pages",
+      "category": "Conversion & Brand Launch",
+      "summary": "Focused company websites, product launch pages, and professional portfolios structured to communicate value clearly and capture enquiries.",
+      "overview": "Whether you are launching a new startup, presenting a consulting practice, or showcasing a service line, we build focused landing pages and business websites with clear typographic hierarchy, structured CTAs, and validated lead-capture flows.",
+      "problemsAddressed": [
+        "Visitors leaving because the value proposition and service offerings are unclear",
+        "Broken or unvalidated contact forms that fail to capture structured enquiries",
+        "Lack of a professional digital presence when pitching to prospective clients or partners"
+      ],
+      "deliverables": [
+        "High-clarity hero section, service breakdown, and FAQ architecture",
+        "Validated lead/quote enquiry intake connected to your database or webhook",
+        "Adaptive Dark & Light mode support if desired",
+        "Fast asset optimization and deployment setup"
+      ],
+      "technologies": [
+        "React",
+        "TypeScript",
+        "Tailwind CSS",
+        "Express API",
+        "SEO Schema"
+      ],
+      "processSteps": [
+        "Discover: Understand your objectives, users, and practical constraints.",
+        "Plan: Define system architecture, data models, and milestone deliverables.",
+        "Design: Create accessible wireframes, high-contrast UI components, and responsive layouts.",
+        "Develop: Write clean TypeScript, React, and backend API code.",
+        "Test: Validate forms, cross-device responsiveness, and edge cases.",
+        "Launch: Deploy to cloud hosting with documentation and handover."
+      ],
+      "faqs": [
+        {
+          "question": "How long does a business landing page or company site take?",
+          "answer": "A focused landing page or multi-section business site typically takes 1 to 3 weeks depending on content readiness and custom interactive features."
+        }
+      ],
+      "availability": "Available for New Projects",
+      "featured": true
+    },
+    {
+      "id": "srv-webapp-dev",
+      "slug": "web-application-development",
+      "index": "03",
+      "title": "Web Application Development",
+      "category": "Custom Web Software",
+      "summary": "Admin dashboards, management portals, booking systems, client portals, and full-stack web applications.",
+      "overview": "We build interactive, state-driven web applications that replace manual spreadsheets and disconnected forms. From role-based admin consoles and client portals to internal workflow trackers, our web apps combine responsive React frontends with structured Node.js backends.",
+      "problemsAddressed": [
+        "Manual operations tracked across scattered spreadsheets and email threads",
+        "Need for role-based dashboards where admins and users have scoped permissions",
+        "Lack of custom workflow logic such as status tracking, document generation, or audit logs"
+      ],
+      "deliverables": [
+        "Interactive React + TypeScript frontend with search, filtering, and role views",
+        "Node.js + Express REST API with strict payload validation",
+        "Database persistence (PostgreSQL, Firestore, or structured JSON store)",
+        "Role-based authorization, exportable CSV reports, and PDF document generation"
+      ],
+      "technologies": [
+        "React 19",
+        "TypeScript",
+        "Node.js",
+        "Express",
+        "PostgreSQL / Firestore"
+      ],
+      "processSteps": [
+        "Discover: Understand your objectives, users, and practical constraints.",
+        "Plan: Define system architecture, data models, and milestone deliverables.",
+        "Design: Create accessible wireframes, high-contrast UI components, and responsive layouts.",
+        "Develop: Write clean TypeScript, React, and backend API code.",
+        "Test: Validate forms, cross-device responsiveness, and edge cases.",
+        "Launch: Deploy to cloud hosting with documentation and handover."
+      ],
+      "faqs": [
+        {
+          "question": "Can you build portals with both user and admin dashboards?",
+          "answer": "Yes. We architect multi-role web applications with scoped client views, administrative management consoles, and secure backend APIs."
+        }
+      ],
+      "availability": "Available for New Projects",
+      "featured": true
+    },
+    {
+      "id": "srv-ecommerce",
+      "slug": "ecommerce-website-development",
+      "index": "04",
+      "title": "E-commerce Website Development",
+      "category": "Digital Commerce & Catalogues",
+      "summary": "Product catalogue websites, custom order-enquiry storefronts, inventory browsers, and scoped e-commerce web experiences.",
+      "overview": "We build clean product catalogue websites, B2B order-request portals, and custom storefronts for businesses that want to showcase products with category filtering, specification tables, and order or quote checkout flows.",
+      "problemsAddressed": [
+        "Difficulty presenting structured product catalogues with technical specifications online",
+        "Need for custom quote-based checkout or B2B order requests rather than rigid off-the-shelf themes",
+        "Slow mobile browsing experience across large product categories"
+      ],
+      "deliverables": [
+        "Searchable, filterable product catalogue and detail pages",
+        "Admin product management interface (add, edit, publish/unpublish products)",
+        "Cart / order-enquiry workflow saved to database",
+        "Payment gateway integration available upon project review and merchant account setup"
+      ],
+      "technologies": [
+        "React",
+        "TypeScript",
+        "Tailwind CSS",
+        "Node.js",
+        "REST APIs"
+      ],
+      "processSteps": [
+        "Discover: Understand your objectives, users, and practical constraints.",
+        "Plan: Define system architecture, data models, and milestone deliverables.",
+        "Design: Create accessible wireframes, high-contrast UI components, and responsive layouts.",
+        "Develop: Write clean TypeScript, React, and backend API code.",
+        "Test: Validate forms, cross-device responsiveness, and edge cases.",
+        "Launch: Deploy to cloud hosting with documentation and handover."
+      ],
+      "faqs": [
+        {
+          "question": "Are third-party payment gateways or shipping APIs pre-installed?",
+          "answer": "We do not claim pre-bundled third-party merchant integrations out of the box. Payment gateways (such as Razorpay or Stripe) are scoped, implemented, and tested specifically for your merchant account during project delivery."
+        }
+      ],
+      "availability": "Available Upon Project Review",
+      "featured": true
+    },
+    {
+      "id": "srv-ai-integration",
+      "slug": "ai-chatbots-and-ai-integration",
+      "index": "05",
+      "title": "AI Chatbots and AI Integration",
+      "category": "Applied AI Solutions",
+      "summary": "Server-side Gemini API integrations, structured brief analyzers, FAQ assistants, and practical AI workflow tools.",
+      "overview": "We integrate proven foundation models (such as Google Gemini) into websites and web applications through secure server-side API proxy routes. We focus on practical, deterministic use cases—such as structured data extraction, enquiry triage, and document summarization—while keeping API keys strictly on the server.",
+      "problemsAddressed": [
+        "Insecure frontend AI implementations that expose API keys in browser code",
+        "Unstructured client enquiries or documents that require manual sorting and scoping",
+        "Apps that break completely when an external AI API is unconfigured or rate-limited"
+      ],
+      "deliverables": [
+        "Secure server-side Node.js proxy routes for Gemini API calls",
+        "Structured JSON schema validation for predictable AI outputs",
+        "Graceful deterministic fallback templates when paid API keys are not active",
+        "Custom UI panels integrated into your existing web application"
+      ],
+      "technologies": [
+        "Gemini API (@google/genai)",
+        "Node.js Proxy",
+        "TypeScript",
+        "JSON Schema"
+      ],
+      "processSteps": [
+        "Discover: Understand your objectives, users, and practical constraints.",
+        "Plan: Define system architecture, data models, and milestone deliverables.",
+        "Design: Create accessible wireframes, high-contrast UI components, and responsive layouts.",
+        "Develop: Write clean TypeScript, React, and backend API code.",
+        "Test: Validate forms, cross-device responsiveness, and edge cases.",
+        "Launch: Deploy to cloud hosting with documentation and handover."
+      ],
+      "faqs": [
+        {
+          "question": "Will my website still work if I do not have a paid AI API key yet?",
+          "answer": "Yes. We engineer every AI feature with a clean server-side fallback mode so your core website and forms work reliably without requiring a paid API key."
+        }
+      ],
+      "availability": "Available for New Projects",
+      "featured": true
+    },
+    {
+      "id": "srv-ui-ux",
+      "slug": "ui-ux-design",
+      "index": "06",
+      "title": "UI/UX Design",
+      "category": "Interface & Experience Design",
+      "summary": "Wireframes, component design systems, responsive interface redesigns, and accessibility-focused user flows.",
+      "overview": "Good software feels effortless to navigate. We design high-contrast user interfaces, interactive prototypes, and clean design systems that prioritize legibility, keyboard accessibility, and responsive mobile-to-desktop ergonomics.",
+      "problemsAddressed": [
+        "Cluttered dashboards and confusing navigation that frustrate end users",
+        "Inconsistent typography, spacing, and low-contrast color combinations",
+        "Lack of clear wireframes before starting full-stack software development"
+      ],
+      "deliverables": [
+        "Page structure wireframes and user journey mapping",
+        "Dark and light theme color tokens with WCAG AA contrast compliance",
+        "Interactive React component prototypes",
+        "Usability and responsive layout audit for existing web apps"
+      ],
+      "technologies": [
+        "Figma",
+        "Tailwind CSS",
+        "Component Tokens",
+        "WCAG AA Accessibility",
+        "Three.js"
+      ],
+      "processSteps": [
+        "Discover: Understand your objectives, users, and practical constraints.",
+        "Plan: Define system architecture, data models, and milestone deliverables.",
+        "Design: Create accessible wireframes, high-contrast UI components, and responsive layouts.",
+        "Develop: Write clean TypeScript, React, and backend API code.",
+        "Test: Validate forms, cross-device responsiveness, and edge cases.",
+        "Launch: Deploy to cloud hosting with documentation and handover."
+      ],
+      "faqs": [
+        {
+          "question": "Can you redesign an existing web application’s interface?",
+          "answer": "Yes. We can audit your current UI, modernize its navigation, typography, and mobile responsiveness, and deliver clean React/Tailwind components."
+        }
+      ],
+      "availability": "Available for New Projects",
+      "featured": true
+    },
+    {
+      "id": "srv-backend-api",
+      "slug": "backend-and-api-development",
+      "index": "07",
+      "title": "Backend and API Development",
+      "category": "Server & API Engineering",
+      "summary": "RESTful API architecture, authentication middleware, rate limiting, audit logging, and secure server-side webhooks.",
+      "overview": "Every reliable web application depends on a well-structured backend. We build type-safe Node.js and Express services with input validation, role-based access control, private file handling, and clean API contracts.",
+      "problemsAddressed": [
+        "Frontend-only prototypes that lack persistent data storage or server-side security",
+        "Unvalidated API endpoints vulnerable to malformed payloads or duplicate submissions",
+        "Need for server-side PDF/document issuance, audit logs, or webhook dispatchers"
+      ],
+      "deliverables": [
+        "Modular Express / Node.js REST API endpoints",
+        "Token/session authentication and role-based authorization middleware",
+        "Rate limiting, duplicate submission guards, and append-only audit logs",
+        "Optional server-side email/webhook notification integration"
+      ],
+      "technologies": [
+        "Node.js",
+        "Express",
+        "TypeScript",
+        "REST APIs",
+        "HMAC / Token Auth"
+      ],
+      "processSteps": [
+        "Discover: Understand your objectives, users, and practical constraints.",
+        "Plan: Define system architecture, data models, and milestone deliverables.",
+        "Design: Create accessible wireframes, high-contrast UI components, and responsive layouts.",
+        "Develop: Write clean TypeScript, React, and backend API code.",
+        "Test: Validate forms, cross-device responsiveness, and edge cases.",
+        "Launch: Deploy to cloud hosting with documentation and handover."
+      ],
+      "faqs": [
+        {
+          "question": "How do you handle sensitive files like applicant resumes?",
+          "answer": "Sensitive files are validated for file type and size and stored in private server directories outside public static assets, accessible only to authenticated administrators."
+        }
+      ],
+      "availability": "Available for New Projects",
+      "featured": false
+    },
+    {
+      "id": "srv-database-design",
+      "slug": "database-design-and-integration",
+      "index": "08",
+      "title": "Database Design and Integration",
+      "category": "Data Architecture & Security",
+      "summary": "Relational (PostgreSQL) and document (Firestore) schema modeling, data validation, and access-control rules.",
+      "overview": "We design normalized relational schemas and structured document collections that keep your application data consistent, queryable, and protected by strict ownership and role rules.",
+      "problemsAddressed": [
+        "Poorly structured data models that become slow or difficult to query as records grow",
+        "Missing security rules in cloud document databases",
+        "Need to migrate from temporary browser storage to persistent server databases"
+      ],
+      "deliverables": [
+        "Entity-relationship and collection schema blueprints",
+        "Firestore security rules (`firestore.rules`) or SQL table definitions",
+        "CRUD data access layer with TypeScript interfaces",
+        "CSV data export utilities for administrators"
+      ],
+      "technologies": [
+        "PostgreSQL / SQL",
+        "Firebase Firestore",
+        "Security Rules",
+        "TypeScript"
+      ],
+      "processSteps": [
+        "Discover: Understand your objectives, users, and practical constraints.",
+        "Plan: Define system architecture, data models, and milestone deliverables.",
+        "Design: Create accessible wireframes, high-contrast UI components, and responsive layouts.",
+        "Develop: Write clean TypeScript, React, and backend API code.",
+        "Test: Validate forms, cross-device responsiveness, and edge cases.",
+        "Launch: Deploy to cloud hosting with documentation and handover."
+      ],
+      "faqs": [
+        {
+          "question": "Do you write Firestore security rules?",
+          "answer": "Yes. We design explicit `firestore.rules` enforcing user ownership and server-verified admin roles so private collections are never exposed publicly."
+        }
+      ],
+      "availability": "Available for New Projects",
+      "featured": false
+    },
+    {
+      "id": "srv-maintenance-bugfix",
+      "slug": "website-maintenance-and-bug-fixing",
+      "index": "09",
+      "title": "Website Maintenance and Bug Fixing",
+      "category": "Codebase Health & Reliability",
+      "summary": "Troubleshooting UI glitches, fixing broken forms or API routes, TypeScript refactoring, and performance optimization.",
+      "overview": "Already have a website or web application that needs attention? We diagnose layout regressions, resolve TypeScript and build errors, fix broken responsive views, and clean up technical debt.",
+      "problemsAddressed": [
+        "Broken mobile layouts, overlapping navigation bars, or non-working buttons",
+        "Build failures, dependency conflicts, or unhandled runtime errors",
+        "Sluggish page load performance and missing SEO metadata"
+      ],
+      "deliverables": [
+        "Root-cause diagnosis and targeted code fixes",
+        "Responsive breakpoint cleanup across mobile, tablet, and desktop",
+        "TypeScript type-safety and linter error resolution",
+        "Verified production build check"
+      ],
+      "technologies": [
+        "React",
+        "TypeScript",
+        "HTML/CSS",
+        "Node.js",
+        "Vite / Webpack"
+      ],
+      "processSteps": [
+        "Discover: Understand your objectives, users, and practical constraints.",
+        "Plan: Define system architecture, data models, and milestone deliverables.",
+        "Design: Create accessible wireframes, high-contrast UI components, and responsive layouts.",
+        "Develop: Write clean TypeScript, React, and backend API code.",
+        "Test: Validate forms, cross-device responsiveness, and edge cases.",
+        "Launch: Deploy to cloud hosting with documentation and handover."
+      ],
+      "faqs": [
+        {
+          "question": "Can you work with an existing React or TypeScript repository?",
+          "answer": "Yes. We review your existing codebase, preserve working features, and implement clean, non-destructive improvements."
+        }
+      ],
+      "availability": "Available for New Projects",
+      "featured": false
+    },
+    {
+      "id": "srv-deployment-support",
+      "slug": "deployment-and-technical-support",
+      "index": "10",
+      "title": "Deployment and Technical Support",
+      "category": "Cloud Hosting & Operations",
+      "summary": "Cloud Run, Vercel, Netlify, or VPS deployment configuration, environment variable setup, SSL, and handover documentation.",
+      "overview": "We help individuals and startups take their web applications from local development to live cloud hosting using cost-effective free-tier or scalable cloud platforms, complete with environment secret configuration and operational documentation.",
+      "problemsAddressed": [
+        "Difficulty deploying full-stack Node.js + React apps to production environments",
+        "Misconfigured environment variables, CORS issues, or broken SPA routing on refresh",
+        "Lack of clear setup documentation for future maintainers"
+      ],
+      "deliverables": [
+        "Production build pipeline and server start script configuration",
+        "Environment variable (`.env.example`) template and secret isolation review",
+        "Custom domain, SSL, and SPA fallback routing setup guidance",
+        "Step-by-step deployment and administration runbook"
+      ],
+      "technologies": [
+        "Google Cloud Run",
+        "Vercel / Netlify",
+        "Node.js",
+        "Docker / Buildpacks",
+        "Git"
+      ],
+      "processSteps": [
+        "Discover: Understand your objectives, users, and practical constraints.",
+        "Plan: Define system architecture, data models, and milestone deliverables.",
+        "Design: Create accessible wireframes, high-contrast UI components, and responsive layouts.",
+        "Develop: Write clean TypeScript, React, and backend API code.",
+        "Test: Validate forms, cross-device responsiveness, and edge cases.",
+        "Launch: Deploy to cloud hosting with documentation and handover."
+      ],
+      "faqs": [
+        {
+          "question": "Do you prioritize free-tier friendly hosting options?",
+          "answer": "Yes. For early-stage projects and startups, we recommend hosting architectures with generous free tiers and scale-to-zero efficiency."
+        }
+      ],
+      "availability": "Available for New Projects",
+      "featured": false
+    },
+    {
+      "id": "srv-custom-software",
+      "slug": "custom-software-solutions",
+      "index": "11",
+      "title": "Custom Software Solutions",
+      "category": "Tailored Digital Products",
+      "summary": "Bespoke MVP development, interactive 3D web experiences, internal business tools, and experimental R&D prototypes.",
+      "overview": "When off-the-shelf software does not fit your workflow or product concept, we collaborate with you to architect custom digital solutions—ranging from startup MVPs and document verification systems to interactive 3D browser visualizations.",
+      "problemsAddressed": [
+        "Unique product ideas that require custom business logic and interactive user interfaces",
+        "Need for a functional, investor-ready or user-testable MVP without agency bloat",
+        "Bridging multiple workflows (such as applications, reviews, and verifiable PDF credentials) in one system"
+      ],
+      "deliverables": [
+        "End-to-end MVP architecture and technical specification",
+        "Iterative prototype builds with transparent milestone reviews",
+        "Full source-code ownership and documentation upon completion",
+        "Extensibility roadmap for future phases"
+      ],
+      "technologies": [
+        "React 19",
+        "TypeScript",
+        "Node.js",
+        "Three.js / WebGL",
+        "PDF & Data Engines"
+      ],
+      "processSteps": [
+        "Discover: Understand your objectives, users, and practical constraints.",
+        "Plan: Define system architecture, data models, and milestone deliverables.",
+        "Design: Create accessible wireframes, high-contrast UI components, and responsive layouts.",
+        "Develop: Write clean TypeScript, React, and backend API code.",
+        "Test: Validate forms, cross-device responsiveness, and edge cases.",
+        "Launch: Deploy to cloud hosting with documentation and handover."
+      ],
+      "faqs": [
+        {
+          "question": "How do you scope custom software projects?",
+          "answer": "We start by defining a focused Phase 1 MVP with clear deliverables and fixed milestones so you can validate your idea quickly and predictably."
+        }
+      ],
+      "availability": "Available Upon Project Review",
+      "featured": true
+    }
+  ],
+  "solutions": [
+    {
+      "id": "sol-digital-transformation",
+      "index": "01",
+      "title": "Business Digital Transformation",
+      "category": "Operations Modernization",
+      "useCase": "For small businesses, educational institutes, and service organizations transitioning from paper forms and scattered spreadsheets to a unified digital workflow.",
+      "summary": "Replace manual intake forms, status tracking sheets, and repetitive document preparation with a streamlined web portal tailored to your daily operations.",
+      "potentialFeatures": [
+        "Digital client or student intake forms with automated reference numbers",
+        "Centralized administrator dashboard with search, filters, and status pipelines",
+        "One-click CSV report exports and standardized PDF document generation",
+        "Role-based access so staff and external users only see authorized records"
+      ],
+      "recommendedService": "Web Application Development",
+      "integrationDisclosure": "Built using modular web technologies. Any external ERP, accounting, or email webhook integration is scoped and verified per engagement.",
+      "readinessStatus": "Available for Scoping"
+    },
+    {
+      "id": "sol-custom-portals",
+      "index": "02",
+      "title": "Custom Web Portals",
+      "category": "Scoped User & Admin Portals",
+      "useCase": "For organizations that need a dedicated self-service portal where clients, members, or partners can sign in, check status updates, and download official documents.",
+      "summary": "Secure, multi-role web portals with scoped authentication, status timelines, task tracking, and document management.",
+      "potentialFeatures": [
+        "Scoped client/member login using verified credentials or reference keys",
+        "Real-time status stepper (e.g. Submitted → Under Review → Approved)",
+        "Private document vault for authorized PDF proposals, invoices, or reports",
+        "Role-guarded administrative review and approval workflows"
+      ],
+      "recommendedService": "Custom Software Solutions",
+      "integrationDisclosure": "Engineered with modular React frontends and Node.js REST APIs tailored to your organization’s workflow.",
+      "readinessStatus": "Available for Scoping"
+    },
+    {
+      "id": "sol-booking-management",
+      "index": "03",
+      "title": "Booking and Management Systems",
+      "category": "Scheduling & Resource Coordination",
+      "useCase": "For clinics, training centers, studios, and local service providers that need structured appointment requests, resource scheduling, or enquiry management.",
+      "summary": "Clean booking request interfaces paired with an operator console to review, confirm, reschedule, or archive incoming requests.",
+      "potentialFeatures": [
+        "Service or slot selection interface with client validation",
+        "Admin queue management with status filters (New, Confirmed, Completed, Archived)",
+        "Automated reference code generation for customer lookup",
+        "Optional server-side webhook notifications for staff alerts"
+      ],
+      "recommendedService": "Web Application Development",
+      "integrationDisclosure": "Calendar sync or SMS/email gateways are optional and configured only when client API credentials are provided.",
+      "readinessStatus": "Available for Scoping"
+    },
+    {
+      "id": "sol-ai-workflows",
+      "index": "04",
+      "title": "AI-Powered Business Workflows",
+      "category": "Applied Intelligence & Automation",
+      "useCase": "For teams looking to integrate practical LLM capabilities—such as project brief structuring, enquiry summarization, or knowledge-base Q&A—into their web apps.",
+      "summary": "Server-side AI integrations engineered with strict JSON output schemas, zero frontend secret exposure, and reliable deterministic fallbacks.",
+      "potentialFeatures": [
+        "Interactive scope & brief analyzers that convert raw user text into structured milestones",
+        "Internal document or enquiry triage assistants",
+        "Server-side Gemini API proxy routes with rate-limiting guards",
+        "Fallback template engine when external AI APIs are offline or unconfigured"
+      ],
+      "recommendedService": "AI Chatbots and AI Integration",
+      "integrationDisclosure": "Demonstrated live below in our Interactive MVP Architecture & Scope Planner.",
+      "readinessStatus": "Available for Scoping"
+    },
+    {
+      "id": "sol-startup-mvp",
+      "index": "05",
+      "title": "Startup MVP Development",
+      "category": "Early-Stage Product Engineering",
+      "useCase": "For solo founders and early-stage startups who need to turn a product concept into a working, testable web application to validate with real users.",
+      "summary": "Focused, milestone-driven MVP engineering that prioritizes core user flows, clean UI/UX, and maintainable TypeScript code over unnecessary complexity.",
+      "potentialFeatures": [
+        "Interactive UI prototype and core full-stack workflow implementation",
+        "User authentication, database schema design, and admin management controls",
+        "Responsive desktop and mobile browser compatibility",
+        "Clean codebase handover ready for future team expansion"
+      ],
+      "recommendedService": "Custom Software Solutions",
+      "integrationDisclosure": "Scoped around free-tier friendly infrastructure so early-stage founders keep monthly hosting costs minimal.",
+      "readinessStatus": "Available for Scoping"
+    },
+    {
+      "id": "sol-product-catalogue",
+      "index": "06",
+      "title": "Product Catalogue Websites",
+      "category": "E-commerce & B2B Showcases",
+      "useCase": "For manufacturers, retailers, and distributors who want to showcase products online with category filters, technical specs, and direct quote/order enquiries.",
+      "summary": "Fast, searchable digital product catalogues that let customers browse items, compare specifications, and submit structured order or quote requests.",
+      "potentialFeatures": [
+        "Multi-category product filtering and instant keyword search",
+        "Detailed product specification views and high-contrast visual galleries",
+        "Direct \"Request Quote for Item\" or custom order-sheet submission",
+        "Admin dashboard to add, update, publish, or hide catalogue items"
+      ],
+      "recommendedService": "E-commerce Website Development",
+      "integrationDisclosure": "Third-party payment processors or inventory ERPs are not claimed as pre-active; they are integrated upon project review.",
+      "readinessStatus": "Prototype & Custom Build"
+    },
+    {
+      "id": "sol-iot-prototypes",
+      "index": "07",
+      "title": "IoT and Experimental Prototypes",
+      "category": "Connected Telemetry & R&D",
+      "useCase": "For engineering teams, researchers, and makers exploring web dashboards for sensor telemetry, smart agriculture/healthcare concepts, or 3D spatial interfaces.",
+      "summary": "Experimental software architectures that connect simulated or edge microcontroller data streams with real-time browser visualization dashboards.",
+      "potentialFeatures": [
+        "JSON telemetry ingestion endpoints for edge sensor nodes",
+        "Real-time threshold monitoring and web visualization panels",
+        "Interactive 3D / WebGL hardware and spatial system representations",
+        "Collaborative R&D prototyping for academic and startup validation"
+      ],
+      "recommendedService": "Custom Software Solutions",
+      "integrationDisclosure": "Currently offered as software & dashboard R&D prototyping. Lovanstrix does not manufacture commercial hardware devices.",
+      "readinessStatus": "Experimental R&D"
+    }
+  ],
+  "projects": [
+    {
+      "id": "proj-enquiry-portal",
+      "title": "Agency Service & Quote Management Architecture",
+      "category": "Web Applications",
+      "classification": "Demo Project",
+      "objective": "Demonstrate a full-stack IT services agency portal with 11 dedicated service detail views, validated quote intake, live admin content management, and transparent delivery reporting.",
+      "problemStatement": "Service businesses need a way to present detailed technical offerings, capture structured client project briefs, and manage website content without relying on heavy CMS plugins.",
+      "proposedSolution": "Engineered a modular React + Express platform with individual service detail pages, pre-filled quote routing, database persistence, and an authenticated Admin Console.",
+      "technologies": [
+        "React 19",
+        "TypeScript",
+        "Node.js",
+        "Express",
+        "Tailwind CSS"
+      ],
+      "features": [
+        "Client and server input validation for project quotes with optional reference links",
+        "Role-protected Admin Management Console with live service and portfolio publishing",
+        "Transparent database persistence and optional server-side email webhook forwarding"
+      ],
+      "liveDemoUrl": "#contact",
+      "githubUrl": "https://github.com/lovanstrix",
+      "visualType": "webapp",
+      "published": true,
+      "publishedAt": "2026"
+    },
+    {
+      "id": "proj-ai-triage-sandbox",
+      "title": "Structured Project Brief & AI Scope Analyzer",
+      "category": "AI Projects",
+      "classification": "Prototype",
+      "objective": "Convert raw client project ideas into structured technical deliverables, recommended stacks, and 4-phase milestones via a secure server-side Gemini proxy.",
+      "problemStatement": "Prospective clients often struggle to translate a high-level business idea into concrete software milestones and technology stack choices.",
+      "proposedSolution": "Created an interactive scope planner backed by a server-side Gemini API route with strict JSON schema output and a zero-cost deterministic template fallback.",
+      "technologies": [
+        "TypeScript",
+        "Gemini API (Server-Side)",
+        "JSON Schema",
+        "React"
+      ],
+      "features": [
+        "4-phase milestone breakdown (Discover, Design, Build, Launch)",
+        "Zero frontend API key exposure with server-side proxy architecture",
+        "Seamless one-click transfer of generated scope into the Request a Quote form"
+      ],
+      "liveDemoUrl": "#solutions",
+      "githubUrl": "https://github.com/lovanstrix",
+      "visualType": "ai",
+      "published": true,
+      "publishedAt": "2026"
+    },
+    {
+      "id": "proj-3d-innovation-core",
+      "title": "Interactive 3D Spatial Engineering Core",
+      "category": "Websites",
+      "classification": "Architecture Demo",
+      "objective": "Showcase an interactive Three.js / WebGL spatial installation embedded inside a high-contrast startup website with hardware-accelerated raycasting and fallback controls.",
+      "problemStatement": "Standard 3D web embeds often suffer from poor text contrast, runaway GPU frame loops, or lack of keyboard/fallback accessibility.",
+      "proposedSolution": "Built a custom Three.js scene with studio environment reflections, raycastable lifecycle satellites (Discover → Launch), OrbitControls, and a 2D SVG blueprint toggle.",
+      "technologies": [
+        "Three.js",
+        "WebGL",
+        "React 19",
+        "TypeScript",
+        "Tailwind CSS"
+      ],
+      "features": [
+        "Interactive orbital stage inspection with live telemetry HUD",
+        "Software-WebGL detection and reduced-motion accessibility compliance",
+        "Instant toggle between 3D Interactive Core and 2D SVG Blueprint"
+      ],
+      "liveDemoUrl": "#home",
+      "githubUrl": "https://github.com/lovanstrix",
+      "visualType": "website",
+      "published": true,
+      "publishedAt": "2026"
+    },
+    {
+      "id": "proj-iot-telemetry-schema",
+      "title": "Edge Sensor Telemetry Ingestion & Alert Concept",
+      "category": "IoT and Hardware",
+      "classification": "In Development",
+      "objective": "R&D exploration of a lightweight JSON telemetry ingestion schema and web monitoring view designed for future environmental and agricultural sensor nodes.",
+      "problemStatement": "Low-power edge microcontrollers require compact, predictable HTTP/MQTT payload schemas and lightweight web dashboards to visualize threshold alerts.",
+      "proposedSolution": "Developing a reference Node.js ingestion schema and time-series visualization prototype for future IoT and AgriTech collaborations.",
+      "technologies": [
+        "Node.js",
+        "TypeScript",
+        "REST Ingestion",
+        "Time-Series Schema"
+      ],
+      "features": [
+        "Lightweight payload specification for edge microcontrollers",
+        "Configurable threshold rule evaluation prototype",
+        "Foundation for future IoT and connected sensor research projects"
+      ],
+      "liveDemoUrl": "#solutions",
+      "visualType": "iot",
+      "published": true,
+      "publishedAt": "2026"
+    },
+    {
+      "id": "proj-catalogue-sandbox",
+      "title": "Modular B2B Product Catalogue & Quote Cart Concept",
+      "category": "Experimental Prototypes",
+      "classification": "Prototype",
+      "objective": "Internal prototype exploring a fast, filterable product specification catalogue where buyers can assemble multi-item quote requests without complex checkout friction.",
+      "problemStatement": "Many B2B suppliers and custom manufacturers need a digital product catalogue that routes into a tailored quote enquiry rather than a fixed retail cart.",
+      "proposedSolution": "Architected a reusable React catalogue grid with category filtering, specification comparison, and direct quote-form prefill.",
+      "technologies": [
+        "React",
+        "TypeScript",
+        "Tailwind CSS",
+        "REST API"
+      ],
+      "features": [
+        "Instant category and specification filtering",
+        "Direct integration with server-side quote enquiry storage",
+        "Clean responsive layout across mobile and desktop devices"
+      ],
+      "liveDemoUrl": "#solutions",
+      "visualType": "website",
+      "published": true,
+      "publishedAt": "2026"
+    }
+  ],
+  "explorations": [
+    {
+      "id": "exp-ai",
+      "index": "01",
+      "title": "Artificial Intelligence",
+      "statusLabel": "Active Service Track",
+      "summary": "Practical integration of large language models into web interfaces for document assistance, structured enquiry routing, and workflow automation.",
+      "practicalFocus": [
+        "Server-side Gemini API integration with strict schema outputs",
+        "Custom knowledge base search and FAQ assistants for businesses",
+        "Automated form triage and structured summary generation"
+      ],
+      "honestNote": "Available now for web and API integration projects. We integrate proven foundation models via secure backend APIs rather than training custom foundational models."
+    },
+    {
+      "id": "exp-webapps",
+      "index": "02",
+      "title": "Web Applications",
+      "statusLabel": "Active Service Track",
+      "summary": "Modern full-stack web applications that replace scattered spreadsheets with unified dashboards, portals, and operational tools.",
+      "practicalFocus": [
+        "Internal operations dashboards and inventory/booking trackers",
+        "Client portals with role-based views and status workflows",
+        "Progressive web interfaces optimized for desktop and mobile browsers"
+      ],
+      "honestNote": "Core active capability at Lovanstrix. Ready for client scoping and iterative prototype delivery."
+    },
+    {
+      "id": "exp-iot",
+      "index": "03",
+      "title": "Internet of Things (IoT)",
+      "statusLabel": "Internal Prototype Stage",
+      "summary": "Connecting connected sensor nodes with cloud dashboards to monitor environmental metrics, equipment status, and real-time alerts.",
+      "practicalFocus": [
+        "Web-based telemetry dashboards for microcontroller sensor feeds",
+        "REST and WebSocket data ingestion pipelines",
+        "Hardware-to-cloud prototyping with standard development boards"
+      ],
+      "honestNote": "Currently in internal R&D and software architecture prototyping. Commercial hardware manufacturing is not offered at this stage."
+    },
+    {
+      "id": "exp-healthcare",
+      "index": "04",
+      "title": "Healthcare Technology",
+      "statusLabel": "Concept Exploration",
+      "summary": "Exploring accessible digital tools for clinic appointment coordination, patient intake forms, and health education portals.",
+      "practicalFocus": [
+        "Streamlined digital appointment request and queue interfaces",
+        "Accessible patient education and clinic information websites",
+        "Privacy-first data handling patterns"
+      ],
+      "honestNote": "Future exploration area. Lovanstrix does not currently provide certified medical diagnostic software or clinical devices."
+    },
+    {
+      "id": "exp-agritech",
+      "index": "05",
+      "title": "Agriculture Technology",
+      "statusLabel": "Concept Exploration",
+      "summary": "Investigating how lightweight web apps and future soil/weather telemetry can assist regional growers with resource planning.",
+      "practicalFocus": [
+        "Mobile-friendly crop calendar and input tracking interfaces",
+        "Experimental weather and soil moisture dashboard concepts",
+        "Local-first web tools for low-bandwidth rural connectivity"
+      ],
+      "honestNote": "Early concept research aimed at future regional field trials and student research collaborations."
+    },
+    {
+      "id": "exp-robotics",
+      "index": "06",
+      "title": "Robotics and Emerging Technologies",
+      "statusLabel": "Long-Term Research Horizon",
+      "summary": "Long-term vision to bridge web control interfaces with embedded systems, robotics education kits, and automation experiments.",
+      "practicalFocus": [
+        "Browser-based control and telemetry panels for educational robotics",
+        "Collaborative R&D projects with engineering students and makers",
+        "Open-source hardware/software bridge experiments"
+      ],
+      "honestNote": "Part of Lovanstrix’s long-term roadmap. Currently focused on software architecture and community learning rather than commercial robotics."
+    }
+  ],
+  "openings": [],
+  "enquiries": [],
+  "careerSubmissions": [],
+  "internshipListings": [],
+  "internshipApplications": [],
+  "internshipDocuments": [],
+  "certificateRecords": [],
+  "adminAuditLogs": []
+}
