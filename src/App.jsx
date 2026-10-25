@@ -351,7 +351,7 @@ function App() {
     { id: "careers", label: "Careers" },
     { id: "contact", label: "Contact" }
   ];
-  return <div className="min-h-screen bg-[#9CADB5] p-0 sm:p-4 lg:p-8">
+  return <div className="lovanstrix-page-outer min-h-screen bg-[#9CADB5] p-0 sm:p-4 lg:p-8">
       <div
     className={`lovanstrix-intro ${showIntro ? "is-open" : "is-closed"}`}
     aria-hidden={!showIntro}
@@ -407,7 +407,7 @@ function App() {
       </div>
 
       <div
-    className={`mx-auto max-w-[1600px] min-h-screen overflow-hidden shadow-[0_30px_90px_rgba(15,23,42,0.16)] transition-colors duration-200 ${isDark ? "bg-[#050814] text-slate-100" : "bg-[#E4E7EF] text-[#111318]"}`}
+    className={`lovanstrix-page-panel mx-auto max-w-[1600px] min-h-screen overflow-hidden shadow-[0_30px_90px_rgba(15,23,42,0.16)] transition-colors duration-200 ${isDark ? "bg-[#050814] text-slate-100" : "bg-[#E4E7EF] text-[#111318]"}`}
   >
       {
     /* STICKY HEADER & NAVIGATION BAR */
@@ -608,7 +608,7 @@ function App() {
             {
     /* SECTION 1: PREMIUM REFERENCE-INSPIRED HERO */
   }
-            <section className="relative grid grid-cols-1 lg:grid-cols-12 gap-9 lg:gap-8 xl:gap-12 items-center pt-3 sm:pt-5 pb-8 min-h-[520px]">
+            <section className="lovanstrix-home-hero relative grid grid-cols-1 lg:grid-cols-12 gap-9 lg:gap-8 xl:gap-12 items-center pt-3 sm:pt-5 pb-8 min-h-[520px]">
               <div className="lg:col-span-6 flex flex-col justify-center py-5 sm:py-9 lg:py-12">
                 <div className="inline-flex items-center gap-2.5 mb-5 text-[12px] font-medium text-slate-700">
                   <span className="inline-flex items-center gap-2 rounded-full bg-white/85 border border-white px-4 py-2 shadow-sm">
@@ -619,7 +619,7 @@ function App() {
                   <span className="text-slate-500">Build</span>
                 </div>
 
-                <h1 className="font-display text-[47px] leading-[1.03] tracking-[-0.055em] sm:text-[58px] xl:text-[70px] font-medium text-[#101216] text-balance max-w-[690px]">
+                <h1 className="lovanstrix-hero-title font-display text-[47px] leading-[1.03] tracking-[-0.055em] sm:text-[58px] xl:text-[70px] font-medium text-[#101216] text-balance max-w-[690px]">
                   {company.heroHeading.split(" ").map((word, index, words) => <React.Fragment key={`${word}-${index}`}>
                       <span
     className={`lovanstrix-heading-word ${showIntro ? "is-paused" : ""}`}
