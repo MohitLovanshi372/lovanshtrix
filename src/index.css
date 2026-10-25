@@ -514,3 +514,132 @@ html:not(.dark) body {
   .lovanstrix-logo-showcase{transition:none!important;}
   .lovanstrix-logo-showcase:hover{transform:none;}
 }
+
+
+/* Concept 3 — cinematic product launch visual system */
+.lovanstrix-launch-hero {
+  position:relative;
+  overflow:hidden;
+  isolation:isolate;
+  min-height:clamp(650px,72vw,840px);
+  padding:clamp(28px,6vw,84px) clamp(22px,5vw,74px)!important;
+  border:1px solid rgba(196,159,99,.3)!important;
+  border-radius:clamp(24px,3vw,42px)!important;
+  background:
+    radial-gradient(ellipse at 72% 39%,rgba(13,101,237,.26),transparent 41%),
+    radial-gradient(ellipse at 85% 90%,rgba(215,158,65,.15),transparent 39%),
+    linear-gradient(120deg,#030710 0%,#081831 52%,#040915 100%)!important;
+  box-shadow:0 32px 90px rgba(5,18,43,.22),inset 0 1px rgba(255,255,255,.11);
+}
+.lovanstrix-launch-hero::before {
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
+  background:linear-gradient(115deg,transparent 15%,rgba(255,255,255,.03) 43%,transparent 60%);
+  background-size:200% 100%;
+  animation:lx-launch-light-pass 12s ease-in-out infinite;
+}
+.lovanstrix-launch-hero::after {
+  content:"";
+  pointer-events:none;
+  position:absolute;left:6%;right:6%;bottom:0;height:1px;
+  background:linear-gradient(90deg,transparent,#d7aa5d,transparent);
+}
+.lovanstrix-launch-hero .lovanstrix-hero-title {
+  color:#f8fbff!important;
+  background:linear-gradient(115deg,#fff 0%,#e4eeff 42%,#a3cbff 67%,#e6be75 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+  font-weight:650!important;
+  letter-spacing:-.065em;
+  font-size:clamp(52px,5.3vw,94px);
+  line-height:1.025;
+  text-wrap:balance;
+}
+.lovanstrix-launch-hero .lovanstrix-heading-word {
+  filter:drop-shadow(0 2px 13px rgba(28,108,231,.14));
+}
+.lovanstrix-launch-eyebrow {
+  color:#c5d6ef!important;
+  text-transform:uppercase;
+  letter-spacing:.18em;
+}
+.lovanstrix-launch-eyebrow > span:first-child {
+  background:rgba(255,255,255,.08)!important;
+  color:#ecd5a4!important;
+  border-color:rgba(225,183,109,.36)!important;
+  backdrop-filter:blur(16px);
+}
+.lovanstrix-launch-eyebrow > span:not(:first-child){color:#9cb2d3!important}
+.lovanstrix-launch-subtitle{color:#acbed7!important;max-width:550px!important}
+.lovanstrix-launch-actions button:first-child {
+  background:linear-gradient(110deg,#e7b860,#b8812f)!important;
+  color:#061329!important;
+  box-shadow:0 14px 36px rgba(210,155,69,.2);
+}
+.lovanstrix-launch-actions button:first-child:hover {
+  background:linear-gradient(110deg,#f4d594,#d7a449)!important;
+  box-shadow:0 18px 46px rgba(210,155,69,.32);
+}
+.lovanstrix-launch-actions button:last-child{color:#d9e7fc!important}
+.lovanstrix-launch-actions button:last-child:hover{color:#eec77e!important}
+.lovanstrix-launch-values{border-color:rgba(205,224,255,.17)!important}
+.lovanstrix-launch-values p:first-child{color:#edf5ff!important}
+.lovanstrix-launch-values p:last-child{color:#9baccc!important}
+.lovanstrix-launch-values > div > span {
+  background:rgba(255,255,255,.1)!important;
+  color:#d9b66f!important;
+  border:1px solid rgba(210,160,77,.25);
+}
+.lovanstrix-launch-showcase {
+  animation:lx-launch-display 1.1s cubic-bezier(.16,1,.3,1) both;
+}
+.lovanstrix-launch-showcase .lovanstrix-logo-showcase {
+  background:linear-gradient(145deg,rgba(246,250,255,.94),rgba(221,235,255,.9));
+  border-color:rgba(243,201,127,.65);
+  box-shadow:0 30px 90px rgba(0,0,0,.38),0 0 75px rgba(28,111,255,.13);
+  border-radius:34px;
+}
+.lovanstrix-launch-showcase .lovanstrix-glass-note {
+  background:rgba(255,255,255,.7);
+}
+.lovanstrix-launch-showcase > div.relative.z-10 button {
+  background:rgba(244,248,255,.09)!important;
+  color:#f2d59f!important;
+  border-color:rgba(233,202,149,.36)!important;
+  backdrop-filter:blur(20px);
+}
+.lovanstrix-launch-showcase > div.relative.z-10 button:hover {
+  background:rgba(255,255,255,.16)!important;
+}
+.lovanstrix-launch-showcase > div.absolute.bottom-5 {
+  background:rgba(7,22,45,.72)!important;
+  color:#d6e4fa!important;
+  border-color:rgba(241,202,136,.26)!important;
+}
+@keyframes lx-launch-display {
+  from{opacity:0;transform:translateY(30px) scale(.96)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+@keyframes lx-launch-light-pass {
+  0%,100%{background-position:100% 0}
+  50%{background-position:0 0}
+}
+@media(max-width:1023px){
+  .lovanstrix-launch-hero{min-height:auto;padding-block:48px!important}
+  .lovanstrix-launch-hero .lovanstrix-hero-title{font-size:clamp(45px,8vw,78px)}
+}
+@media(max-width:640px){
+  .lovanstrix-launch-hero{padding:30px 17px!important;border-radius:22px!important}
+  .lovanstrix-launch-hero .lovanstrix-hero-title{font-size:clamp(43px,11.2vw,62px)}
+  .lovanstrix-launch-eyebrow{letter-spacing:.08em}
+  .lovanstrix-launch-values{gap:10px}
+  .lovanstrix-launch-showcase .lovanstrix-logo-showcase{border-radius:22px}
+}
+@media(prefers-reduced-motion:reduce){
+  .lovanstrix-launch-hero::before,
+  .lovanstrix-launch-showcase{animation:none!important;opacity:1!important;transform:none!important}
+}
