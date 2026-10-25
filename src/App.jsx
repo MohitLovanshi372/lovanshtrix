@@ -608,8 +608,8 @@ function App() {
             {
     /* SECTION 1: PREMIUM REFERENCE-INSPIRED HERO */
   }
-            <section className="lovanstrix-home-hero lovanstrix-launch-hero relative grid grid-cols-1 lg:grid-cols-12 gap-9 lg:gap-8 xl:gap-12 items-center pt-3 sm:pt-5 pb-8 min-h-[520px]">
-              <div className="lg:col-span-6 flex flex-col justify-center py-5 sm:py-9 lg:py-12">
+            <section className="lovanstrix-home-hero lovanstrix-launch-hero lovanstrix-wave-hero relative flex flex-col items-start justify-center min-h-[600px]">
+              <div className="lovanstrix-wave-content relative z-10 w-full max-w-[720px] flex flex-col justify-center py-5 sm:py-9 lg:py-12">
                 <div className="lovanstrix-launch-eyebrow inline-flex items-center gap-2.5 mb-5 text-[12px] font-medium text-slate-700">
                   <span className="inline-flex items-center gap-2 rounded-full bg-white/85 border border-white px-4 py-2 shadow-sm">
                     <span className="w-2 h-2 rounded-full bg-blue-600" /> Innovate
@@ -675,42 +675,25 @@ function App() {
                     </div>
                   </div>
                 </div>
-              </div>
-
-              <div className="lovanstrix-launch-showcase lg:col-span-6 relative mx-auto w-full max-w-[660px] lg:max-w-none">
-                <div className="pointer-events-none absolute -inset-5 rounded-full bg-gradient-to-br from-blue-200/30 via-transparent to-violet-200/35 blur-3xl" />
-                <div className="relative z-10 flex justify-end pb-3">
+                <div className="mt-8">
                   <button
-    type="button"
-    onClick={() => setHeroVisualMode((mode) => mode === "image" ? "3d" : "image")}
-    aria-pressed={heroVisualMode === "3d"}
-    className="inline-flex items-center gap-2 rounded-full border border-white/90 bg-white/85 px-4 py-2 text-[11px] font-semibold text-slate-700 shadow-sm backdrop-blur transition-all hover:-translate-y-0.5 hover:border-blue-300 hover:text-blue-700"
-  >
-                    <Box className="h-3.5 w-3.5 text-blue-600" />
-                    {heroVisualMode === "image" ? "Explore interactive 3D" : "Back to artwork"}
+                    type="button"
+                    className="lovanstrix-wave-3d-button inline-flex items-center gap-2 rounded-full px-4 py-2.5 text-xs font-semibold"
+                    onClick={() => setHeroVisualMode((mode) => mode === "image" ? "3d" : "image")}
+                    aria-expanded={heroVisualMode === "3d"}
+                  >
+                    <Box className="h-4 w-4" />
+                    {heroVisualMode === "3d" ? "Close interactive 3D" : "Explore interactive 3D"}
                     <ArrowRight className="h-3.5 w-3.5" />
                   </button>
-                </div>
-                {heroVisualMode === "3d" ? <div className="lovanstrix-3d-panel relative overflow-hidden rounded-[26px] sm:rounded-[32px]">
-                    <Interactive3DCore isDark={isDark} compact />
-                  </div> : <figure className="lovanstrix-logo-showcase relative mx-auto w-full max-w-[650px]">
-                    <img
-                      src="/images/lovanshtrix-premium-brand.svg"
-                      alt="Lovanshtrix blue and gold LX logo with Ideas Into Innovation tagline"
-                      width="800"
-                      height="800"
-                      fetchPriority="high"
-                    />
-                    <figcaption className="lovanstrix-glass-note">
-                      <span>LOVANSHTRIX / PREMIUM DIGITAL EXPERIENCES</span>
-                      <span aria-hidden="true">✦</span>
-                    </figcaption>
-                  </figure>}
-                <div className="absolute bottom-5 left-3 sm:bottom-8 sm:left-6 z-20 inline-flex items-center gap-2 rounded-full border border-white/90 bg-white/85 px-3.5 py-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-600 shadow-md backdrop-blur-md">
-                  <span className="h-1.5 w-1.5 rounded-full bg-blue-600" />
-                  {heroVisualMode === "image" ? "Web \xB7 Apps \xB7 AI" : "Interactive technology core"}
+                  {heroVisualMode === "3d" && (
+                    <div className="lovanstrix-wave-3d-panel mt-5 overflow-hidden rounded-2xl">
+                      <Interactive3DCore isDark={isDark} compact />
+                    </div>
+                  )}
                 </div>
               </div>
+
             </section>
 
             {
