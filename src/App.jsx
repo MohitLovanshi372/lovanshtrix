@@ -608,9 +608,9 @@ function App() {
             {
     /* SECTION 1: PREMIUM REFERENCE-INSPIRED HERO */
   }
-            <section className="lovanstrix-home-hero relative grid grid-cols-1 lg:grid-cols-12 gap-9 lg:gap-8 xl:gap-12 items-center pt-3 sm:pt-5 pb-8 min-h-[520px]">
+            <section className="lovanstrix-home-hero lovanstrix-launch-hero relative grid grid-cols-1 lg:grid-cols-12 gap-9 lg:gap-8 xl:gap-12 items-center pt-3 sm:pt-5 pb-8 min-h-[520px]">
               <div className="lg:col-span-6 flex flex-col justify-center py-5 sm:py-9 lg:py-12">
-                <div className="inline-flex items-center gap-2.5 mb-5 text-[12px] font-medium text-slate-700">
+                <div className="lovanstrix-launch-eyebrow inline-flex items-center gap-2.5 mb-5 text-[12px] font-medium text-slate-700">
                   <span className="inline-flex items-center gap-2 rounded-full bg-white/85 border border-white px-4 py-2 shadow-sm">
                     <span className="w-2 h-2 rounded-full bg-blue-600" /> Innovate
                   </span>
@@ -631,11 +631,11 @@ function App() {
                     </React.Fragment>)}
                 </h1>
 
-                <p className="mt-6 max-w-[500px] text-[15px] sm:text-[17px] leading-[1.8] text-slate-600">
+                <p className="lovanstrix-launch-subtitle mt-6 max-w-[500px] text-[15px] sm:text-[17px] leading-[1.8] text-slate-600">
                   {company.heroSubtitle}
                 </p>
 
-                <div className="mt-7 flex flex-wrap items-center gap-4">
+                <div className="lovanstrix-launch-actions mt-7 flex flex-wrap items-center gap-4">
                   <button
     type="button"
     onClick={() => navigateTo("contact")}
@@ -655,7 +655,7 @@ function App() {
                   </button>
                 </div>
 
-                <div className="mt-10 grid max-w-[490px] grid-cols-2 gap-5 border-t border-slate-300/80 pt-5">
+                <div className="lovanstrix-launch-values mt-10 grid max-w-[490px] grid-cols-2 gap-5 border-t border-slate-300/80 pt-5">
                   <div className="flex gap-3">
                     <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white text-blue-700 shadow-sm">
                       <Sparkles className="h-4 w-4" />
@@ -677,7 +677,7 @@ function App() {
                 </div>
               </div>
 
-              <div className="lg:col-span-6 relative mx-auto w-full max-w-[660px] lg:max-w-none">
+              <div className="lovanstrix-launch-showcase lg:col-span-6 relative mx-auto w-full max-w-[660px] lg:max-w-none">
                 <div className="pointer-events-none absolute -inset-5 rounded-full bg-gradient-to-br from-blue-200/30 via-transparent to-violet-200/35 blur-3xl" />
                 <div className="relative z-10 flex justify-end pb-3">
                   <button
