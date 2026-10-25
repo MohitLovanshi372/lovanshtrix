@@ -2,172 +2,79 @@ import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
-import { ChevronDown, ChevronUp, RotateCcw, Box } from 'lucide-react';
+import { ChevronDown, ChevronUp, RotateCcw, Layers, Eye } from 'lucide-react';
 
-export interface InnovationStageSpec {
-  step: string;
-  label: string;
-  caption: string;
-  architecture: string;
-  angle: number;
-  orbitRadius: number;
-  elevation: number;
-}
-
-export const INNOVATION_STAGES: InnovationStageSpec[] = [
-  {
-    step: '01',
-    label: 'Discover',
-    caption: 'Clarify problem scope, target users, and practical constraints.',
-    architecture: 'Requirements · User Journey Map · Feasibility Check',
-    angle: 0,
-    orbitRadius: 2.35,
-    elevation: 0.35,
-  },
-  {
-    step: '02',
-    label: 'Plan',
-    caption: 'Define data schemas, API boundaries, and iterative milestones.',
-    architecture: 'System Blueprint · Database Schema · Sprint Plan',
-    angle: Math.PI / 3,
-    orbitRadius: 2.35,
-    elevation: -0.25,
-  },
-  {
-    step: '03',
-    label: 'Design',
-    caption: 'Craft accessible interfaces, responsive grids, and clear user flows.',
-    architecture: 'Wireframes · Component Tokens · WCAG AA Contrast',
-    angle: (2 * Math.PI) / 3,
-    orbitRadius: 2.35,
-    elevation: 0.3,
-  },
-  {
-    step: '04',
-    label: 'Develop',
-    caption: 'Build clean TypeScript frontends, validated APIs, and AI integrations.',
-    architecture: 'React + TypeScript · Node.js API · Server-Side AI',
-    angle: Math.PI,
-    orbitRadius: 2.35,
-    elevation: -0.3,
-  },
-  {
-    step: '05',
-    label: 'Test',
-    caption: 'Verify form validation, cross-device responsiveness, and edge states.',
-    architecture: 'Input Validation · Device Audit · Error Handling',
-    angle: (4 * Math.PI) / 3,
-    orbitRadius: 2.35,
-    elevation: 0.25,
-  },
-  {
-    step: '06',
-    label: 'Launch',
-    caption: 'Deploy to cloud infrastructure with clean documentation and handover.',
-    architecture: 'Cloud Deployment · SSL & SEO · Ongoing Support',
-    angle: (5 * Math.PI) / 3,
-    orbitRadius: 2.35,
-    elevation: -0.2,
-  },
-];
-
-type MaterialFinish = 'cobalt' | 'violet' | 'titanium';
-
-const FINISH_PALETTES: Record<
-  MaterialFinish,
-  {
-    label: string;
-    coreHex: number;
-    ringHex: number;
-    accentHex: number;
-    emissiveHex: number;
-  }
-> = {
-  cobalt: {
-    label: 'Obsidian Cobalt',
-    coreHex: 0x1e3a8a,
-    ringHex: 0x3b82f6,
-    accentHex: 0x60a5fa,
-    emissiveHex: 0x1d4ed8,
-  },
-  violet: {
-    label: 'Quantum Violet',
-    coreHex: 0x311068,
-    ringHex: 0x7c3aed,
-    accentHex: 0xa78bfa,
-    emissiveHex: 0x5b21b6,
-  },
-  titanium: {
-    label: 'Brushed Titanium',
-    coreHex: 0x1e293b,
-    ringHex: 0x94a3b8,
-    accentHex: 0x38bdf8,
-    emissiveHex: 0x0284c7,
-  },
-};
-
-// Reusable math objects at module scope (zero GC in render loop)
-const _mouse = new THREE.Vector2();
-const _targetCameraPos = new THREE.Vector3();
-const _dummyMatrix = new THREE.Matrix4();
-const _dummyPos = new THREE.Vector3();
-const _dummyQuat = new THREE.Quaternion();
-const _dummyScale = new THREE.Vector3();
-const _dummyColor = new THREE.Color();
-
-interface Interactive3DCoreProps {
-  isDark: boolean;
+export interface Interactive3DCoreProps {
+  isDark?: boolean;
   compact?: boolean;
 }
 
-export const Interactive3DCore: React.FC<Interactive3DCoreProps> = ({ isDark, compact = false }) => {
+type CameraPreset = 'isometric' | 'top' | 'front';
+type CoreMode = 'unified' | 'exploded';
+
+const CAMERA_TARGETS: Record<CameraPreset, [number, number, number]> = {
+  isometric: [4.2, 2.9, 4.6],
+  top: [0.01, 6.4, 0.8],
+  front: [0, 1.1, 6.1],
+};
+
+export const Interactive3DCore: React.FC<Interactive3DCoreProps> = ({
+  isDark = false,
+  compact = false,
+}) => {
   const canvasMountRef = useRef<HTMLDivElement | null>(null);
-  const [activeStageIdx, setActiveStageIdx] = useState<number>(3);
-  const [explodedFactor, setExplodedFactor] = useState<number>(0.15);
-  const [finish, setFinish] = useState<MaterialFinish>('cobalt');
+  const [cameraPreset, setCameraPreset] = useState<CameraPreset>('isometric');
+  const [coreMode, setCoreMode] = useState<CoreMode>('unified');
   const [dockCollapsed, setDockCollapsed] = useState<boolean>(false);
-  const [webglSupported, setWebglSupported] = useState<boolean>(true);
+  const [selectedLayerLabel, setSelectedLayerLabel] = useState<string>(
+    'Web · Apps · AI Technology Core'
+  );
 
-  // Mutable refs for animation loop access without re-mounting WebGL
-  const activeStageRef = useRef<number>(3);
-  const explodedRef = useRef<number>(0.15);
-  const finishRef = useRef<MaterialFinish>('cobalt');
-  const resetCameraTriggerRef = useRef<boolean>(false);
-
-  useEffect(() => {
-    activeStageRef.current = activeStageIdx;
-  }, [activeStageIdx]);
+  const targetExplosionRef = useRef<number>(0);
+  const cameraTargetPosRef = useRef<THREE.Vector3 | null>(null);
+  const requestRenderRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
-    explodedRef.current = explodedFactor;
-  }, [explodedFactor]);
+    targetExplosionRef.current = coreMode === 'exploded' ? 1 : 0;
+    requestRenderRef.current?.();
+  }, [coreMode]);
 
   useEffect(() => {
-    finishRef.current = finish;
-  }, [finish]);
+    const coords = CAMERA_TARGETS[cameraPreset];
+    cameraTargetPosRef.current = new THREE.Vector3(coords[0], coords[1], coords[2]);
+    requestRenderRef.current?.();
+  }, [cameraPreset]);
 
   useEffect(() => {
     const container = canvasMountRef.current;
     if (!container) return;
 
-    // 1. Software-WebGL Guard (detect SwiftShader, llvmpipe, Basic Render from GPU renderer string)
-    let isSoftwareGl = false;
-    try {
-      const probeCanvas = document.createElement('canvas');
-      const gl = probeCanvas.getContext('webgl2') || probeCanvas.getContext('webgl');
-      if (!gl) {
-        setWebglSupported(false);
-        return;
+    const isSoftwareGl = (() => {
+      try {
+        const probeCanvas = document.createElement('canvas');
+        const gl = probeCanvas.getContext('webgl2') || probeCanvas.getContext('webgl');
+        if (!gl) return true;
+        const ext = gl.getExtension('WEBGL_debug_renderer_info');
+        const param = ext ? ext.UNMASKED_RENDERER_WEBGL : gl.RENDERER;
+        const gpu = String(gl.getParameter(param));
+        gl.getExtension('WEBGL_lose_context')?.loseContext();
+        return /SwiftShader|llvmpipe|softpipe|Software|Basic Render/i.test(gpu);
+      } catch {
+        return true;
       }
-      const ext = gl.getExtension('WEBGL_debug_renderer_info');
-      const param = ext ? ext.UNMASKED_RENDERER_WEBGL : gl.RENDERER;
-      const gpu = String(gl.getParameter(param));
-      gl.getExtension('WEBGL_lose_context')?.loseContext();
-      isSoftwareGl = /SwiftShader|llvmpipe|softpipe|Software|Basic Render/i.test(gpu);
-    } catch {
-      setWebglSupported(false);
-      return;
-    }
+    })();
+
+    const width = Math.max(container.clientWidth, 320);
+    const height = Math.max(container.clientHeight, compact ? 390 : 460);
+
+    const scene = new THREE.Scene();
+    const bgHex = isDark ? 0x080b16 : 0x0b132b;
+    scene.background = new THREE.Color(bgHex);
+    scene.fog = new THREE.FogExp2(bgHex, 0.065);
+
+    const camera = new THREE.PerspectiveCamera(42, width / height, 0.1, 60);
+    camera.position.set(...CAMERA_TARGETS.isometric);
+    camera.lookAt(0, 0.2, 0);
 
     let renderer: THREE.WebGLRenderer;
     try {
@@ -176,331 +83,259 @@ export const Interactive3DCore: React.FC<Interactive3DCoreProps> = ({ isDark, co
         powerPreference: 'high-performance',
       });
     } catch {
-      setWebglSupported(false);
       return;
     }
 
-    const width = container.clientWidth || 520;
-    const height = container.clientHeight || 420;
-
+    renderer.setSize(width, height);
+    renderer.setPixelRatio(isSoftwareGl ? 1 : Math.min(window.devicePixelRatio || 1, 2));
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.12;
-    renderer.setPixelRatio(isSoftwareGl ? 1 : Math.min(window.devicePixelRatio, 2));
-    renderer.setSize(width, height);
     renderer.shadowMap.enabled = !isSoftwareGl;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
     container.innerHTML = '';
     container.appendChild(renderer.domElement);
 
-    const scene = new THREE.Scene();
-    const bgHex = 0x060b19;
-    scene.background = new THREE.Color(bgHex);
-    scene.fog = new THREE.FogExp2(bgHex, 0.085);
-
-    // 2. Studio Environment Map (RoomEnvironment + PMREMGenerator)
     const pmremGenerator = new THREE.PMREMGenerator(renderer);
     const envTarget = pmremGenerator.fromScene(new RoomEnvironment(), 0.04);
     scene.environment = envTarget.texture;
     pmremGenerator.dispose();
 
-    // Camera & OrbitControls
-    const camera = new THREE.PerspectiveCamera(42, width / height, 0.1, 100);
-    camera.position.set(0, 2.1, 6.2);
-
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = !isSoftwareGl;
-    controls.dampingFactor = 0.06;
-    controls.minDistance = 3.6;
-    controls.maxDistance = 10.5;
-    controls.maxPolarAngle = Math.PI * 0.62;
-    controls.target.set(0, 0, 0);
-
-    // 3. Three-Point Studio Lighting Rig (Warm Key + Cool Hemisphere + Violet Rim)
-    const hemiLight = new THREE.HemisphereLight(0x93c5fd, 0x0f172a, 0.9);
+    // 3-Point Studio Lighting Rig
+    const hemiLight = new THREE.HemisphereLight(0x93c5fd, 0x1e1b4b, 0.85);
+    hemiLight.position.set(0, 10, 0);
     scene.add(hemiLight);
 
     const keyLight = new THREE.DirectionalLight(0xfff7ed, 2.4);
-    keyLight.position.set(4.5, 6.5, 4.0);
-    keyLight.castShadow = !isSoftwareGl;
+    keyLight.position.set(5.5, 7.5, 5.0);
     if (!isSoftwareGl) {
-      keyLight.shadow.camera.left = -4;
-      keyLight.shadow.camera.right = 4;
-      keyLight.shadow.camera.top = 4;
-      keyLight.shadow.camera.bottom = -4;
+      keyLight.castShadow = true;
+      keyLight.shadow.mapSize.set(1024, 1024);
+      keyLight.shadow.camera.near = 1;
+      keyLight.shadow.camera.far = 20;
+      const d = 4.5;
+      keyLight.shadow.camera.left = -d;
+      keyLight.shadow.camera.right = d;
+      keyLight.shadow.camera.top = d;
+      keyLight.shadow.camera.bottom = -d;
       keyLight.shadow.bias = -0.0005;
       keyLight.shadow.normalBias = 0.02;
     }
     scene.add(keyLight);
 
-    const rimLight = new THREE.DirectionalLight(0x8b5cf6, 1.8);
-    rimLight.position.set(-5.0, 2.5, -4.5);
+    const fillLight = new THREE.DirectionalLight(0x3b82f6, 1.35);
+    fillLight.position.set(-5.0, 3.2, -3.5);
+    scene.add(fillLight);
+
+    const rimLight = new THREE.PointLight(0x7c3aed, 2.1, 14, 1.8);
+    rimLight.position.set(0, 2.8, -4.2);
     scene.add(rimLight);
 
-    // Contact Grounding Pedestal & Shadow Plane
-    const pedestalGeo = new THREE.CylinderGeometry(2.8, 3.1, 0.12, 48);
-    const pedestalMat = new THREE.MeshStandardMaterial({
-      color: 0x0b1329,
+    // Ground Pedestal & Soft Contact Shadow
+    const pedestalGroup = new THREE.Group();
+    pedestalGroup.position.set(0, -1.35, 0);
+    scene.add(pedestalGroup);
+
+    const basePlinthGeo = new THREE.CylinderGeometry(2.35, 2.55, 0.16, 48);
+    const basePlinthMat = new THREE.MeshStandardMaterial({
+      color: 0x0f172a,
       metalness: 0.75,
-      roughness: 0.35,
+      roughness: 0.32,
     });
-    const pedestalMesh = new THREE.Mesh(pedestalGeo, pedestalMat);
-    pedestalMesh.position.set(0, -1.65, 0);
-    pedestalMesh.receiveShadow = true;
-    scene.add(pedestalMesh);
+    const basePlinth = new THREE.Mesh(basePlinthGeo, basePlinthMat);
+    basePlinth.position.y = -0.08;
+    basePlinth.receiveShadow = true;
+    pedestalGroup.add(basePlinth);
 
-    const ringDecalGeo = new THREE.RingGeometry(2.15, 2.22, 64);
-    ringDecalGeo.rotateX(-Math.PI / 2);
-    const ringDecalMat = new THREE.MeshBasicMaterial({
+    const trimRingGeo = new THREE.TorusGeometry(2.22, 0.022, 16, 72);
+    const trimRingMat = new THREE.MeshStandardMaterial({
       color: 0x3b82f6,
-      transparent: true,
-      opacity: 0.4,
-      polygonOffset: true,
-      polygonOffsetFactor: -1,
-      polygonOffsetUnits: -1,
-    });
-    const ringDecal = new THREE.Mesh(ringDecalGeo, ringDecalMat);
-    ringDecal.position.set(0, -1.58, 0);
-    scene.add(ringDecal);
-
-    // 4. Composite Multi-Part Procedural Model (THREE.Group: 10+ distinct parts)
-    const rootAssembly = new THREE.Group();
-    scene.add(rootAssembly);
-
-    // Part 1: Central Beveled Hexagonal Prism Core (ExtrudeGeometry)
-    const hexShape = new THREE.Shape();
-    const hexRadius = 0.78;
-    for (let i = 0; i < 6; i++) {
-      const a = (i * Math.PI) / 3;
-      const x = Math.cos(a) * hexRadius;
-      const y = Math.sin(a) * hexRadius;
-      if (i === 0) hexShape.moveTo(x, y);
-      else hexShape.lineTo(x, y);
-    }
-    hexShape.closePath();
-
-    const coreExtrudeGeo = new THREE.ExtrudeGeometry(hexShape, {
-      depth: 0.7,
-      bevelEnabled: true,
-      bevelSegments: 3,
-      steps: 1,
-      bevelSize: 0.12,
-      bevelThickness: 0.12,
-    });
-    coreExtrudeGeo.center();
-
-    const coreMat = new THREE.MeshPhysicalMaterial({
-      color: FINISH_PALETTES.cobalt.coreHex,
-      metalness: 0.88,
+      metalness: 0.85,
       roughness: 0.18,
-      clearcoat: 0.9,
-      clearcoatRoughness: 0.15,
-    });
-    const coreMesh = new THREE.Mesh(coreExtrudeGeo, coreMat);
-    coreMesh.castShadow = true;
-    coreMesh.receiveShadow = true;
-    rootAssembly.add(coreMesh);
-
-    // Part 2 & 3: Upper & Lower Precision End-Caps on Core
-    const capGeo = new THREE.CylinderGeometry(0.48, 0.58, 0.18, 6);
-    const capMat = new THREE.MeshStandardMaterial({
-      color: 0x60a5fa,
-      metalness: 0.92,
-      roughness: 0.42,
       emissive: 0x1d4ed8,
       emissiveIntensity: 0.35,
     });
-    const topCap = new THREE.Mesh(capGeo, capMat);
-    topCap.position.set(0, 0.56, 0);
-    const bottomCap = new THREE.Mesh(capGeo, capMat);
-    bottomCap.rotation.z = Math.PI;
-    bottomCap.position.set(0, -0.56, 0);
-    rootAssembly.add(topCap, bottomCap);
+    const trimRing = new THREE.Mesh(trimRingGeo, trimRingMat);
+    trimRing.rotation.x = Math.PI / 2;
+    trimRing.position.y = 0.02;
+    pedestalGroup.add(trimRing);
 
-    // Part 4 & 5: Dual Counter-Rotating Gimbal Rings
-    const innerGimbalGeo = new THREE.TorusGeometry(1.32, 0.038, 20, 72);
-    const gimbalMat = new THREE.MeshStandardMaterial({
-      color: FINISH_PALETTES.cobalt.ringHex,
-      metalness: 0.9,
+    // Composite 7-Part Lovanstrix Technology Core Group
+    const coreAssembly = new THREE.Group();
+    coreAssembly.position.set(0, 0.15, 0);
+    scene.add(coreAssembly);
+
+    // 1. Primary Inner Nucleus (Brushed Cobalt Titanium Octahedron)
+    const nucleusGeo = new THREE.OctahedronGeometry(0.68, 2);
+    const nucleusMat = new THREE.MeshPhysicalMaterial({
+      color: 0x2563eb,
+      metalness: 0.92,
+      roughness: 0.16,
+      clearcoat: 0.8,
+      emissive: 0x1e3a8a,
+      emissiveIntensity: 0.28,
+    });
+    const nucleusMesh = new THREE.Mesh(nucleusGeo, nucleusMat);
+    nucleusMesh.castShadow = true;
+    nucleusMesh.userData = { label: '01 · Core Logic & API Engine' };
+    coreAssembly.add(nucleusMesh);
+
+    // 2. Outer Optical Glass Enclosure Cube (Beveled Extrude / Rounded Frame)
+    const glassShellGeo = new THREE.BoxGeometry(1.48, 1.48, 1.48);
+    const glassShellMat = new THREE.MeshPhysicalMaterial({
+      color: 0x93c5fd,
+      metalness: 0.08,
+      roughness: 0.08,
+      transmission: isSoftwareGl ? 0 : 0.9,
+      transparent: true,
+      opacity: isSoftwareGl ? 0.32 : 1,
+      ior: 1.52,
+      thickness: 1.2,
+      clearcoat: 1.0,
+      depthWrite: false,
+    });
+    const glassShellMesh = new THREE.Mesh(glassShellGeo, glassShellMat);
+    glassShellMesh.renderOrder = 2;
+    glassShellMesh.userData = { label: '02 · Responsive UI/UX Interface Layer' };
+    coreAssembly.add(glassShellMesh);
+
+    // 3. Structural Edge Frame around Glass Cube
+    const edgeGeo = new THREE.EdgesGeometry(new THREE.BoxGeometry(1.52, 1.52, 1.52));
+    const edgeMat = new THREE.LineBasicMaterial({
+      color: 0x60a5fa,
+      transparent: true,
+      opacity: 0.65,
+    });
+    const edgeFrame = new THREE.LineSegments(edgeGeo, edgeMat);
+    coreAssembly.add(edgeFrame);
+
+    // 4. Primary Equatorial Orbital Ring (Web Architecture)
+    const orbitOneGeo = new THREE.TorusGeometry(1.58, 0.038, 20, 84);
+    const orbitOneMat = new THREE.MeshStandardMaterial({
+      color: 0x60a5fa,
+      metalness: 0.88,
       roughness: 0.22,
     });
-    const innerGimbal = new THREE.Mesh(innerGimbalGeo, gimbalMat);
-    innerGimbal.rotation.x = Math.PI / 3;
-    rootAssembly.add(innerGimbal);
+    const orbitOneMesh = new THREE.Mesh(orbitOneGeo, orbitOneMat);
+    orbitOneMesh.rotation.set(Math.PI / 2.8, 0.35, 0);
+    orbitOneMesh.castShadow = true;
+    orbitOneMesh.userData = { label: '03 · Full-Stack Web Application Pipeline' };
+    coreAssembly.add(orbitOneMesh);
 
-    const outerGimbalGeo = new THREE.TorusGeometry(1.68, 0.028, 16, 84);
-    const outerGimbalMat = new THREE.MeshStandardMaterial({
+    // 5. Secondary Inclined Orbital Ring (Applied AI Integration)
+    const orbitTwoGeo = new THREE.TorusGeometry(1.92, 0.03, 18, 84);
+    const orbitTwoMat = new THREE.MeshStandardMaterial({
       color: 0x8b5cf6,
-      metalness: 0.65,
-      roughness: 0.48,
+      metalness: 0.82,
+      roughness: 0.28,
     });
-    const outerGimbal = new THREE.Mesh(outerGimbalGeo, outerGimbalMat);
-    outerGimbal.rotation.y = Math.PI / 4;
-    outerGimbal.rotation.x = -Math.PI / 5;
-    rootAssembly.add(outerGimbal);
+    const orbitTwoMesh = new THREE.Mesh(orbitTwoGeo, orbitTwoMat);
+    orbitTwoMesh.rotation.set(-Math.PI / 3.1, -0.45, 0.2);
+    orbitTwoMesh.userData = { label: '04 · Applied AI & Automation Workflows' };
+    coreAssembly.add(orbitTwoMesh);
 
-    // Parts 6–11: 6 Interactive Orbital Stage Satellites (Raycastable Layer 1)
-    const satellitesGroup = new THREE.Group();
-    rootAssembly.add(satellitesGroup);
-
-    const clickableProxies: THREE.Mesh[] = [];
-    const satelliteNodes: {
-      group: THREE.Group;
-      coreMesh: THREE.Mesh;
-      haloMesh: THREE.Mesh;
-      spokeLine: THREE.Line;
-      basePos: THREE.Vector3;
-      mat: THREE.MeshStandardMaterial;
-    }[] = [];
-
-    const satCoreGeo = new THREE.OctahedronGeometry(0.24, 1);
-    const satHaloGeo = new THREE.TorusGeometry(0.36, 0.018, 12, 36);
-    const proxyGeo = new THREE.SphereGeometry(0.46, 12, 12);
-    const proxyMat = new THREE.MeshBasicMaterial({ visible: false });
-
-    INNOVATION_STAGES.forEach((stage, idx) => {
-      const satGroup = new THREE.Group();
-      const bx = Math.cos(stage.angle) * stage.orbitRadius;
-      const bz = Math.sin(stage.angle) * stage.orbitRadius;
-      const by = stage.elevation;
-      const basePos = new THREE.Vector3(bx, by, bz);
-      satGroup.position.copy(basePos);
-
-      const satMat = new THREE.MeshStandardMaterial({
-        color: idx === activeStageRef.current ? 0x60a5fa : 0x1e293b,
-        metalness: 0.82,
-        roughness: 0.24,
-        emissive: idx === activeStageRef.current ? 0x2563eb : 0x0f172a,
-        emissiveIntensity: idx === activeStageRef.current ? 0.65 : 0.15,
-      });
-
-      const satMesh = new THREE.Mesh(satCoreGeo, satMat);
-      satMesh.castShadow = true;
-      satGroup.add(satMesh);
-
-      const haloMesh = new THREE.Mesh(
-        satHaloGeo,
-        new THREE.MeshBasicMaterial({
-          color: idx === activeStageRef.current ? 0x93c5fd : 0x475569,
-          transparent: true,
-          opacity: 0.7,
-        })
-      );
-      haloMesh.rotation.x = Math.PI / 2;
-      satGroup.add(haloMesh);
-
-      // Raycast collision proxy on Layer 1
-      const proxyMesh = new THREE.Mesh(proxyGeo, proxyMat);
-      proxyMesh.layers.set(1);
-      proxyMesh.userData = { stageIndex: idx };
-      satGroup.add(proxyMesh);
-      clickableProxies.push(proxyMesh);
-
-      // Connecting spoke line to center
-      const lineGeo = new THREE.BufferGeometry().setFromPoints([
-        new THREE.Vector3(0, 0, 0),
-        basePos.clone(),
-      ]);
-      const lineMat = new THREE.LineBasicMaterial({
-        color: idx === activeStageRef.current ? 0x60a5fa : 0x334155,
-        transparent: true,
-        opacity: 0.55,
-      });
-      const spokeLine = new THREE.Line(lineGeo, lineMat);
-      satellitesGroup.add(spokeLine);
-      satellitesGroup.add(satGroup);
-
-      satelliteNodes.push({
-        group: satGroup,
-        coreMesh: satMesh,
-        haloMesh,
-        spokeLine,
-        basePos,
-        mat: satMat,
-      });
-    });
-
-    // Part 12: InstancedMesh Lattice Micro-Satellites (36 nodes with varied scale & tint)
-    const instanceCount = 36;
-    const microGeo = new THREE.BoxGeometry(0.055, 0.055, 0.055);
-    const microMat = new THREE.MeshStandardMaterial({
-      color: 0x93c5fd,
-      metalness: 0.8,
+    // 6. Top & Bottom Precision Cap Rings (Explodable along Y axis)
+    const capGeo = new THREE.CylinderGeometry(0.62, 0.78, 0.14, 6);
+    const capMat = new THREE.MeshStandardMaterial({
+      color: 0x1e293b,
+      metalness: 0.85,
       roughness: 0.25,
     });
-    const instancedLattice = new THREE.InstancedMesh(microGeo, microMat, instanceCount);
-    for (let i = 0; i < instanceCount; i++) {
-      const theta = (i / instanceCount) * Math.PI * 2;
-      const r = 2.85 + (i % 3) * 0.22;
-      const y = Math.sin(theta * 3) * 0.55;
-      _dummyPos.set(Math.cos(theta) * r, y, Math.sin(theta) * r);
-      _dummyQuat.setFromEuler(new THREE.Euler(theta, theta * 0.5, 0));
-      const s = 0.85 + (i % 4) * 0.1;
-      _dummyScale.set(s, s, s);
-      _dummyMatrix.compose(_dummyPos, _dummyQuat, _dummyScale);
-      instancedLattice.setMatrixAt(i, _dummyMatrix);
-      _dummyColor.setHex(i % 2 === 0 ? 0x60a5fa : 0xa78bfa);
-      instancedLattice.setColorAt(i, _dummyColor);
-    }
-    instancedLattice.instanceMatrix.needsUpdate = true;
-    if (instancedLattice.instanceColor) instancedLattice.instanceColor.needsUpdate = true;
-    instancedLattice.computeBoundingSphere();
-    rootAssembly.add(instancedLattice);
+    const topCap = new THREE.Mesh(capGeo, capMat);
+    topCap.position.set(0, 0.96, 0);
+    topCap.userData = { label: '05 · Cloud Deployment & Security Shield' };
+    coreAssembly.add(topCap);
 
-    // Pre-warm shaders on hardware GPUs
+    const bottomCap = new THREE.Mesh(capGeo, capMat);
+    bottomCap.rotation.x = Math.PI;
+    bottomCap.position.set(0, -0.96, 0);
+    bottomCap.userData = { label: '06 · Database & Persistent Storage Foundation' };
+    coreAssembly.add(bottomCap);
+
+    // 7. Instanced Orbital Data Nodes (24 nodes distributed in 3D orbit)
+    const nodeCount = 24;
+    const nodeGeo = new THREE.OctahedronGeometry(0.065, 0);
+    const nodeMat = new THREE.MeshStandardMaterial({
+      color: 0x93c5fd,
+      metalness: 0.7,
+      roughness: 0.2,
+    });
+    const instancedNodes = new THREE.InstancedMesh(nodeGeo, nodeMat, nodeCount);
+    const dummy = new THREE.Object3D();
+    const nodeColor = new THREE.Color();
+
+    for (let i = 0; i < nodeCount; i++) {
+      const angle = (i / nodeCount) * Math.PI * 2;
+      const radius = i % 2 === 0 ? 1.58 : 1.92;
+      const yOffset = Math.sin(angle * 2) * 0.42;
+      dummy.position.set(
+        Math.cos(angle) * radius,
+        yOffset,
+        Math.sin(angle) * radius
+      );
+      const scale = 0.85 + (i % 3) * 0.12;
+      dummy.scale.setScalar(scale);
+      dummy.rotation.set(angle, angle * 0.5, 0);
+      dummy.updateMatrix();
+      instancedNodes.setMatrixAt(i, dummy.matrix);
+
+      nodeColor.setHex(i % 2 === 0 ? 0x60a5fa : 0xa78bfa);
+      instancedNodes.setColorAt(i, nodeColor);
+    }
+    instancedNodes.instanceMatrix.needsUpdate = true;
+    if (instancedNodes.instanceColor) instancedNodes.instanceColor.needsUpdate = true;
+    instancedNodes.computeBoundingSphere();
+    coreAssembly.add(instancedNodes);
+
+    // OrbitControls Setup
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.target.set(0, 0.1, 0);
+    controls.enableDamping = !isSoftwareGl;
+    controls.dampingFactor = 0.06;
+    controls.enablePan = false;
+    controls.minDistance = 3.0;
+    controls.maxDistance = 8.5;
+    controls.maxPolarAngle = Math.PI / 2 - 0.04;
+
+    const cancelCameraTransition = () => {
+      cameraTargetPosRef.current = null;
+    };
+    controls.addEventListener('start', cancelCameraTransition);
+
+    // Raycasting on click for inspecting core subsystems
+    const raycaster = new THREE.Raycaster();
+    const pointer = new THREE.Vector2();
+    const inspectableMeshes: THREE.Object3D[] = [
+      nucleusMesh,
+      glassShellMesh,
+      orbitOneMesh,
+      orbitTwoMesh,
+      topCap,
+      bottomCap,
+    ];
+
+    const handlePointerDown = (event: PointerEvent) => {
+      const rect = renderer.domElement.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) return;
+      pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+      raycaster.setFromCamera(pointer, camera);
+      const hits = raycaster.intersectObjects(inspectableMeshes, false);
+      if (hits.length > 0 && hits[0].object.userData?.label) {
+        setSelectedLayerLabel(String(hits[0].object.userData.label));
+      }
+    };
+    renderer.domElement.addEventListener('pointerdown', handlePointerDown);
+
     if (!isSoftwareGl) {
       renderer.compile(scene, camera);
     }
 
-    // Raycasting setup (restricted to Layer 1)
-    const raycaster = new THREE.Raycaster();
-    raycaster.layers.set(1);
-
-    const handlePointerDown = (event: PointerEvent) => {
-      const rect = renderer.domElement.getBoundingClientRect();
-      _mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-      _mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-      raycaster.setFromCamera(_mouse, camera);
-      const hits = raycaster.intersectObjects(clickableProxies, false);
-      if (hits.length > 0) {
-        const hitIdx = hits[0].object.userData?.stageIndex;
-        if (typeof hitIdx === 'number') {
-          setActiveStageIdx(hitIdx);
-        }
-      }
-    };
-
-    let lastHoverTime = 0;
-    const handlePointerMove = (event: PointerEvent) => {
-      const now = performance.now();
-      if (now - lastHoverTime < 50) return;
-      lastHoverTime = now;
-      const rect = renderer.domElement.getBoundingClientRect();
-      _mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-      _mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-      raycaster.setFromCamera(_mouse, camera);
-      const hits = raycaster.intersectObjects(clickableProxies, false);
-      renderer.domElement.style.cursor = hits.length > 0 ? 'pointer' : 'grab';
-    };
-
-    renderer.domElement.addEventListener('pointerdown', handlePointerDown);
-    renderer.domElement.addEventListener('pointermove', handlePointerMove);
-
-    const handleResize = () => {
-      if (!container) return;
-      const w = container.clientWidth || 520;
-      const h = container.clientHeight || 420;
-      camera.aspect = w / h;
-      camera.updateProjectionMatrix();
-      renderer.setSize(w, h);
-    };
-    window.addEventListener('resize', handleResize);
-
-    // Software-WebGL Paced Loop & Smooth Exponential Damping
-    const clock = new THREE.Clock();
+    let currentExplosion = 0;
     let frameId = 0;
-    let currentExploded = explodedRef.current;
+    let isDisposed = false;
+    const clock = new THREE.Clock();
 
     function afterDraw(cb: () => void) {
       const gl = renderer.getContext() as WebGL2RenderingContext;
@@ -508,6 +343,7 @@ export const Interactive3DCore: React.FC<Interactive3DCoreProps> = ({ isDark, co
         const sync = gl.fenceSync(gl.SYNC_GPU_COMMANDS_COMPLETE, 0);
         gl.flush();
         const poll = () => {
+          if (isDisposed) return;
           const state = sync && gl.getSyncParameter(sync, gl.SYNC_STATUS);
           if (state === gl.UNSIGNALED) {
             frameId = window.setTimeout(poll, 5);
@@ -523,59 +359,55 @@ export const Interactive3DCore: React.FC<Interactive3DCoreProps> = ({ isDark, co
     }
 
     function tick() {
+      if (isDisposed) return;
       const dt = Math.min(clock.getDelta(), 0.1);
       const elapsed = clock.getElapsedTime();
 
-      // Smoothly damp exploded factor
-      currentExploded = THREE.MathUtils.damp(currentExploded, explodedRef.current, 6, dt);
+      // Smooth exponential damping for exploded view separation
+      currentExplosion = THREE.MathUtils.damp(
+        currentExplosion,
+        targetExplosionRef.current,
+        5.5,
+        dt
+      );
 
-      // Update palette finish smoothly
-      const palette = FINISH_PALETTES[finishRef.current];
-      coreMat.color.setHex(palette.coreHex);
-      gimbalMat.color.setHex(palette.ringHex);
-      capMat.emissive.setHex(palette.emissiveHex);
+      topCap.position.y = 0.96 + currentExplosion * 0.52;
+      bottomCap.position.y = -0.96 - currentExplosion * 0.52;
+      const shellScale = 1 + currentExplosion * 0.16;
+      glassShellMesh.scale.setScalar(shellScale);
+      edgeFrame.scale.setScalar(shellScale);
 
-      // Gentle core & gimbal rotation
-      coreMesh.rotation.z += dt * 0.25;
-      coreMesh.rotation.y += dt * 0.18;
-      topCap.position.y = 0.56 + currentExploded * 0.65;
-      bottomCap.position.y = -(0.56 + currentExploded * 0.65);
+      // Gentle procedural orbital motion
+      nucleusMesh.rotation.y = elapsed * 0.45;
+      nucleusMesh.rotation.x = Math.sin(elapsed * 0.6) * 0.22;
+      glassShellMesh.rotation.y = -elapsed * 0.18;
+      edgeFrame.rotation.y = -elapsed * 0.18;
+      orbitOneMesh.rotation.z = elapsed * 0.32;
+      orbitTwoMesh.rotation.z = -elapsed * 0.26;
+      instancedNodes.rotation.y = elapsed * 0.15;
 
-      innerGimbal.rotation.z -= dt * 0.32;
-      innerGimbal.scale.setScalar(1 + currentExploded * 0.22);
-      outerGimbal.rotation.x += dt * 0.2;
-      outerGimbal.scale.setScalar(1 + currentExploded * 0.35);
-      instancedLattice.rotation.y += dt * 0.08;
-
-      // Update orbital satellites
-      const selectedIdx = activeStageRef.current;
-      satelliteNodes.forEach((sat, idx) => {
-        const isSelected = idx === selectedIdx;
-        const expansionMultiplier = 1 + currentExploded * 0.55;
-        sat.group.position.set(
-          sat.basePos.x * expansionMultiplier,
-          sat.basePos.y + Math.sin(elapsed * 1.6 + idx) * 0.06,
-          sat.basePos.z * expansionMultiplier
+      // Smooth camera preset transition if active
+      if (cameraTargetPosRef.current) {
+        camera.position.x = THREE.MathUtils.damp(
+          camera.position.x,
+          cameraTargetPosRef.current.x,
+          5,
+          dt
         );
-        sat.coreMesh.rotation.y += dt * (isSelected ? 1.4 : 0.45);
-        sat.coreMesh.rotation.x += dt * 0.3;
-
-        const targetScale = isSelected ? 1.32 : 1.0;
-        const dampedScale = THREE.MathUtils.damp(sat.group.scale.x, targetScale, 8, dt);
-        sat.group.scale.setScalar(dampedScale);
-
-        sat.mat.color.setHex(isSelected ? palette.accentHex : 0x1e293b);
-        sat.mat.emissive.setHex(isSelected ? palette.emissiveHex : 0x0f172a);
-        sat.mat.emissiveIntensity = isSelected ? 0.85 : 0.15;
-      });
-
-      // Camera reset animation if triggered
-      if (resetCameraTriggerRef.current) {
-        _targetCameraPos.set(0, 2.1, 6.2);
-        camera.position.lerp(_targetCameraPos, 1 - Math.exp(-8 * dt));
-        controls.target.lerp(new THREE.Vector3(0, 0, 0), 1 - Math.exp(-8 * dt));
-        if (camera.position.distanceTo(_targetCameraPos) < 0.05) {
-          resetCameraTriggerRef.current = false;
+        camera.position.y = THREE.MathUtils.damp(
+          camera.position.y,
+          cameraTargetPosRef.current.y,
+          5,
+          dt
+        );
+        camera.position.z = THREE.MathUtils.damp(
+          camera.position.z,
+          cameraTargetPosRef.current.z,
+          5,
+          dt
+        );
+        if (camera.position.distanceTo(cameraTargetPosRef.current) < 0.03) {
+          cameraTargetPosRef.current = null;
         }
       }
 
@@ -589,160 +421,140 @@ export const Interactive3DCore: React.FC<Interactive3DCoreProps> = ({ isDark, co
       }
     }
 
+    requestRenderRef.current = () => {
+      // Continuous loop already active; state refs will be picked up next frame
+    };
+
     tick();
 
+    const handleResize = () => {
+      if (!container || isDisposed) return;
+      const newW = Math.max(container.clientWidth, 300);
+      const newH = Math.max(container.clientHeight, compact ? 390 : 460);
+      camera.aspect = newW / newH;
+      camera.updateProjectionMatrix();
+      renderer.setSize(newW, newH);
+    };
+
+    window.addEventListener('resize', handleResize);
+
     return () => {
+      isDisposed = true;
       cancelAnimationFrame(frameId);
       clearTimeout(frameId);
       window.removeEventListener('resize', handleResize);
+      controls.removeEventListener('start', cancelCameraTransition);
       renderer.domElement.removeEventListener('pointerdown', handlePointerDown);
-      renderer.domElement.removeEventListener('pointermove', handlePointerMove);
       controls.dispose();
+
+      scene.traverse((obj) => {
+        if ((obj as THREE.Mesh).geometry) {
+          (obj as THREE.Mesh).geometry.dispose();
+        }
+        const mat = (obj as THREE.Mesh).material;
+        if (Array.isArray(mat)) {
+          mat.forEach((m) => m.dispose());
+        } else if (mat) {
+          mat.dispose();
+        }
+      });
       envTarget.dispose();
       renderer.dispose();
     };
-  }, []);
-
-  const currentStage = INNOVATION_STAGES[activeStageIdx] || INNOVATION_STAGES[0];
+  }, [compact, isDark]);
 
   return (
-    <div
-      className={`relative w-full rounded-2xl border overflow-hidden flex flex-col justify-between ${
-        compact ? 'min-h-[380px]' : 'min-h-[470px] h-full'
-      } ${
-        isDark
-          ? 'bg-[#060B19] border-slate-800/90 text-white'
-          : 'bg-[#060B19] border-slate-800 text-white'
-      }`}
-    >
-      {/* Minimal Top-Left Specification Header (Unobstructed 3D Center) */}
-      <div className="relative z-10 flex items-center justify-between gap-4 px-5 py-3.5 bg-[#060B19]/90 border-b border-slate-800/80 pointer-events-auto">
-        <div className="flex items-center gap-2.5">
-          <Box className="w-4 h-4 text-blue-400 shrink-0" />
-          <div>
-            <p className="text-[11px] font-medium text-blue-400">
-              Interactive 3D Spatial Architecture · Drag to Orbit · Click Nodes
-            </p>
-            <h3 className="font-display text-sm font-semibold text-white">
-              {currentStage.step}. {currentStage.label} — {currentStage.architecture}
-            </h3>
-          </div>
-        </div>
-        <span className="text-xs font-mono text-slate-400 tabular-nums shrink-0">
-          Stage {currentStage.step} / 06
-        </span>
+    <div className="relative w-full h-full min-h-[390px] select-none overflow-hidden rounded-[26px] sm:rounded-[32px]">
+      {/* Dedicated WebGL Mount Container */}
+      <div
+        ref={canvasMountRef}
+        className="w-full h-full min-h-[390px] cursor-grab active:cursor-grabbing"
+        aria-label="Interactive 3D Lovanstrix Technology Core"
+      />
+
+      {/* Minimal Top-Left Specification Badge */}
+      <div className="pointer-events-none absolute top-3.5 left-4 z-10 inline-flex items-center gap-2 rounded-lg border border-slate-700/80 bg-[#0b132b]/90 px-3 py-1.5 text-[11px] font-medium text-slate-200">
+        <span className="font-mono text-blue-400">3D CORE</span>
+        <span className="text-slate-500">·</span>
+        <span className="truncate max-w-[230px] sm:max-w-[300px]">{selectedLayerLabel}</span>
       </div>
 
-      {/* Dedicated Empty WebGL Canvas Mount Container */}
-      {webglSupported ? (
-        <div
-          ref={canvasMountRef}
-          className="relative flex-1 w-full min-h-[280px]"
-          aria-label="Interactive 3D Lovanstrix Innovation Core"
-        />
-      ) : (
-        <div className="flex-1 flex items-center justify-center p-8 text-center">
-          <p className="text-xs text-slate-300">
-            Interactive 3D Innovation Core — {currentStage.label}: {currentStage.caption}
-          </p>
-        </div>
-      )}
-
-      {/* Unified Collapsible Bottom Control Dock (Zero Side-Panel Clutter, Zero Backdrop-Blur over WebGL) */}
-      <div className="relative z-10 w-full px-4 pb-3 pt-1 flex flex-col items-center pointer-events-none">
+      {/* Collapsible Unified Bottom Control Dock */}
+      <div className="absolute bottom-3 left-1/2 z-10 -translate-x-1/2 w-[92%] max-w-[460px] flex flex-col items-center">
         <button
           type="button"
           onClick={() => setDockCollapsed((prev) => !prev)}
-          className="pointer-events-auto inline-flex items-center gap-1.5 px-3 py-1 rounded-t-lg bg-[#0B1224] border border-b-0 border-slate-700/80 text-[11px] font-medium text-slate-300 hover:text-white transition-colors"
+          className="mb-1 inline-flex items-center gap-1 rounded-t-md border border-b-0 border-slate-700/80 bg-[#0b132b] px-2.5 py-1 text-[10px] font-medium text-slate-300 hover:text-white transition-colors"
+          aria-expanded={!dockCollapsed}
         >
           {dockCollapsed ? (
             <>
-              <ChevronUp className="w-3.5 h-3.5 text-blue-400" />
+              <ChevronUp className="h-3 w-3 text-blue-400" />
               <span>Show 3D Controls</span>
             </>
           ) : (
             <>
-              <ChevronDown className="w-3.5 h-3.5 text-blue-400" />
+              <ChevronDown className="h-3 w-3 text-blue-400" />
               <span>Hide Controls</span>
             </>
           )}
         </button>
 
         {!dockCollapsed && (
-          <div className="pointer-events-auto w-full max-w-[920px] rounded-xl bg-[#0B1224] border border-slate-700/80 p-3.5 space-y-3 shadow-lg">
-            {/* Stage Caption & Quick Stage Selector */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-2.5">
-              <p className="text-xs text-slate-300 leading-relaxed">{currentStage.caption}</p>
-              <button
-                type="button"
-                onClick={() => {
-                  resetCameraTriggerRef.current = true;
-                  setExplodedFactor(0.15);
-                }}
-                className="inline-flex items-center gap-1 text-[11px] font-medium text-blue-400 hover:text-blue-300 whitespace-nowrap shrink-0 self-start sm:self-center"
-              >
-                <RotateCcw className="w-3 h-3" />
-                <span>Reset View</span>
-              </button>
-            </div>
+          <div className="w-full rounded-xl border border-slate-700/90 bg-[#0b132b]/95 px-3 py-2 shadow-lg flex flex-wrap items-center justify-between gap-2 text-[11px]">
+            {/* Exploded View Toggle */}
+            <button
+              type="button"
+              onClick={() =>
+                setCoreMode((prev) => (prev === 'unified' ? 'exploded' : 'unified'))
+              }
+              className={`inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 font-semibold transition-colors ${
+                coreMode === 'exploded'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-slate-800/90 text-slate-200 hover:bg-slate-700'
+              }`}
+            >
+              <Layers className="h-3.5 w-3.5" />
+              <span>{coreMode === 'exploded' ? 'Unified Core' : 'Explode Layers'}</span>
+            </button>
 
-            {/* Stage Buttons */}
-            <div className="grid grid-cols-3 sm:grid-cols-6 gap-1.5" role="tablist">
-              {INNOVATION_STAGES.map((node, idx) => (
+            {/* Camera Angle Presets */}
+            <div className="inline-flex items-center gap-1 rounded-lg bg-slate-900/90 p-1 border border-slate-800">
+              <Eye className="h-3 w-3 text-slate-400 ml-1 mr-0.5" />
+              {(['isometric', 'front', 'top'] as const).map((preset) => (
                 <button
-                  key={node.step}
+                  key={preset}
                   type="button"
-                  onClick={() => setActiveStageIdx(idx)}
-                  className={`py-1.5 px-2 rounded text-[11px] font-medium transition-colors whitespace-nowrap shrink-0 truncate ${
-                    idx === activeStageIdx
+                  onClick={() => setCameraPreset(preset)}
+                  className={`rounded px-2 py-1 text-[10px] font-medium capitalize transition-colors ${
+                    cameraPreset === preset
                       ? 'bg-blue-600 text-white'
-                      : 'bg-[#060B19] text-slate-400 hover:text-white border border-slate-800'
+                      : 'text-slate-300 hover:text-white'
                   }`}
                 >
-                  {node.step}. {node.label}
+                  {preset}
                 </button>
               ))}
             </div>
 
-            {/* Exploded View Slider & Finish Presets */}
-            <div className="flex flex-wrap items-center justify-between gap-4 pt-1 text-[11px]">
-              <div className="flex items-center gap-2.5 flex-1 min-w-[180px]">
-                <label htmlFor="exploded-slider" className="text-slate-400 whitespace-nowrap shrink-0">
-                  Exploded Orbit:
-                </label>
-                <input
-                  id="exploded-slider"
-                  type="range"
-                  min={0}
-                  max={1}
-                  step={0.05}
-                  value={explodedFactor}
-                  onChange={(e) => setExplodedFactor(parseFloat(e.target.value))}
-                  className="w-full accent-blue-500 cursor-pointer"
-                />
-              </div>
-
-              <div className="flex items-center gap-1.5">
-                <span className="text-slate-400 mr-1">Finish:</span>
-                {(['cobalt', 'violet', 'titanium'] as MaterialFinish[]).map((f) => (
-                  <button
-                    key={f}
-                    type="button"
-                    onClick={() => setFinish(f)}
-                    className={`px-2.5 py-1 rounded text-[11px] font-medium transition-colors whitespace-nowrap shrink-0 ${
-                      finish === f
-                        ? 'bg-blue-600/30 border border-blue-500 text-white'
-                        : 'bg-[#060B19] border border-slate-800 text-slate-400 hover:text-white'
-                    }`}
-                  >
-                    {FINISH_PALETTES[f].label}
-                  </button>
-                ))}
-              </div>
-            </div>
+            {/* Reset View */}
+            <button
+              type="button"
+              onClick={() => {
+                setCoreMode('unified');
+                setCameraPreset('isometric');
+                setSelectedLayerLabel('Web · Apps · AI Technology Core');
+              }}
+              className="inline-flex items-center gap-1 rounded-lg bg-slate-800/90 px-2.5 py-1.5 text-slate-300 hover:text-white hover:bg-slate-700 transition-colors"
+              title="Reset 3D view"
+            >
+              <RotateCcw className="h-3 w-3" />
+              <span>Reset</span>
+            </button>
           </div>
         )}
       </div>
     </div>
   );
 };
+export default Interactive3DCore;

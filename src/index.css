@@ -2,28 +2,46 @@
 
 @layer base {
   :root {
-    --font-display: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
-    --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-display: 'Inter', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
+
+    --lx-white: #ffffff;
+    --lx-blue: #155eef;
+    --lx-navy: #102b59;
+    --lx-light-blue: #f5f8ff;
+    --lx-violet: #7958e8;
+    --lx-body: #475569;
+    --lx-border: #e2e8f0;
   }
 
   html {
     font-family: var(--font-sans);
+    color: var(--lx-body);
+    background-color: var(--lx-white);
     scroll-behavior: smooth;
   }
 
-  h1, h2, h3, h4, .font-display {
+  h1,
+  h2,
+  h3,
+  h4,
+  .font-display {
     font-family: var(--font-display);
+    letter-spacing: -0.02em;
   }
 
-  .font-mono, .tabular-nums {
+  .font-mono,
+  .tabular-nums {
     font-family: var(--font-mono);
     font-variant-numeric: tabular-nums;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, ::before, ::after {
+  *,
+  ::before,
+  ::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;

@@ -137,22 +137,22 @@ export const CareersSection: React.FC<CareersSectionProps> = ({
       {/* Section Header */}
       <div className="max-w-3xl">
         <p className="text-xs font-medium text-blue-400 mb-2">
-          Careers & Future Learning Opportunities
+          Careers &amp; Developer Collaborations
         </p>
         <h1
           className={`font-display text-3xl sm:text-4xl font-bold tracking-tight text-balance ${
             isDark ? 'text-white' : 'text-slate-950'
           }`}
         >
-          Growing With Talented Developers & Curious Builders
+          Growing With Talented Developers &amp; Curious Builders
         </h1>
         <p
           className={`mt-4 text-base leading-relaxed ${
             isDark ? 'text-slate-300' : 'text-slate-600'
           }`}
         >
-          Part of Lovanstrix’s core vision is to collaborate with dedicated engineers and create
-          meaningful learning and internship opportunities as our project pipeline expands.
+          Part of Lovanstrix’s core vision is to collaborate with dedicated software engineers,
+          designers, and builders as our client and product pipeline expands.
         </p>
       </div>
 
@@ -201,7 +201,7 @@ export const CareersSection: React.FC<CareersSectionProps> = ({
                 isDark ? 'text-white' : 'text-slate-900'
               }`}
             >
-              Published Role & Internship Openings
+              Published Role &amp; Collaboration Openings
             </h2>
             <p className={`text-xs mt-1 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
               Official openings appear below only when published by Lovanstrix administration.
@@ -225,7 +225,7 @@ export const CareersSection: React.FC<CareersSectionProps> = ({
                 isDark ? 'text-slate-200' : 'text-slate-800'
               }`}
             >
-              No Active Internship or Job Openings Are Published Right Now
+              No Active Role Openings Are Published Right Now
             </p>
             <p
               className={`mt-2 text-xs max-w-xl mx-auto leading-relaxed ${
@@ -233,8 +233,8 @@ export const CareersSection: React.FC<CareersSectionProps> = ({
               }`}
             >
               We do not list placeholder or inactive roles as open. You can register your profile in
-              our interest form below to be notified when real project collaborations or internships
-              are announced.
+              our interest form below to be notified when real project collaborations or engineering
+              roles are announced.
             </p>
           </div>
         ) : (
@@ -383,7 +383,7 @@ export const CareersSection: React.FC<CareersSectionProps> = ({
         </div>
       </section>
 
-      {/* Future Talent & Internship Interest Form */}
+      {/* Future Talent & Collaboration Interest Form */}
       <section
         id="career-interest-form"
         className={`rounded-2xl border p-7 sm:p-10 ${
@@ -407,8 +407,8 @@ export const CareersSection: React.FC<CareersSectionProps> = ({
                 isDark ? 'text-slate-300' : 'text-slate-600'
               }`}
             >
-              Whether you are a student looking for future technical learning opportunities or an
-              independent developer open to project collaboration, share your profile below.
+              Whether you are an independent developer, UI/UX designer, or full-stack builder open to
+              future project collaboration, share your profile below.
             </p>
 
             <div
@@ -421,8 +421,8 @@ export const CareersSection: React.FC<CareersSectionProps> = ({
               <p className="font-semibold text-blue-400 mb-1">Important Transparency Notice</p>
               <p>
                 Submitting this form records your profile in Lovanstrix’s future interest registry.
-                It does <strong>not</strong> promise or guarantee a job offer, active internship
-                placement, internship certificate, stipend, or selection.
+                It does <strong>not</strong> promise or guarantee a job offer, active contract, or
+                immediate selection.
               </p>
             </div>
           </div>

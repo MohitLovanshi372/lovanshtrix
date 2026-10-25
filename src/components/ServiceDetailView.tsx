@@ -40,16 +40,20 @@ export const ServiceDetailView: React.FC<ServiceDetailViewProps> = ({
   return (
     <div className="space-y-16">
       {/* Top Breadcrumb & Service Switcher Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800/80 pb-6">
+      <div
+        className={`flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b pb-6 ${
+          isDark ? 'border-slate-800' : 'border-[#E2E8F0]'
+        }`}
+      >
         <button
           type="button"
           onClick={onBackToAllServices}
           className={`inline-flex items-center gap-2 text-xs font-semibold transition-colors self-start ${
-            isDark ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-800'
+            isDark ? 'text-blue-400 hover:text-blue-300' : 'text-[#155EEF] hover:text-[#102B59]'
           }`}
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>Back to All 11 IT Services</span>
+          <span>Back to All IT Services</span>
         </button>
 
         <div className="flex items-center gap-2">
@@ -167,14 +171,18 @@ export const ServiceDetailView: React.FC<ServiceDetailViewProps> = ({
                 founder or verified technical collaborators. We agree on concrete deliverables,
                 technologies, and milestones before development begins.
               </p>
-              <div className="pt-3 border-t border-slate-800/60 space-y-2 text-xs">
+              <div
+                className={`pt-3 border-t space-y-2 text-xs ${
+                  isDark ? 'border-slate-800' : 'border-[#E2E8F0]'
+                }`}
+              >
                 <div className="flex items-center justify-between">
                   <span className="text-slate-400">Delivery Status:</span>
-                  <span className="font-semibold text-blue-400">{service.availability}</span>
+                  <span className="font-semibold text-[#155EEF]">{service.availability}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-400">Code Ownership:</span>
-                  <span className={isDark ? 'text-slate-200' : 'text-slate-800'}>
+                  <span className={isDark ? 'text-slate-200' : 'text-[#102B59] font-medium'}>
                     Clean, Maintainable Handover
                   </span>
                 </div>
@@ -304,7 +312,11 @@ export const ServiceDetailView: React.FC<ServiceDetailViewProps> = ({
             </div>
           </div>
 
-          <p className="text-xs text-slate-400 pt-6 mt-6 border-t border-slate-800/60">
+          <p
+            className={`text-xs text-slate-400 pt-6 mt-6 border-t ${
+              isDark ? 'border-slate-800' : 'border-[#E2E8F0]'
+            }`}
+          >
             Free-tier cloud hosting and open-standard frameworks prioritized wherever eligible.
           </p>
         </div>
@@ -411,7 +423,10 @@ export const ServiceDetailView: React.FC<ServiceDetailViewProps> = ({
       )}
 
       {/* Embedded Request a Quote Form Pre-Selected for this Service */}
-      <section id="service-quote-section" className="pt-4 border-t border-slate-800/80">
+      <section
+        id="service-quote-section"
+        className={`pt-4 border-t ${isDark ? 'border-slate-800' : 'border-[#E2E8F0]'}`}
+      >
         <ContactQuoteSection
           company={company}
           services={allServices}

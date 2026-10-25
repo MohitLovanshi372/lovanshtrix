@@ -91,14 +91,24 @@ function loadStore(): LovanstrixStore {
       founderName: parsed.company?.founderName || INITIAL_STORE.company.founderName,
       founderRole: parsed.company?.founderRole || INITIAL_STORE.company.founderRole,
       founderBio: parsed.company?.founderBio || INITIAL_STORE.company.founderBio,
+      vision:
+        parsed.company?.vision?.toLowerCase().includes('internship')
+          ? INITIAL_STORE.company.vision
+          : parsed.company?.vision || INITIAL_STORE.company.vision,
+      careerStatusBanner:
+        parsed.company?.careerStatusBanner?.toLowerCase().includes('internship')
+          ? INITIAL_STORE.company.careerStatusBanner
+          : parsed.company?.careerStatusBanner || INITIAL_STORE.company.careerStatusBanner,
     };
 
-    const upgradedProjects =
+    const rawProjects =
       Array.isArray(parsed.projects) &&
       parsed.projects.length >= INITIAL_STORE.projects.length &&
       parsed.projects[0]?.problemStatement
         ? parsed.projects
         : structuredClone(INITIAL_STORE.projects);
+
+    const upgradedProjects = rawProjects.filter((p) => p.id !== 'proj-internship-portal');
 
     const merged: LovanstrixStore = {
       ...INITIAL_STORE,
@@ -109,21 +119,13 @@ function loadStore(): LovanstrixStore {
         : parsed.services,
       solutions:
         Array.isArray(parsed.solutions) && parsed.solutions.length > 0
-          ? parsed.solutions
+          ? structuredClone(INITIAL_STORE.solutions)
           : structuredClone(INITIAL_STORE.solutions),
       projects: upgradedProjects,
-      internshipListings: Array.isArray(parsed.internshipListings)
-        ? parsed.internshipListings
-        : structuredClone(INITIAL_STORE.internshipListings),
-      internshipApplications: Array.isArray(parsed.internshipApplications)
-        ? parsed.internshipApplications
-        : [],
-      internshipDocuments: Array.isArray(parsed.internshipDocuments)
-        ? parsed.internshipDocuments
-        : [],
-      certificateRecords: Array.isArray(parsed.certificateRecords)
-        ? parsed.certificateRecords
-        : [],
+      internshipListings: [],
+      internshipApplications: [],
+      internshipDocuments: [],
+      certificateRecords: [],
       adminAuditLogs: Array.isArray(parsed.adminAuditLogs) ? parsed.adminAuditLogs : [],
     };
 

@@ -95,7 +95,7 @@ export const AdminConsoleSection: React.FC<AdminConsoleSectionProps> = ({
   // New Career Opening Form State
   const [openTitle, setOpenTitle] = useState('');
   const [openTrack, setOpenTrack] = useState<CareerOpening['track']>('Full-Stack Development');
-  const [openType, setOpenType] = useState<CareerOpening['type']>('Internship');
+  const [openType, setOpenType] = useState<CareerOpening['type']>('Project Collaboration');
   const [openEligibility, setOpenEligibility] = useState('');
   const [openDuration, setOpenDuration] = useState('3 Months (Remote)');
   const [openResponsibilities, setOpenResponsibilities] = useState('');
@@ -399,7 +399,7 @@ export const AdminConsoleSection: React.FC<AdminConsoleSectionProps> = ({
       setOpenEligibility('');
       setOpenResponsibilities('');
       setOpenLink('');
-      notifySaved('Official career/internship opening published.');
+      notifySaved('Official career opening published.');
     }
   };
 
@@ -739,13 +739,13 @@ export const AdminConsoleSection: React.FC<AdminConsoleSectionProps> = ({
                 isDark ? 'bg-[#0B1224] border-slate-800' : 'bg-white border-slate-200'
               }`}
             >
-              <p className="text-xs text-slate-400">Talent Pool &amp; Internships</p>
+              <p className="text-xs text-slate-400">Talent Pool &amp; Career Openings</p>
               <p
                 className={`mt-2 font-display text-3xl font-bold tabular-nums ${
                   isDark ? 'text-white' : 'text-slate-900'
                 }`}
               >
-                {store.internshipApplications?.length || 0}
+                {store.openings.length}
               </p>
               <p className="mt-1 text-xs text-blue-400">
                 {store.careerSubmissions.length} career interest registrations
@@ -785,8 +785,8 @@ export const AdminConsoleSection: React.FC<AdminConsoleSectionProps> = ({
                     <td className="py-3.5 pr-4 font-medium">Express Backend &amp; Local Store</td>
                     <td className="py-3.5 px-4 text-emerald-400 font-medium">Functional Now</td>
                     <td className="py-3.5 pl-4 text-slate-400">
-                      Persists company copy, 11 services, portfolio projects, enquiries, and
-                      internships in <code className="font-mono">data/lovanstrix-store.json</code>.
+                      Persists company copy, 11 services, portfolio projects, enquiries, and career
+                      openings in <code className="font-mono">data/lovanstrix-store.json</code>.
                     </td>
                   </tr>
                   <tr>
@@ -1442,7 +1442,7 @@ export const AdminConsoleSection: React.FC<AdminConsoleSectionProps> = ({
                   type="text"
                   value={projLiveUrl}
                   onChange={(e) => setProjLiveUrl(e.target.value)}
-                  placeholder="https://... or /internships"
+                  placeholder="https://... or #solutions"
                   className={`w-full rounded-lg border px-3 py-2 text-sm ${
                     isDark
                       ? 'bg-[#050814] border-slate-700 text-white'
@@ -1680,7 +1680,7 @@ export const AdminConsoleSection: React.FC<AdminConsoleSectionProps> = ({
         </div>
       )}
 
-      {/* TAB 6: CAREERS & INTERNSHIP OPENINGS */}
+      {/* TAB 6: CAREERS & ROLE OPENINGS */}
       {activeTab === 'careers' && store && (
         <div className="space-y-12">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
@@ -1691,7 +1691,7 @@ export const AdminConsoleSection: React.FC<AdminConsoleSectionProps> = ({
               }`}
             >
               <h2 className="font-display text-lg font-bold">
-                Publish Official Internship or Role Opening
+                Publish Official Role or Collaboration Opening
               </h2>
               <p className="text-xs text-slate-400">
                 Publishing an opening here makes it visible on the public Careers page.
@@ -1704,7 +1704,7 @@ export const AdminConsoleSection: React.FC<AdminConsoleSectionProps> = ({
                   required
                   value={openTitle}
                   onChange={(e) => setOpenTitle(e.target.value)}
-                  placeholder="e.g. Frontend Engineering Intern (React & TypeScript)"
+                  placeholder="e.g. Frontend Engineer (React & TypeScript)"
                   className={`w-full rounded-lg border px-3 py-2 text-sm ${
                     isDark
                       ? 'bg-[#050814] border-slate-700 text-white'
@@ -1744,7 +1744,7 @@ export const AdminConsoleSection: React.FC<AdminConsoleSectionProps> = ({
                         : 'bg-white border-slate-300 text-slate-900'
                     }`}
                   >
-                    <option value="Internship">Internship</option>
+                    <option value="Project Collaboration">Project Collaboration</option>
                     <option value="Part-Time Collaboration">Part-Time Collaboration</option>
                     <option value="Full-Time Role">Full-Time Role</option>
                   </select>
@@ -1790,7 +1790,7 @@ export const AdminConsoleSection: React.FC<AdminConsoleSectionProps> = ({
                   required
                   value={openEligibility}
                   onChange={(e) => setOpenEligibility(e.target.value)}
-                  placeholder="CS/IT students or self-taught builders with React fundamentals"
+                  placeholder="Developers or builders with strong React and TypeScript fundamentals"
                   className={`w-full rounded-lg border px-3 py-2 text-sm ${
                     isDark
                       ? 'bg-[#050814] border-slate-700 text-white'
@@ -1849,8 +1849,8 @@ export const AdminConsoleSection: React.FC<AdminConsoleSectionProps> = ({
                 </h3>
                 {store.openings.length === 0 ? (
                   <p className="text-xs text-slate-400">
-                    No openings created yet. The public Careers page accurately states that
-                    internships are not currently open.
+                    No openings created yet. The public Careers page accurately states that role
+                    openings are not currently published.
                   </p>
                 ) : (
                   store.openings.map((op) => (

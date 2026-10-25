@@ -136,7 +136,7 @@ export interface CareerOpening {
     | 'UI/UX Design'
     | 'AI & Software Research'
     | 'General Engineering';
-  type: 'Internship' | 'Part-Time Collaboration' | 'Full-Time Role';
+  type: 'Project Collaboration' | 'Part-Time Collaboration' | 'Full-Time Role';
   status: 'Open' | 'Closed';
   eligibility: string;
   duration: string;
@@ -405,7 +405,7 @@ export const INITIAL_STORE: LovanstrixStore = {
       'Founded as an emerging technology venture, Lovanstrix works directly with individuals, founders, educators, and growing businesses to turn practical ideas into clean, maintainable digital products and software systems.',
     mission: 'Build useful, accessible, and innovative digital solutions.',
     vision:
-      'To grow into a multidisciplinary technology company that develops useful digital products, builds innovative web and AI applications, collaborates with talented developers, and creates structured internship and learning opportunities.',
+      'To grow into a multidisciplinary technology company that develops useful digital products, builds innovative web and AI applications, and collaborates with talented engineers and builders.',
     stageDisclosure:
       'Lovanstrix is an emerging early-stage technology venture. We focus on direct founder-led engineering, transparent project scoping, and verifiable prototypes—never fabricating client logos, team headcount, or commercial claims.',
     email: 'contact@lovanstrix.tech',
@@ -414,7 +414,7 @@ export const INITIAL_STORE: LovanstrixStore = {
     linkedinUrl: 'https://linkedin.com/company/lovanstrix',
     portfolioComingSoonMode: false,
     careerStatusBanner:
-      'Lovanstrix is growing its engineering collaborations and mentored student internship cohorts. Explore published tracks or register in our talent network for upcoming opportunities.',
+      'Lovanstrix is growing its engineering and design collaborations. Explore published roles or register in our talent network for upcoming project opportunities.',
     founderName: 'Founder & Lead Engineer (Lovanstrix)',
     founderRole: 'Founder-Led Engineering & Product Architecture',
     founderBio:
@@ -502,9 +502,9 @@ export const INITIAL_STORE: LovanstrixStore = {
       title: 'Web Application Development',
       category: 'Custom Web Software',
       summary:
-        'Admin dashboards, management portals, booking systems, student/client portals, and full-stack web applications.',
+        'Admin dashboards, management portals, booking systems, client portals, and full-stack web applications.',
       overview:
-        'We build interactive, state-driven web applications that replace manual spreadsheets and disconnected forms. From role-based admin consoles and student/internship portals to internal workflow trackers, our web apps combine responsive React frontends with structured Node.js backends.',
+        'We build interactive, state-driven web applications that replace manual spreadsheets and disconnected forms. From role-based admin consoles and client portals to internal workflow trackers, our web apps combine responsive React frontends with structured Node.js backends.',
       problemsAddressed: [
         'Manual operations tracked across scattered spreadsheets and email threads',
         'Need for role-based dashboards where admins and users have scoped permissions',
@@ -522,7 +522,7 @@ export const INITIAL_STORE: LovanstrixStore = {
         {
           question: 'Can you build portals with both user and admin dashboards?',
           answer:
-            'Yes. For example, Lovanstrix’s own Internship Management System includes a public portal, scoped Student Dashboard, Admin Console, and public verification route.',
+            'Yes. We architect multi-role web applications with scoped client views, administrative management consoles, and secure backend APIs.',
         },
       ],
       availability: 'Available for New Projects',
@@ -820,18 +820,18 @@ export const INITIAL_STORE: LovanstrixStore = {
       title: 'Custom Web Portals',
       category: 'Scoped User & Admin Portals',
       useCase:
-        'For organizations that need a dedicated self-service portal where clients, students, or applicants can sign in, check status updates, and download official documents.',
+        'For organizations that need a dedicated self-service portal where clients, members, or partners can sign in, check status updates, and download official documents.',
       summary:
-        'Secure, multi-role web portals with scoped authentication, status timelines, task tracking, and public credential verification.',
+        'Secure, multi-role web portals with scoped authentication, status timelines, task tracking, and document management.',
       potentialFeatures: [
-        'Scoped applicant/client login using verified credentials or reference keys',
+        'Scoped client/member login using verified credentials or reference keys',
         'Real-time status stepper (e.g. Submitted → Under Review → Approved)',
-        'Private document vault for authorized PDF offer letters, invoices, or certificates',
-        'Public verification lookup endpoint for issued credentials',
+        'Private document vault for authorized PDF proposals, invoices, or reports',
+        'Role-guarded administrative review and approval workflows',
       ],
       recommendedService: 'Custom Software Solutions',
       integrationDisclosure:
-        'Demonstrated live on this website via the Lovanstrix Internship & Student Portal (/internships and /student-dashboard).',
+        'Engineered with modular React frontends and Node.js REST APIs tailored to your organization’s workflow.',
       readinessStatus: 'Available for Scoping',
     },
     {
@@ -937,29 +937,6 @@ export const INITIAL_STORE: LovanstrixStore = {
   ],
   projects: [
     {
-      id: 'proj-internship-portal',
-      title: 'Lovanstrix Internship & Credential Management System',
-      category: 'Web Applications',
-      classification: 'Published Project',
-      objective:
-        'Full-stack internship lifecycle portal with track publishing, private resume intake, scoped student dashboard, versioned PDF offer letters/certificates, and public verification.',
-      problemStatement:
-        'Early-stage organizations often manage student internship applications via scattered emails and issue unverified documents without a central audit trail or public authenticity check.',
-      proposedSolution:
-        'Built an integrated end-to-end portal featuring status-gated applications, private server-side resume storage, signatory-guarded PDF generation, and a rate-limited public certificate verification route.',
-      technologies: ['React 19', 'TypeScript', 'Node.js', 'Express', 'jsPDF'],
-      features: [
-        'Public track directory (/internships) with transparent stipend and eligibility disclosures',
-        'Scoped Student Dashboard (/student-dashboard) and Admin Portal (/admin/internships)',
-        'Public Certificate Verification (/verify-certificate/:id) with append-only audit logs',
-      ],
-      liveDemoUrl: '#internships',
-      githubUrl: 'https://github.com/lovanstrix',
-      visualType: 'webapp',
-      published: true,
-      publishedAt: '2026',
-    },
-    {
       id: 'proj-enquiry-portal',
       title: 'Agency Service & Quote Management Architecture',
       category: 'Web Applications',
@@ -1043,7 +1020,7 @@ export const INITIAL_STORE: LovanstrixStore = {
       features: [
         'Lightweight payload specification for edge microcontrollers',
         'Configurable threshold rule evaluation prototype',
-        'Foundation for future student IoT internship research projects',
+        'Foundation for future IoT and connected sensor research projects',
       ],
       liveDemoUrl: '#solutions',
       visualType: 'iot',
@@ -1168,195 +1145,7 @@ export const INITIAL_STORE: LovanstrixStore = {
   openings: [],
   enquiries: [],
   careerSubmissions: [],
-  internshipListings: [
-    {
-      id: 'int-frontend-2026',
-      code: 'LX-TRK-FE01',
-      title: 'Frontend Web Engineering Track (React & TypeScript)',
-      department: 'Frontend Development',
-      description:
-        'Structured project-based learning track focused on building accessible, responsive web interfaces, reusable design-system components, and interactive 3D/2D browser experiences.',
-      techStack: ['React 19', 'TypeScript', 'Tailwind CSS', 'Three.js', 'Vite'],
-      workMode: 'Remote',
-      compensationType: 'Unpaid / Academic Learning',
-      stipendDetails:
-        'Unpaid educational/project track by default; specific stipend terms (if applicable) are disclosed in writing on official offer letters.',
-      duration: '8 Weeks',
-      weeklyCommitment: '12–15 hours / week (Flexible around college classes)',
-      eligibility:
-        'Undergraduate CS/IT/Engineering students or self-taught developers with foundational HTML, CSS, and JavaScript/TypeScript knowledge.',
-      requiredSkills: ['React Fundamentals', 'TypeScript Basics', 'Responsive CSS', 'Git Version Control'],
-      responsibilities: [
-        'Build modular UI components following WCAG AA contrast and keyboard accessibility standards',
-        'Collaborate on state management, form validation, and REST API integration',
-        'Participate in code reviews and weekly milestone demonstrations',
-      ],
-      learningObjectives: [
-        'Master production TypeScript component patterns and clean state architecture',
-        'Learn responsive layout engineering and performance optimization',
-        'Understand end-to-end Git workflows and technical documentation',
-      ],
-      selectionCriteria:
-        'Evaluated on code clarity, problem-solving fundamentals, portfolio/GitHub repositories, and learning motivation. Submitting an application does not guarantee selection.',
-      positionsCount: 3,
-      deadline: '30 November 2026',
-      status: 'Upcoming',
-      createdAt: '2026-10-21T00:00:00.000Z',
-    },
-    {
-      id: 'int-fullstack-2026',
-      code: 'LX-TRK-FS02',
-      title: 'Full-Stack Web Application Engineering Track',
-      department: 'Full-Stack Development',
-      description:
-        'Hands-on engineering track covering REST API architecture, server-side validation, database schema design, and full-stack React + Node.js application development.',
-      techStack: ['React', 'TypeScript', 'Node.js', 'Express', 'PostgreSQL / Firestore'],
-      workMode: 'Remote',
-      compensationType: 'Unpaid / Academic Learning',
-      stipendDetails:
-        'Unpaid learning cohort unless a client-sponsored stipend is explicitly specified when the cohort opens.',
-      duration: '10 Weeks',
-      weeklyCommitment: '15 hours / week',
-      eligibility:
-        'Students or early-career developers familiar with both frontend components and basic Node.js/REST concepts.',
-      requiredSkills: ['TypeScript', 'React', 'Node.js & Express', 'JSON & REST APIs'],
-      responsibilities: [
-        'Develop and test backend API endpoints with strict input validation',
-        'Connect frontend dashboards with secure server-side data persistence',
-        'Document API schemas, error states, and deployment configurations',
-      ],
-      learningObjectives: [
-        'Design role-based authorization and secure server-side API proxies',
-        'Model relational and document database schemas cleanly',
-        'Deploy full-stack applications to modern cloud runtimes',
-      ],
-      selectionCriteria:
-        'Reviewed based on demonstrated full-stack curiosity, personal projects, and technical clarity.',
-      positionsCount: 2,
-      deadline: '15 December 2026',
-      status: 'Upcoming',
-      createdAt: '2026-10-21T00:00:00.000Z',
-    },
-    {
-      id: 'int-aiml-2026',
-      code: 'LX-TRK-AI03',
-      title: 'Applied AI & LLM Workflow Integration Track',
-      department: 'AI/ML',
-      description:
-        'Practical exploration of integrating foundation models into web applications using server-side API proxies, structured JSON schemas, and deterministic guardrails.',
-      techStack: ['TypeScript', 'Node.js', 'Gemini API', 'Structured Outputs', 'React'],
-      workMode: 'Remote',
-      compensationType: 'Unpaid / Academic Learning',
-      stipendDetails:
-        'Unpaid R&D exploration track. Any stipend or project grant is stated prior to onboarding.',
-      duration: '8 Weeks',
-      weeklyCommitment: '10–12 hours / week',
-      eligibility:
-        'Students interested in applied AI engineering, prompt structuring, and full-stack web integration.',
-      requiredSkills: ['JavaScript / TypeScript', 'API Integration', 'JSON Schema Design'],
-      responsibilities: [
-        'Prototype server-side AI assistants with structured JSON output validation',
-        'Design fallback templates when external LLM APIs are offline or rate-limited',
-        'Evaluate latency, prompt safety, and user experience clarity',
-      ],
-      learningObjectives: [
-        'Build secure server-side LLM proxy endpoints without exposing API keys',
-        'Combine deterministic business rules with generative AI workflows',
-      ],
-      selectionCriteria:
-        'Assessed on practical software engineering fundamentals and clear understanding of API security.',
-      positionsCount: 2,
-      deadline: '15 December 2026',
-      status: 'Upcoming',
-      createdAt: '2026-10-21T00:00:00.000Z',
-    },
-    {
-      id: 'int-uiux-2026',
-      code: 'LX-TRK-UX04',
-      title: 'UI/UX Product & Design Systems Track',
-      department: 'UI/UX Design',
-      description:
-        'Focused on wireframing, high-contrast dark/light interface systems, accessible typography, and translating complex workflows into intuitive layouts.',
-      techStack: ['Figma', 'Design Tokens', 'WCAG AA Accessibility', 'Responsive CSS'],
-      workMode: 'Remote',
-      compensationType: 'Unpaid / Academic Learning',
-      stipendDetails: 'Unpaid educational mentorship track.',
-      duration: '6 Weeks',
-      weeklyCommitment: '10 hours / week',
-      eligibility: 'Design and frontend students with a portfolio of wireframes or UI concepts.',
-      requiredSkills: ['Wireframing', 'Visual Hierarchy', 'Responsive Layouts', 'Accessibility'],
-      responsibilities: [
-        'Create clean user flows and component specifications for web applications',
-        'Audit color contrast, keyboard focus states, and mobile usability',
-      ],
-      learningObjectives: [
-        'Structure scalable design systems that translate directly into CSS/Tailwind code',
-        'Eliminate visual clutter in data-dense dashboards and forms',
-      ],
-      selectionCriteria: 'Portfolio review focusing on usability, clarity, and attention to detail.',
-      positionsCount: 2,
-      deadline: '30 November 2026',
-      status: 'Upcoming',
-      createdAt: '2026-10-21T00:00:00.000Z',
-    },
-    {
-      id: 'int-backend-2026',
-      code: 'LX-TRK-BE05',
-      title: 'Backend API & Database Architecture Track',
-      department: 'Backend Development',
-      description:
-        'Focused on building reliable Node.js/Express services, authentication middleware, audit logging, and document/relational persistence.',
-      techStack: ['Node.js', 'Express', 'TypeScript', 'PostgreSQL', 'Firestore'],
-      workMode: 'Remote',
-      compensationType: 'Unpaid / Academic Learning',
-      stipendDetails: 'Unpaid learning track.',
-      duration: '8 Weeks',
-      weeklyCommitment: '12 hours / week',
-      eligibility: 'Students with solid programming fundamentals in TypeScript/JavaScript or Python.',
-      requiredSkills: ['Node.js', 'REST APIs', 'SQL or NoSQL Basics', 'Security Fundamentals'],
-      responsibilities: [
-        'Build authenticated API routes with strict role and ownership checks',
-        'Implement rate limiting, audit trails, and structured error handling',
-      ],
-      learningObjectives: [
-        'Understand server-side security, session tokens, and data privacy',
-        'Write maintainable, type-safe backend services',
-      ],
-      selectionCriteria: 'Evaluated on backend logic clarity and security awareness.',
-      positionsCount: 2,
-      deadline: '15 December 2026',
-      status: 'Upcoming',
-      createdAt: '2026-10-21T00:00:00.000Z',
-    },
-    {
-      id: 'int-iot-2026',
-      code: 'LX-TRK-IOT06',
-      title: 'IoT Telemetry & Web Control Interface Track',
-      department: 'IoT',
-      description:
-        'Experimental R&D track exploring how edge sensor nodes transmit telemetry to real-time web dashboards.',
-      techStack: ['Node.js', 'MQTT / HTTP Ingestion', 'TypeScript', 'Web Dashboards'],
-      workMode: 'Remote',
-      compensationType: 'Unpaid / Academic Learning',
-      stipendDetails: 'Unpaid experimental research track.',
-      duration: '8 Weeks',
-      weeklyCommitment: '10 hours / week',
-      eligibility: 'Electronics, IoT, or CS students interested in hardware-to-cloud data pipelines.',
-      requiredSkills: ['JSON Telemetry', 'Basic Microcontrollers / Simulation', 'Web APIs'],
-      responsibilities: [
-        'Simulate sensor payload streams and build web visualization views',
-        'Document lightweight payload schemas for low-power devices',
-      ],
-      learningObjectives: [
-        'Bridge embedded/simulated sensor data with modern web applications',
-      ],
-      selectionCriteria: 'Interest in embedded systems and web telemetry visualization.',
-      positionsCount: 2,
-      deadline: '31 December 2026',
-      status: 'Upcoming',
-      createdAt: '2026-10-21T00:00:00.000Z',
-    },
-  ],
+  internshipListings: [],
   internshipApplications: [],
   internshipDocuments: [],
   certificateRecords: [],
