@@ -351,7 +351,7 @@ function App() {
     { id: "careers", label: "Careers" },
     { id: "contact", label: "Contact" }
   ];
-  return <div className="min-h-screen bg-[#9CADB5] p-0 sm:p-4 lg:p-8">
+  return <div className="lovanstrix-page-outer min-h-screen bg-[#9CADB5] p-0 sm:p-4 lg:p-8">
       <div
     className={`lovanstrix-intro ${showIntro ? "is-open" : "is-closed"}`}
     aria-hidden={!showIntro}
@@ -407,7 +407,7 @@ function App() {
       </div>
 
       <div
-    className={`mx-auto max-w-[1600px] min-h-screen overflow-hidden shadow-[0_30px_90px_rgba(15,23,42,0.16)] transition-colors duration-200 ${isDark ? "bg-[#050814] text-slate-100" : "bg-[#E4E7EF] text-[#111318]"}`}
+    className={`lovanstrix-page-panel mx-auto max-w-[1600px] min-h-screen overflow-hidden shadow-[0_30px_90px_rgba(15,23,42,0.16)] transition-colors duration-200 ${isDark ? "bg-[#050814] text-slate-100" : "bg-[#E4E7EF] text-[#111318]"}`}
   >
       {
     /* STICKY HEADER & NAVIGATION BAR */
@@ -608,7 +608,7 @@ function App() {
             {
     /* SECTION 1: PREMIUM REFERENCE-INSPIRED HERO */
   }
-            <section className="relative grid grid-cols-1 lg:grid-cols-12 gap-9 lg:gap-8 xl:gap-12 items-center pt-3 sm:pt-5 pb-8 min-h-[520px]">
+            <section className="lovanstrix-home-hero relative grid grid-cols-1 lg:grid-cols-12 gap-9 lg:gap-8 xl:gap-12 items-center pt-3 sm:pt-5 pb-8 min-h-[520px]">
               <div className="lg:col-span-6 flex flex-col justify-center py-5 sm:py-9 lg:py-12">
                 <div className="inline-flex items-center gap-2.5 mb-5 text-[12px] font-medium text-slate-700">
                   <span className="inline-flex items-center gap-2 rounded-full bg-white/85 border border-white px-4 py-2 shadow-sm">
@@ -619,7 +619,7 @@ function App() {
                   <span className="text-slate-500">Build</span>
                 </div>
 
-                <h1 className="font-display text-[47px] leading-[1.03] tracking-[-0.055em] sm:text-[58px] xl:text-[70px] font-medium text-[#101216] text-balance max-w-[690px]">
+                <h1 className="lovanstrix-hero-title font-display text-[47px] leading-[1.03] tracking-[-0.055em] sm:text-[58px] xl:text-[70px] font-medium text-[#101216] text-balance max-w-[690px]">
                   {company.heroHeading.split(" ").map((word, index, words) => <React.Fragment key={`${word}-${index}`}>
                       <span
     className={`lovanstrix-heading-word ${showIntro ? "is-paused" : ""}`}
@@ -693,15 +693,18 @@ function App() {
                 </div>
                 {heroVisualMode === "3d" ? <div className="lovanstrix-3d-panel relative overflow-hidden rounded-[26px] sm:rounded-[32px]">
                     <Interactive3DCore isDark={isDark} compact />
-                  </div> : <figure className="lovanstrix-hero-figure relative mx-auto w-full max-w-[650px] overflow-hidden rounded-[26px] sm:rounded-[32px]">
+                  </div> : <figure className="lovanstrix-logo-showcase relative mx-auto w-full max-w-[650px]">
                     <img
-    src="/images/lovanstrix-hero-orbit.svg"
-    alt="Lovanstrix abstract glass cube with blue and violet fluid details surrounded by orbital lines"
-    className="lovanstrix-hero-art block h-auto w-full"
-    width="1200"
-    height="1000"
-    fetchPriority="high"
-  />
+                      src="/images/lovanshtrix-premium-brand.svg"
+                      alt="Lovanshtrix blue and gold LX logo with Ideas Into Innovation tagline"
+                      width="800"
+                      height="800"
+                      fetchPriority="high"
+                    />
+                    <figcaption className="lovanstrix-glass-note">
+                      <span>LOVANSHTRIX / PREMIUM DIGITAL EXPERIENCES</span>
+                      <span aria-hidden="true">✦</span>
+                    </figcaption>
                   </figure>}
                 <div className="absolute bottom-5 left-3 sm:bottom-8 sm:left-6 z-20 inline-flex items-center gap-2 rounded-full border border-white/90 bg-white/85 px-3.5 py-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-600 shadow-md backdrop-blur-md">
                   <span className="h-1.5 w-1.5 rounded-full bg-blue-600" />
