@@ -719,3 +719,85 @@ html:not(.dark) body {
   .lovanstrix-wave-hero::before { animation:none!important; }
   .lovanstrix-wave-3d-button { transition:none!important; }
 }
+
+
+/* Product-launch hero: use the user's uploaded blue/gold ribbon as real full-bleed artwork.
+   No substitute stock photo, no separate image card. Home-only selectors protect inner pages. */
+.lovanstrix-ribbon-home > .lovanstrix-wave-hero.lovanstrix-launch-hero {
+  width: min(1400px, calc(100% + 260px), calc(100vw - 50px));
+  max-width: none;
+  margin-left: 50%;
+  transform: translateX(-50%);
+  min-height: clamp(640px, 77vh, 850px);
+  padding: clamp(32px, 6vw, 94px) clamp(26px, 7vw, 108px) !important;
+  overflow: hidden;
+  border: 1px solid rgba(220, 175, 103, .32) !important;
+  border-radius: clamp(24px, 2.8vw, 40px) !important;
+  background-color: #040817 !important;
+  background-image:
+    linear-gradient(90deg,
+      rgba(4, 8, 22, .94) 0%,
+      rgba(4, 8, 22, .80) 27%,
+      rgba(4, 8, 22, .39) 51%,
+      rgba(4, 8, 22, .06) 86%),
+    linear-gradient(0deg, rgba(5, 10, 28, .55) 0%, transparent 42%),
+    url("/images/lovanshtrix-wave.png") !important;
+  background-size: cover, cover, cover !important;
+  background-position: center, center, 57% 50% !important;
+  background-repeat: no-repeat !important;
+  box-shadow:
+    0 34px 90px rgba(2, 9, 30, .26),
+    inset 0 0 0 1px rgba(255, 255, 255, .035);
+}
+.lovanstrix-ribbon-home .lovanstrix-wave-content {
+  max-width: min(660px, 100%);
+}
+.lovanstrix-ribbon-home .lovanstrix-wave-hero .lovanstrix-hero-title {
+  font-size: clamp(50px, 5.4vw, 88px);
+  font-weight: 680 !important;
+  line-height: 1.035;
+  letter-spacing: -.062em;
+  text-shadow: 0 8px 34px rgba(0, 0, 0, .28);
+}
+.lovanstrix-ribbon-home .lovanstrix-wave-hero .lovanstrix-launch-subtitle {
+  color: #e0e7f4 !important;
+  max-width: 500px !important;
+}
+.lovanstrix-ribbon-home .lovanstrix-wave-hero .lovanstrix-launch-values {
+  max-width: 540px;
+  border-top-color: rgba(244, 216, 164, .26) !important;
+}
+.lovanstrix-ribbon-home .lovanstrix-wave-hero .lovanstrix-launch-actions button:first-child {
+  background: linear-gradient(110deg, #ffe4a0, #d8a248) !important;
+  box-shadow: 0 12px 36px rgba(206, 145, 51, .22);
+}
+@media (min-width: 1100px) {
+  .lovanstrix-ribbon-home > .lovanstrix-wave-hero.lovanstrix-launch-hero {
+    background-position: center, center, 58% 48% !important;
+  }
+}
+@media (max-width: 767px) {
+  .lovanstrix-ribbon-home > .lovanstrix-wave-hero.lovanstrix-launch-hero {
+    width: calc(100vw - 18px);
+    min-height: 660px;
+    padding: 44px 20px !important;
+    border-radius: 24px !important;
+    background-image:
+      linear-gradient(90deg, rgba(3, 8, 22, .91), rgba(3, 8, 22, .61)),
+      linear-gradient(0deg, rgba(4, 8, 22, .73), transparent 60%),
+      url("/images/lovanshtrix-wave.png") !important;
+    background-position: center, center, 64% 50% !important;
+  }
+  .lovanstrix-ribbon-home .lovanstrix-wave-hero .lovanstrix-hero-title {
+    font-size: clamp(42px, 10.3vw, 60px);
+  }
+  .lovanstrix-ribbon-home .lovanstrix-wave-hero .lovanstrix-launch-subtitle {
+    font-size: 15px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lovanstrix-ribbon-home .lovanstrix-wave-hero,
+  .lovanstrix-ribbon-home .lovanstrix-wave-hero::before {
+    animation: none !important;
+  }
+}
