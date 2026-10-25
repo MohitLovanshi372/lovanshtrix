@@ -410,3 +410,107 @@ html:not(.dark) body { background: #dbe4ef; }
     transform: none !important;
   }
 }
+
+
+/* Lovanshtrix product-launch glass design, October 2026 */
+html:not(.dark) body {
+  background: #08142d !important;
+}
+.lovanstrix-page-outer {
+  background:
+    radial-gradient(circle at 12% 8%, rgba(18,110,255,.32),transparent 34%),
+    radial-gradient(circle at 88% 20%, rgba(213,169,81,.20),transparent 32%),
+    linear-gradient(145deg,#061126 0%,#101f41 54%,#060e1e 100%) !important;
+}
+.lovanstrix-page-panel {
+  position: relative;
+  isolation: isolate;
+  background:
+    radial-gradient(ellipse at 91% 1%,rgba(80,154,253,.21),transparent 42%),
+    radial-gradient(ellipse at 0% 38%,rgba(217,164,65,.10),transparent 36%),
+    linear-gradient(145deg,#f8fbff 0%,#eaf1fb 48%,#f8faff 100%) !important;
+  border: 1px solid rgba(243,213,139,.27);
+  border-radius: 20px;
+}
+.lovanstrix-page-panel::before {
+  content:"";
+  position:absolute;
+  pointer-events:none;
+  inset:0;
+  z-index:-1;
+  border-radius:inherit;
+  background-image:linear-gradient(rgba(17,67,143,.025) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(17,67,143,.025) 1px,transparent 1px);
+  background-size:58px 58px;
+  mask-image:linear-gradient(to bottom,black,transparent 55%);
+}
+.lovanstrix-site-header {
+  background: rgba(246,250,255,.74) !important;
+  -webkit-backdrop-filter:blur(24px) saturate(1.4);
+  backdrop-filter:blur(24px) saturate(1.4);
+  box-shadow:0 12px 36px rgba(7,25,56,.07);
+  border-bottom:1px solid rgba(195,153,74,.34)!important;
+}
+.lovanstrix-home-hero {
+  position:relative;
+  isolation:isolate;
+  padding-inline:clamp(16px,3vw,32px);
+  border:1px solid rgba(230,193,121,.35);
+  border-radius:32px;
+  background:
+    radial-gradient(circle at 80% 25%,rgba(74,143,239,.16),transparent 40%),
+    linear-gradient(145deg,rgba(255,255,255,.88),rgba(226,237,255,.69));
+  box-shadow:0 24px 70px rgba(9,34,80,.09), inset 0 1px rgba(255,255,255,.85);
+  -webkit-backdrop-filter:blur(20px);
+  backdrop-filter:blur(20px);
+}
+.lovanstrix-home-hero::before {
+  content:"";
+  position:absolute;
+  top:-2px;left:8%;right:8%;height:2px;
+  background:linear-gradient(90deg,transparent,#e5ba65,transparent);
+  opacity:.76;
+}
+.lovanstrix-hero-title {
+  background:linear-gradient(110deg,#071b40 9%,#1558b1 45%,#956426 78%,#071b40 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent!important;
+}
+.lovanstrix-logo-showcase {
+  position:relative;
+  border:1px solid rgba(229,188,101,.58);
+  border-radius:30px;
+  overflow:hidden;
+  background:linear-gradient(140deg,rgba(255,255,255,.97),rgba(232,242,255,.94));
+  box-shadow:0 26px 64px rgba(6,26,69,.15),inset 0 1px rgba(255,255,255,.95);
+  padding:18px;
+  transition:transform .5s ease,box-shadow .5s ease;
+}
+.lovanstrix-logo-showcase:hover {
+  transform:translateY(-5px);
+  box-shadow:0 32px 76px rgba(7,40,109,.2),0 0 0 5px rgba(216,170,77,.09);
+}
+.lovanstrix-logo-showcase img {display:block;width:100%;height:auto;object-fit:contain;border-radius:20px}
+.lovanstrix-glass-note {
+  display:flex;align-items:center;justify-content:space-between;
+  gap:12px;margin-top:14px;padding:12px 16px;
+  border:1px solid rgba(216,174,92,.28);
+  border-radius:16px;
+  background:rgba(255,255,255,.7);
+  -webkit-backdrop-filter:blur(14px);
+  backdrop-filter:blur(14px);
+  color:#31527f;font-size:11px;letter-spacing:.12em;font-weight:700;
+}
+.lovanstrix-home-hero button {transition:transform .25s ease, box-shadow .25s ease;}
+.lovanstrix-home-hero button:hover {box-shadow:0 12px 28px rgba(22,86,186,.17);}
+@media(max-width:640px){
+  .lovanstrix-page-outer{padding:0!important;}
+  .lovanstrix-page-panel{border-radius:0;}
+  .lovanstrix-home-hero{border-radius:22px;padding-inline:15px;}
+  .lovanstrix-logo-showcase{border-radius:22px;padding:9px;}
+}
+@media(prefers-reduced-motion:reduce){
+  .lovanstrix-logo-showcase{transition:none!important;}
+  .lovanstrix-logo-showcase:hover{transform:none;}
+}
