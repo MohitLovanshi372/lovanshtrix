@@ -1275,7 +1275,7 @@ html:not(.dark) body {
   gap: 24px;
   background-color: #030817 !important;
   background-image:
-    linear-gradient(90deg, rgba(2, 7, 19, .68) 0%, rgba(3, 9, 24, .46) 27%, rgba(3, 9, 24, .17) 48%, rgba(3, 9, 24, .01) 78%),
+    linear-gradient(90deg, rgba(2, 7, 19, .43) 0%, rgba(3, 9, 24, .30) 27%, rgba(3, 9, 24, .09) 48%, rgba(3, 9, 24, .01) 78%),
     linear-gradient(0deg, rgba(2, 7, 19, .72) 0%, transparent 30%, rgba(2, 7, 19, .06) 83%),
     url("/images/lovanshtrix-wave.png") !important;
   background-size: cover, cover, cover !important;
