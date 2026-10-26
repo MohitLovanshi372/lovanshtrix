@@ -5,7 +5,7 @@ const LovanstrixMark = ({ isDark, isHome = false }) => {
   >
       <img
     src={isHome ? "/images/lovanstrix-logo-on-dark.svg" : "/images/lovanstrix-logo.svg"}
-    alt="LOVANSTRIX — Ideas Into Innovation"
+    alt={isHome ? "LOVANSHTRIX — Ideas Into Innovation" : "LOVANSTRIX — Ideas Into Innovation"}
     width="960"
     height="250"
     className="lovanstrix-header-logo block h-9 w-auto max-w-[42vw] object-contain sm:h-10"
