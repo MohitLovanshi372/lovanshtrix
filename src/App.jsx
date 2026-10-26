@@ -16,6 +16,7 @@ import {
   Layers,
   Lock,
   Menu,
+  Smartphone,
   ShieldCheck,
   Sparkles,
   X
@@ -346,7 +347,7 @@ function App() {
     { id: "home", label: "Home" },
     { id: "services", label: "Services" },
     { id: "solutions", label: "Solutions" },
-    { id: "projects", label: "Our Work" },
+    { id: "projects", label: "Projects" },
     { id: "about", label: "About" },
     { id: "careers", label: "Careers" },
     { id: "contact", label: "Contact" }
@@ -691,12 +692,12 @@ function App() {
                   <ArrowRight className="lovanstrix-capability-arrow" aria-hidden="true" />
                 </button>
                 <button type="button" className="lovanstrix-launch-capability" onClick={() => navigateTo("services")}>
-                  <span className="lovanstrix-capability-icon"><Sparkles aria-hidden="true" /></span>
+                  <span className="lovanstrix-capability-icon"><Smartphone aria-hidden="true" /></span>
                   <span className="lovanstrix-capability-copy"><strong>Mobile Applications</strong><small>App experiences across devices</small></span>
                   <ArrowRight className="lovanstrix-capability-arrow" aria-hidden="true" />
                 </button>
                 <button type="button" className="lovanstrix-launch-capability" onClick={() => navigateTo("solutions")}>
-                  <span className="lovanstrix-capability-icon"><Layers aria-hidden="true" /></span>
+                  <span className="lovanstrix-capability-icon"><Sparkles aria-hidden="true" /></span>
                   <span className="lovanstrix-capability-copy"><strong>AI & Automation</strong><small>Intelligent tools and workflows</small></span>
                   <ArrowRight className="lovanstrix-capability-arrow" aria-hidden="true" />
                 </button>
