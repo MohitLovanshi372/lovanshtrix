@@ -813,82 +813,42 @@ function App() {
             </section>
 
             {
-    /* SECTION 3: SERVICES GRID (ALL 11 IT SERVICES) */
+    /* SECTION 3: PREMIUM BENTO GRID (FEATURED SERVICES) */
   }
-            <section className="space-y-8">
-              <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-800/80 pb-6">
-                <div>
-                  <p className="text-xs font-medium text-blue-400 mb-2">
-                    IT Services &amp; Software Capabilities
-                  </p>
-                  <h2
-    className={`font-display text-3xl font-bold tracking-tight ${isDark ? "text-white" : "text-slate-950"}`}
-  >
-                    Comprehensive Web, Application &amp; AI Services
-                  </h2>
-                </div>
-                <button
-    type="button"
-    onClick={() => navigateTo("services")}
-    className="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-400 hover:text-blue-300 whitespace-nowrap shrink-0"
-  >
-                  <span>Explore All {services.length} Service Pages</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </button>
+            <section className="lovanstrix-bento-services" aria-labelledby="lovanstrix-services-title">
+              <div className="lovanstrix-bento-header">
+                <p className="lovanstrix-bento-eyebrow"><Sparkles className="h-4 w-4" aria-hidden="true" /> DIGITAL ENGINEERING STUDIO</p>
+                <h2 id="lovanstrix-services-title" className="lovanstrix-bento-title">A Full-Service <span>Digital Partner.</span></h2>
+                <p className="lovanstrix-bento-intro">From modern websites to intelligent software — explore what we can build together.</p>
               </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {services.map((srv, idx) => <article
-    key={srv.id}
-    className={`rounded-2xl border p-7 flex flex-col justify-between transition-colors ${idx < 3 ? isDark ? "bg-[#0B1224] border-slate-800 hover:border-blue-500/50" : "bg-white border-slate-200 hover:border-blue-400 shadow-sm" : isDark ? "bg-[#090F21] border-slate-800/80 hover:border-slate-700" : "bg-white border-slate-200 hover:border-slate-300"}`}
-  >
-                    <div>
-                      <div className="flex items-center justify-between gap-2 text-xs text-slate-400 mb-3">
-                        <span className="font-mono text-blue-400 tabular-nums">
-                          {srv.index} · {srv.category}
-                        </span>
-                      </div>
-                      <h3
-    className={`font-display text-xl font-semibold tracking-tight ${isDark ? "text-white" : "text-slate-900"}`}
-  >
-                        <button
-    type="button"
-    onClick={() => openServiceDetail(srv)}
-    className="text-left hover:text-blue-400 transition-colors"
-  >
-                          {srv.title}
-                        </button>
-                      </h3>
-                      <p
-    className={`mt-3 text-xs sm:text-sm leading-relaxed ${isDark ? "text-slate-300" : "text-slate-600"}`}
-  >
-                        {srv.summary}
-                      </p>
-                    </div>
-
-                    <div className="mt-6 pt-4 border-t border-slate-800/60 flex items-center justify-between gap-3">
-                      <button
-    type="button"
-    onClick={() => openServiceDetail(srv)}
-    className="inline-flex items-center gap-1 text-xs font-semibold text-blue-400 hover:text-blue-300 whitespace-nowrap shrink-0"
-  >
-                        <span>Service Details</span>
-                        <ArrowRight className="w-3.5 h-3.5" />
-                      </button>
-
-                      <button
-    type="button"
-    onClick={() => handleDiscussService(srv.title)}
-    className={`text-xs font-medium transition-colors whitespace-nowrap shrink-0 ${isDark ? "text-slate-400 hover:text-white" : "text-slate-600 hover:text-slate-950"}`}
-  >
-                        Get a Quote →
-                      </button>
-                    </div>
-                  </article>)}
+              <div className="lovanstrix-bento-grid">
+                {services.slice(0, 5).map((srv, idx) => <article
+                  key={srv.id}
+                  className={`lovanstrix-bento-card lovanstrix-bento-card--${idx + 1}`}
+                >
+                  <div className="lovanstrix-bento-card-content">
+                    <span className="lovanstrix-bento-icon" aria-hidden="true">
+                      {idx === 0 ? <Code2 /> : idx === 1 ? <Sparkles /> : idx === 2 ? <Layers /> : idx === 3 ? <Compass /> : <Box />}
+                    </span>
+                    <p className="lovanstrix-bento-category">{srv.category}</p>
+                    <h3>{srv.title}</h3>
+                    <p className="lovanstrix-bento-description">{srv.summary}</p>
+                    <button type="button" onClick={() => openServiceDetail(srv)} className="lovanstrix-bento-link">
+                      Explore service <ArrowRight aria-hidden="true" className="h-4 w-4" />
+                    </button>
+                  </div>
+                  <div className="lovanstrix-bento-art" aria-hidden="true">
+                    <span className="lovanstrix-bento-glass-shape"/><span className="lovanstrix-bento-art-line"/>
+                  </div>
+                </article>)}
               </div>
+              <button type="button" className="lovanstrix-bento-all" onClick={() => navigateTo("services")}>
+                Explore all {services.length} services <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </button>
             </section>
 
             {
+
     /* SECTION 4: TECHNOLOGIES AND CAPABILITIES */
   }
             <section
