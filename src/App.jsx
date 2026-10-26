@@ -5,6 +5,8 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   ArrowRight,
+  ArrowDown,
+  Github,
   Box,
   Check,
   ChevronDown,
@@ -359,7 +361,7 @@ function App() {
   const launchHeroSubtitle = company.heroSubtitle === INITIAL_STORE.company.heroSubtitle
     ? "Custom software, modern websites, AI-powered solutions and digital experiences that help businesses grow."
     : company.heroSubtitle;
-  return <div className="lovanstrix-page-outer min-h-screen bg-[#9CADB5] p-0 sm:p-4 lg:p-8">
+  return <div data-lx-current={activeNav} className="lovanstrix-page-outer min-h-screen bg-[#9CADB5] p-0 sm:p-4 lg:p-8">
       <div
     className={`lovanstrix-intro ${showIntro ? "is-open" : "is-closed"}`}
     aria-hidden={!showIntro}
@@ -415,6 +417,7 @@ function App() {
       </div>
 
       <div
+    data-lx-current={activeNav}
     className={`lovanstrix-page-panel mx-auto max-w-[1600px] min-h-screen overflow-hidden shadow-[0_30px_90px_rgba(15,23,42,0.16)] transition-colors duration-200 ${isDark ? "bg-[#050814] text-slate-100" : "bg-[#E4E7EF] text-[#111318]"}`}
   >
       {
@@ -437,7 +440,7 @@ function App() {
     }}
     className="focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-lg shrink-0"
   >
-            <LovanstrixMark isDark={isDark} />
+            <LovanstrixMark isDark={isDark} isHome={activeNav === "home"} />
           </a>
 
           {
@@ -545,7 +548,8 @@ function App() {
     onClick={() => navigateTo("contact")}
     className="lovanstrix-header-cta px-4 py-2 text-xs font-semibold text-white bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-500 hover:to-violet-500 rounded-lg transition-all whitespace-nowrap shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
   >
-              {activeNav === "home" ? "Start a Project" : "Request a Quote"}
+              <span>{activeNav === "home" ? "Start a Project" : "Request a Quote"}</span>
+              {activeNav === "home" && <ArrowRight className="lovanstrix-nav-cta-arrow h-4 w-4" aria-hidden="true" />}
             </button>
 
             <button
@@ -659,29 +663,15 @@ function App() {
     onClick={() => navigateTo("projects")}
     className="inline-flex items-center gap-2 rounded-full px-2 py-3 text-[13px] font-semibold text-slate-700 transition-colors hover:text-blue-700"
   >
-                    Explore Our Work <ArrowRight className="h-4 w-4" />
+                    <span className="lovanstrix-explore-circle"><ArrowRight className="h-3.5 w-3.5" aria-hidden="true" /></span>
+                    Explore Our Work
                   </button>
                 </div>
 
-                <p className="lovanstrix-launch-caption">
-                  Purpose-built web experiences <span aria-hidden="true">·</span> Intelligent applications <span aria-hidden="true">·</span> Reliable software
-                </p>
-                <div className="mt-8">
-                  <button
-                    type="button"
-                    className="lovanstrix-wave-3d-button inline-flex items-center gap-2 rounded-full px-4 py-2.5 text-xs font-semibold"
-                    onClick={() => setHeroVisualMode((mode) => mode === "image" ? "3d" : "image")}
-                    aria-expanded={heroVisualMode === "3d"}
-                  >
-                    <Box className="h-4 w-4" />
-                    {heroVisualMode === "3d" ? "Close interactive 3D" : "Explore interactive 3D"}
-                    <ArrowRight className="h-3.5 w-3.5" />
-                  </button>
-                  {heroVisualMode === "3d" && (
-                    <div className="lovanstrix-wave-3d-panel mt-5 overflow-hidden rounded-2xl">
-                      <Interactive3DCore isDark={isDark} compact />
-                    </div>
-                  )}
+                <div className="lovanstrix-launch-proof" aria-label="What we build">
+                  <span><strong>WEB</strong><small>Modern websites</small></span>
+                  <span><strong>APPS</strong><small>Digital products</small></span>
+                  <span><strong>AI</strong><small>Intelligent solutions</small></span>
                 </div>
               </div>
 
@@ -708,12 +698,46 @@ function App() {
                 </button>
               </div>
 
+              <div className="lovanstrix-hero-bottom-bar">
+                <div className="lovanstrix-hero-quicklinks">
+                  <a href="https://github.com/MohitLovanshi372/lovanshtrix"
+                    target="_blank" rel="noopener noreferrer"
+                    aria-label="Lovanshtrix projects on GitHub"
+                    title="GitHub projects"
+                    className="lovanstrix-hero-quicklink">
+                    <Github aria-hidden="true" className="h-4 w-4"/>
+                  </a>
+                  <button type="button" className="lovanstrix-hero-quicklink" aria-label="Explore projects" title="Explore projects" onClick={() => navigateTo("projects")}>
+                    <Code2 aria-hidden="true" className="h-4 w-4"/>
+                  </button>
+                  <button type="button" className="lovanstrix-hero-quicklink" aria-label="Contact Lovanshtrix" title="Contact" onClick={() => navigateTo("contact")}>
+                    <ArrowRight aria-hidden="true" className="h-4 w-4"/>
+                  </button>
+                </div>
+                <a className="lovanstrix-scroll-cue" href="#lovanstrix-after-hero" aria-label="Scroll down to explore Lovanshtrix">
+                  <span className="lovanstrix-scroll-mouse" aria-hidden="true"><span /></span>
+                  Scroll Down <ArrowDown aria-hidden="true" className="h-3.5 w-3.5"/>
+                </a>
+                <button
+                  type="button"
+                  className="lovanstrix-wave-3d-button lovanstrix-hero-3d-trigger"
+                  onClick={() => setHeroVisualMode((mode) => mode === "image" ? "3d" : "image")}
+                  aria-expanded={heroVisualMode === "3d"}>
+                  <Box aria-hidden="true" className="h-4 w-4"/>
+                  {heroVisualMode === "3d" ? "Close 3D" : "Explore 3D"}
+                </button>
+              </div>
+              {heroVisualMode === "3d" && (
+                <div className="lovanstrix-wave-3d-panel lovanstrix-hero-3d-panel">
+                  <Interactive3DCore isDark={isDark} compact />
+                </div>)}
+
             </section>
 
             {
     /* SECTION 1B: BRAND PROMISE STRIP — NO FABRICATED CLIENT METRICS */
   }
-            <section className="grid grid-cols-1 gap-7 border-y border-slate-300/80 py-7 md:grid-cols-12 md:items-center md:gap-9">
+            <section id="lovanstrix-after-hero" className="grid grid-cols-1 gap-7 border-y border-slate-300/80 py-7 md:grid-cols-12 md:items-center md:gap-9">
               <div className="md:col-span-7 flex items-start gap-4 sm:gap-5">
                 <div className="mt-1 flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-300 via-blue-500 to-violet-600 text-white shadow-lg shadow-blue-500/20">
                   <Sparkles className="h-6 w-6" />

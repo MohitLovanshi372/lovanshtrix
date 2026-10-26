@@ -1,14 +1,14 @@
 import { useState } from "react";
-const LovanstrixMark = ({ isDark }) => {
+const LovanstrixMark = ({ isDark, isHome = false }) => {
   return <span
-    className={`inline-flex items-center justify-center rounded-xl border border-blue-100/80 bg-white px-2 py-1.5 transition-shadow ${isDark ? "shadow-lg shadow-blue-950/20" : "shadow-sm shadow-blue-100/60"}`}
+    className={`lovanstrix-header-brand inline-flex items-center justify-center rounded-xl border border-blue-100/80 bg-white px-2 py-1.5 transition-shadow ${isHome ? "lovanstrix-header-brand--home" : ""} ${isDark ? "shadow-lg shadow-blue-950/20" : "shadow-sm shadow-blue-100/60"}`}
   >
       <img
-    src="/images/lovanstrix-logo.svg"
-    alt="LOVANSTRIX — Ideas Into Innovation"
+    src={isHome ? "/images/lovanstrix-logo-on-dark.svg" : "/images/lovanstrix-logo.svg"}
+    alt={isHome ? "LOVANSHTRIX — Ideas Into Innovation" : "LOVANSTRIX — Ideas Into Innovation"}
     width="960"
     height="250"
-    className="block h-9 w-auto max-w-[42vw] object-contain sm:h-10"
+    className="lovanstrix-header-logo block h-9 w-auto max-w-[42vw] object-contain sm:h-10"
   />
     </span>;
 };
