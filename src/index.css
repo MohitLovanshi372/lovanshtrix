@@ -1592,3 +1592,269 @@ html:not(.dark) body {
   .lovanstrix-scroll-mouse > span { animation: none !important; }
   .lovanstrix-ribbon-home .lovanstrix-launch-capability:hover { transform: none !important; }
 }
+
+
+/* Aurora enterprise / editorial bento — inspired by supplied references, with Lovanshtrix identity */
+.lovanstrix-page-panel[data-lx-current="home"] {
+  background: linear-gradient(180deg, #040716 0px, #05091a 1150px, #070915 1600px, #f6f9ff 2450px, #f6f9ff 100%) !important;
+}
+.lovanstrix-page-panel[data-lx-current="home"] .lovanstrix-reference-main {
+  position: relative;
+  isolation: isolate;
+}
+.lovanstrix-ribbon-home {
+  position: relative;
+}
+.lovanstrix-ribbon-home::before {
+  content: "";
+  position: absolute;
+  top: 1000px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-10deg);
+  width: min(150vw, 1900px);
+  height: 610px;
+  border-radius: 50%;
+  border-top: 2px solid rgba(40, 151, 255, .42);
+  background: radial-gradient(ellipse at 48% 7%, rgba(14, 66, 176, .22), transparent 62%);
+  box-shadow: 0 -30px 75px rgba(18, 97, 234, .13);
+  pointer-events: none;
+  z-index: -1;
+}
+.lovanstrix-bento-services {
+  position: relative;
+  width: min(1150px, calc(100vw - 48px));
+  max-width: none;
+  margin-left: 50%;
+  transform: translateX(-50%);
+  padding: clamp(54px, 7vw, 100px) 0 clamp(55px, 7vw, 95px);
+  color: #f3f5ff;
+}
+.lovanstrix-bento-services::before {
+  content: "";
+  position: absolute;
+  inset: 8% -25% 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 28% 54%, rgba(44, 31, 106, .28), transparent 43%),
+    radial-gradient(ellipse at 75% 36%, rgba(15, 62, 139, .2), transparent 42%);
+}
+.lovanstrix-bento-header {
+  margin: 0 auto 35px;
+  text-align: center;
+  max-width: 800px;
+}
+.lovanstrix-bento-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  margin-bottom: 16px;
+  color: #d1adff;
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: .2em;
+}
+.lovanstrix-bento-title {
+  color: #fff;
+  font-size: clamp(34px, 4.2vw, 62px);
+  font-weight: 550;
+  line-height: 1.13;
+  letter-spacing: -.052em;
+}
+.lovanstrix-bento-title span { color: #e9eaff; }
+.lovanstrix-bento-intro {
+  color: #a7b6d6;
+  margin: 16px auto 0;
+  font-size: clamp(13px, 1.3vw, 16px);
+  line-height: 1.75;
+}
+.lovanstrix-bento-grid {
+  display: grid;
+  grid-template-columns: 1.13fr .92fr 1.13fr;
+  grid-template-rows: repeat(2, minmax(245px, auto));
+  gap: 13px;
+}
+.lovanstrix-bento-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-width: 0;
+  min-height: 245px;
+  border-radius: 15px;
+  border: 1px solid rgba(148, 133, 220, .16);
+  background:
+    radial-gradient(ellipse at 80% 80%, rgba(92, 47, 131, .23), transparent 57%),
+    linear-gradient(145deg, #11111d, #131220 65%, #090c17);
+  box-shadow: inset 0 1px rgba(255,255,255,.055), 0 14px 48px rgba(0,0,0,.18);
+  transition: transform .3s ease, border-color .3s ease, box-shadow .3s ease;
+}
+.lovanstrix-bento-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(147, 156, 255, .48);
+  box-shadow: 0 20px 58px rgba(4, 4, 32, .3);
+}
+.lovanstrix-bento-card--1 { grid-column: 1 / span 2; grid-row: 1; }
+.lovanstrix-bento-card--2 { grid-column: 3; grid-row: 1 / span 2; }
+.lovanstrix-bento-card--3 { grid-column: 1; grid-row: 2; }
+.lovanstrix-bento-card--4 { grid-column: 2; grid-row: 2; }
+.lovanstrix-bento-card--5 { grid-column: 1 / -1; grid-row: 3; min-height: 230px; }
+.lovanstrix-bento-card--2 {
+  background: radial-gradient(ellipse at 70% 90%, rgba(81, 46, 132, .3), transparent 60%), linear-gradient(155deg, #11111b, #131022 65%, #090d1a);
+}
+.lovanstrix-bento-card--4 {
+  background: linear-gradient(145deg, #14234a, #343b79 51%, #111529 100%);
+}
+.lovanstrix-bento-card--5 {
+  background: radial-gradient(ellipse at 84% 80%, rgba(52, 75, 150, .33), transparent 53%), linear-gradient(110deg, #11121e, #191627 68%, #0b1124);
+}
+.lovanstrix-bento-card-content {
+  position: relative;
+  z-index: 2;
+  padding: clamp(22px, 2.6vw, 35px);
+  max-width: 440px;
+}
+.lovanstrix-bento-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  margin-bottom: 14px;
+  color: #ebeeff;
+  border-radius: 9px;
+  background: rgba(255,255,255,.045);
+}
+.lovanstrix-bento-icon svg { width: 17px; height: 17px; }
+.lovanstrix-bento-category {
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  color: #aa9fcf;
+}
+.lovanstrix-bento-card h3 {
+  color: #fff;
+  font-size: clamp(17px, 1.55vw, 24px);
+  line-height: 1.2;
+  font-weight: 650;
+}
+.lovanstrix-bento-description {
+  color: #b4b5cd;
+  font-size: 12px;
+  line-height: 1.7;
+  margin-top: 12px;
+  max-width: 320px;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.lovanstrix-bento-link {
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 18px;
+  font-size: 12px;
+  color: #d7c7ff;
+  font-weight: 650;
+  transition: color .2s ease;
+}
+.lovanstrix-bento-link:hover { color: #fff; }
+.lovanstrix-bento-link:focus-visible,
+.lovanstrix-bento-all:focus-visible { outline: 2px solid #dfc8ff; outline-offset: 4px; }
+.lovanstrix-bento-art {
+  position: absolute;
+  inset: auto 6% -32% auto;
+  width: 64%;
+  aspect-ratio: 1.15;
+  pointer-events: none;
+  opacity: .58;
+  transform: rotate(-15deg);
+  border: 1px solid rgba(112, 133, 255, .17);
+  border-radius: 35%;
+  background: linear-gradient(137deg, rgba(75, 74, 171, .25), rgba(21, 42, 98, .10) 52%, transparent 67%);
+  box-shadow: -18px -16px 55px rgba(102, 79, 202, .12), inset 20px 16px 40px rgba(104, 127, 238, .1);
+}
+.lovanstrix-bento-art .lovanstrix-bento-glass-shape {
+  position: absolute;
+  top: 19%; left: 18%;
+  width: 68%; height: 64%;
+  border-radius: 22px;
+  border: 1px solid rgba(191, 178, 255, .22);
+  background: linear-gradient(127deg, rgba(100, 106, 189, .16), rgba(4, 8, 27, .65));
+  box-shadow: 0 6px 55px rgba(27, 58, 151, .21);
+}
+.lovanstrix-bento-art .lovanstrix-bento-art-line {
+  position: absolute;
+  inset: 13% 27% 18%;
+  border-radius: 40%;
+  border-top: 2px solid rgba(138, 147, 249, .26);
+  transform: rotate(18deg);
+}
+.lovanstrix-bento-card--2 .lovanstrix-bento-art { width: 90%; bottom: -2%; right: -30%; transform: rotate(19deg); opacity:.55; }
+.lovanstrix-bento-card--3 .lovanstrix-bento-art { width: 100%; bottom: -52%; right: -16%; }
+.lovanstrix-bento-card--4 .lovanstrix-bento-art { width: 125%; bottom: -50%; right: -55%; }
+.lovanstrix-bento-card--5 .lovanstrix-bento-art { width: 43%; bottom: -73%; right: 1%; }
+.lovanstrix-bento-all {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 32px auto 0;
+  padding: 12px 18px;
+  color: #e5d5ff;
+  border: 1px solid rgba(179,158,245,.42);
+  border-radius: 999px;
+  background: rgba(27,26,49,.75);
+  font-weight: 650;
+  font-size: 12px;
+  transition: background .2s ease;
+}
+.lovanstrix-bento-all:hover { background: rgba(56,46,91,.85); }
+.lovanstrix-page-panel[data-lx-current="services"] {
+  background:
+    radial-gradient(ellipse 80% 450px at 52% 10%, rgba(11, 74, 176, .18), transparent 70%),
+    linear-gradient(160deg, #080b20 0 490px, #f5f8ff 900px, #f5f8ff 100%) !important;
+}
+.lovanstrix-page-panel[data-lx-current="services"] .lovanstrix-main > div > .max-w-3xl {
+  position: relative;
+  padding: clamp(28px, 5vw, 60px);
+  border: 1px solid rgba(86, 145, 240, .28);
+  border-radius: 26px;
+  background:
+    radial-gradient(ellipse 65% 60% at 95% 2%, rgba(12, 130, 255, .18), transparent 72%),
+    linear-gradient(130deg, rgba(4, 11, 31, .97), rgba(9, 21, 56, .96));
+  overflow: hidden;
+}
+.lovanstrix-page-panel[data-lx-current="services"] .lovanstrix-main > div > .max-w-3xl::before {
+  content:"";
+  position:absolute; pointer-events:none;
+  width:130%; height:210px; top:3%; left:18%;
+  border-radius:50%; transform:rotate(-12deg);
+  border-top:2px solid rgba(37, 150, 255, .50);
+  box-shadow:0 -20px 64px rgba(36, 120, 255, .17);
+}
+.lovanstrix-page-panel[data-lx-current="services"] .lovanstrix-main > div > .max-w-3xl h1 { color:#f4f8ff!important; }
+.lovanstrix-page-panel[data-lx-current="services"] .lovanstrix-main > div > .max-w-3xl p { color:#bfcae3!important; }
+@media(max-width:900px) {
+  .lovanstrix-bento-services { width: min(94vw, 790px); }
+  .lovanstrix-bento-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+  .lovanstrix-bento-card--1 { grid-column: 1 / -1; grid-row: auto; }
+  .lovanstrix-bento-card--2, .lovanstrix-bento-card--3, .lovanstrix-bento-card--4 { grid-column:auto; grid-row:auto; }
+  .lovanstrix-bento-card--5 { grid-column:1 / -1; grid-row:auto; }
+}
+@media(max-width:580px) {
+  .lovanstrix-bento-services { width: calc(100vw - 28px); padding-block:52px; }
+  .lovanstrix-bento-grid { grid-template-columns: 1fr; }
+  .lovanstrix-bento-card--1, .lovanstrix-bento-card--2, .lovanstrix-bento-card--3, .lovanstrix-bento-card--4, .lovanstrix-bento-card--5 {
+    grid-column: 1; grid-row: auto; min-height: 215px;
+  }
+  .lovanstrix-bento-card-content { padding: 24px; }
+  .lovanstrix-bento-card--2 { min-height:245px; }
+  .lovanstrix-bento-header { margin-bottom:28px; }
+  .lovanstrix-bento-description { max-width: 280px; }
+  .lovanstrix-ribbon-home::before { top:920px; height:420px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .lovanstrix-bento-card, .lovanstrix-bento-link, .lovanstrix-bento-all { transition:none !important; }
+  .lovanstrix-bento-card:hover { transform:none; }
+}
