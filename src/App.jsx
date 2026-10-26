@@ -159,7 +159,12 @@ function parseInitialRoute() {
   if (typeof window === "undefined") {
     return { section: "home", certId: "", serviceSlug: "" };
   }
-  const pathname = window.location.pathname.replace(/\/+$/, "") || "/";
+  // GitHub Pages serves project sites from /lovanshtrix/ rather than /.
+  const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+  const fullPath = window.location.pathname.replace(/\/+$/, "") || "/";
+  const pathname = base && (fullPath === base || fullPath.startsWith(base + "/"))
+    ? (fullPath.slice(base.length) || "/")
+    : fullPath;
   if (pathname === "/services") {
     return { section: "services", certId: "", serviceSlug: "" };
   }
@@ -326,7 +331,7 @@ function App() {
         "verify-certificate": param ? `/verify-certificate/${encodeURIComponent(param)}` : "/verify-certificate"
       };
       const targetUrl = routeMap[section] || `/#${section}`;
-      window.history.pushState({}, "", targetUrl);
+      window.history.pushState({}, "", `${import.meta.env.BASE_URL.replace(/\/$/, "")}${targetUrl}`);
     } catch {
     }
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -375,7 +380,7 @@ function App() {
         <div className="lovanstrix-intro__center">
           <div className="lovanstrix-intro__brand">
             <img
-    src="/images/lovanstrix-logo.svg"
+    src={`${import.meta.env.BASE_URL}images/lovanstrix-logo.svg`}
     alt=""
     width="960"
     height="250"
@@ -433,7 +438,7 @@ function App() {
     /* Zone 1: Custom LOVANSTRIX Logo linking to Homepage */
   }
           <a
-    href="/"
+    href={import.meta.env.BASE_URL}
     onClick={(e) => {
       e.preventDefault();
       navigateTo("home");
@@ -456,7 +461,7 @@ function App() {
       return <div key={item.id} className="relative" ref={dropdownRef}>
                     <div className="inline-flex items-center gap-1">
                       <a
-        href="/services"
+        href={`${import.meta.env.BASE_URL}services`}
         onClick={(e) => {
           e.preventDefault();
           navigateTo("services");
@@ -527,7 +532,7 @@ function App() {
     const isActive = activeNav === item.id || item.id === "careers" && (activeNav === "internships" || activeNav === "student-dashboard" || activeNav === "verify-certificate");
     return <a
       key={item.id}
-      href={`/${item.id === "home" ? "" : item.id === "projects" ? "our-work" : item.id}`}
+      href={`${import.meta.env.BASE_URL}${item.id === "home" ? "" : item.id === "projects" ? "our-work" : item.id}`}
       onClick={(e) => {
         e.preventDefault();
         navigateTo(item.id);

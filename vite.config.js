@@ -10,6 +10,9 @@ const __dirname = path.dirname(__filename);
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, '.', '');
   return {
+    // Repository project site lives under /lovanshtrix/ on GitHub Pages.
+    // All regular full-stack deployments keep the default / base.
+    base: env.GITHUB_PAGES === "true" ? "/lovanshtrix/" : "/",
     plugins: [react(), tailwindcss()],
     define: {
       'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),

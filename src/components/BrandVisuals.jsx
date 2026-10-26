@@ -4,7 +4,7 @@ const LovanstrixMark = ({ isDark, isHome = false }) => {
     className={`lovanstrix-header-brand inline-flex items-center justify-center rounded-xl border border-blue-100/80 bg-white px-2 py-1.5 transition-shadow ${isHome ? "lovanstrix-header-brand--home" : ""} ${isDark ? "shadow-lg shadow-blue-950/20" : "shadow-sm shadow-blue-100/60"}`}
   >
       <img
-    src={isHome ? "/images/lovanstrix-logo-on-dark.svg" : "/images/lovanstrix-logo.svg"}
+    src={`${import.meta.env.BASE_URL}images/${isHome ? "lovanstrix-logo-on-dark.svg" : "lovanstrix-logo.svg"}`}
     alt={isHome ? "LOVANSHTRIX — Ideas Into Innovation" : "LOVANSTRIX — Ideas Into Innovation"}
     width="960"
     height="250"

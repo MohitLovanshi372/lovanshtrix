@@ -1,0 +1,46 @@
+name: Deploy Lovanshtrix frontend to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install project dependencies
+        run: npm install --no-package-lock --no-audit --no-fund
+      - name: Build static frontend for Pages
+        env:
+          GITHUB_PAGES: 'true'
+        run: npm run build
+      - name: Support direct links to React routes
+        run: cp dist/index.html dist/404.html
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: Upload built website
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+      - name: Publish
+        id: deployment
+        uses: actions/deploy-pages@v4
