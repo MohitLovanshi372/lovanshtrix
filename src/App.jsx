@@ -414,6 +414,7 @@ function App() {
   }
       <header
     data-intro-state={showIntro ? "waiting" : "ready"}
+    data-lx-page={activeNav}
     className={`lovanstrix-site-header sticky top-0 z-40 backdrop-blur-md border-b transition-colors ${isDark ? "bg-[#050814]/90 border-slate-800/80" : "bg-[#E4E7EF]/95 border-slate-300/70"}`}
   >
         <div className="lovanstrix-header-row max-w-[1060px] mx-auto flex items-center justify-between gap-6 px-6 py-8">
@@ -534,9 +535,9 @@ function App() {
             <button
     type="button"
     onClick={() => navigateTo("contact")}
-    className="px-4 py-2 text-xs font-semibold text-white bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-500 hover:to-violet-500 rounded-lg transition-all whitespace-nowrap shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
+    className="lovanstrix-header-cta px-4 py-2 text-xs font-semibold text-white bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-500 hover:to-violet-500 rounded-lg transition-all whitespace-nowrap shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
   >
-              Request a Quote
+              {activeNav === "home" ? "Start a Project" : "Request a Quote"}
             </button>
 
             <button
@@ -610,14 +611,10 @@ function App() {
   }
             <section className="lovanstrix-home-hero lovanstrix-launch-hero lovanstrix-wave-hero relative flex flex-col items-start justify-center min-h-[600px]">
               <div className="lovanstrix-wave-content relative z-10 w-full max-w-[720px] flex flex-col justify-center py-5 sm:py-9 lg:py-12">
-                <div className="lovanstrix-launch-eyebrow inline-flex items-center gap-2.5 mb-5 text-[12px] font-medium text-slate-700">
-                  <span className="inline-flex items-center gap-2 rounded-full bg-white/85 border border-white px-4 py-2 shadow-sm">
-                    <span className="w-2 h-2 rounded-full bg-blue-600" /> Innovate
-                  </span>
-                  <span className="text-slate-500">Visualize</span>
-                  <span className="ml-1 text-slate-400">/</span>
-                  <span className="text-slate-500">Build</span>
-                </div>
+                <p className="lovanstrix-launch-eyebrow lovanstrix-cinematic-kicker">
+                  <span className="lovanstrix-kicker-dot" aria-hidden="true" />
+                  TECHNOLOGY <span aria-hidden="true">/</span> INNOVATION <span aria-hidden="true">/</span> SOLUTIONS
+                </p>
 
                 <h1 className="lovanstrix-hero-title font-display text-[47px] leading-[1.03] tracking-[-0.055em] sm:text-[58px] xl:text-[70px] font-medium text-[#101216] text-balance max-w-[690px]">
                   {company.heroHeading.split(" ").map((word, index, words) => <React.Fragment key={`${word}-${index}`}>
@@ -655,26 +652,9 @@ function App() {
                   </button>
                 </div>
 
-                <div className="lovanstrix-launch-values mt-10 grid max-w-[490px] grid-cols-2 gap-5 border-t border-slate-300/80 pt-5">
-                  <div className="flex gap-3">
-                    <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white text-blue-700 shadow-sm">
-                      <Sparkles className="h-4 w-4" />
-                    </span>
-                    <div>
-                      <p className="text-[13px] font-semibold text-slate-900">Thoughtful by design</p>
-                      <p className="mt-1 text-[11px] leading-relaxed text-slate-500">Clear, user-focused digital experiences.</p>
-                    </div>
-                  </div>
-                  <div className="flex gap-3">
-                    <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white text-blue-700 shadow-sm">
-                      <Layers className="h-4 w-4" />
-                    </span>
-                    <div>
-                      <p className="text-[13px] font-semibold text-slate-900">Built to grow</p>
-                      <p className="mt-1 text-[11px] leading-relaxed text-slate-500">Practical websites, apps and AI tools.</p>
-                    </div>
-                  </div>
-                </div>
+                <p className="lovanstrix-launch-caption">
+                  Purpose-built web experiences <span aria-hidden="true">·</span> Intelligent applications <span aria-hidden="true">·</span> Reliable software
+                </p>
                 <div className="mt-8">
                   <button
                     type="button"
@@ -692,6 +672,29 @@ function App() {
                     </div>
                   )}
                 </div>
+              </div>
+
+              <div className="lovanstrix-launch-capabilities" aria-label="Explore Lovanstrix capabilities">
+                <button type="button" className="lovanstrix-launch-capability" onClick={() => navigateTo("services")}>
+                  <span className="lovanstrix-capability-icon"><Code2 aria-hidden="true" /></span>
+                  <span className="lovanstrix-capability-copy"><strong>Web Development</strong><small>Modern, responsive experiences</small></span>
+                  <ArrowRight className="lovanstrix-capability-arrow" aria-hidden="true" />
+                </button>
+                <button type="button" className="lovanstrix-launch-capability" onClick={() => navigateTo("solutions")}>
+                  <span className="lovanstrix-capability-icon"><Sparkles aria-hidden="true" /></span>
+                  <span className="lovanstrix-capability-copy"><strong>AI & Automation</strong><small>Smarter digital workflows</small></span>
+                  <ArrowRight className="lovanstrix-capability-arrow" aria-hidden="true" />
+                </button>
+                <button type="button" className="lovanstrix-launch-capability" onClick={() => navigateTo("projects")}>
+                  <span className="lovanstrix-capability-icon"><Layers aria-hidden="true" /></span>
+                  <span className="lovanstrix-capability-copy"><strong>Digital Products</strong><small>Explore our engineering work</small></span>
+                  <ArrowRight className="lovanstrix-capability-arrow" aria-hidden="true" />
+                </button>
+                <button type="button" className="lovanstrix-launch-capability" onClick={() => navigateTo("services")}>
+                  <span className="lovanstrix-capability-icon"><Compass aria-hidden="true" /></span>
+                  <span className="lovanstrix-capability-copy"><strong>UI/UX Design</strong><small>Clear, purposeful interfaces</small></span>
+                  <ArrowRight className="lovanstrix-capability-arrow" aria-hidden="true" />
+                </button>
               </div>
 
             </section>
