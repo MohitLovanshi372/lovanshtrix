@@ -361,7 +361,7 @@ function App() {
   const launchHeroSubtitle = company.heroSubtitle === INITIAL_STORE.company.heroSubtitle
     ? "Custom software, modern websites, AI-powered solutions and digital experiences that help businesses grow."
     : company.heroSubtitle;
-  return <div className="lovanstrix-page-outer min-h-screen bg-[#9CADB5] p-0 sm:p-4 lg:p-8">
+  return <div data-lx-current={activeNav} className="lovanstrix-page-outer min-h-screen bg-[#9CADB5] p-0 sm:p-4 lg:p-8">
       <div
     className={`lovanstrix-intro ${showIntro ? "is-open" : "is-closed"}`}
     aria-hidden={!showIntro}
@@ -417,6 +417,7 @@ function App() {
       </div>
 
       <div
+    data-lx-current={activeNav}
     className={`lovanstrix-page-panel mx-auto max-w-[1600px] min-h-screen overflow-hidden shadow-[0_30px_90px_rgba(15,23,42,0.16)] transition-colors duration-200 ${isDark ? "bg-[#050814] text-slate-100" : "bg-[#E4E7EF] text-[#111318]"}`}
   >
       {
@@ -662,7 +663,8 @@ function App() {
     onClick={() => navigateTo("projects")}
     className="inline-flex items-center gap-2 rounded-full px-2 py-3 text-[13px] font-semibold text-slate-700 transition-colors hover:text-blue-700"
   >
-                    Explore Our Work <ArrowRight className="h-4 w-4" />
+                    <span className="lovanstrix-explore-circle"><ArrowRight className="h-3.5 w-3.5" aria-hidden="true" /></span>
+                    Explore Our Work
                   </button>
                 </div>
 
